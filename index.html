@@ -819,7 +819,11 @@ function afterStart() {
     });
     (ins.find(x => !x.value) || ins[3]).focus();
   }
-  if (L.step === "pin") { const p = $("#pin"); p.focus(); p.addEventListener("keydown", e => e.key === "Enter" && pinGo()); }
+  if (L.step === "pin") {
+    const p = $("#pin"); p.focus();
+    p.addEventListener("keydown", e => e.key === "Enter" && pinGo());
+    p.addEventListener("input", () => { p.value = p.value.replace(/\D/g, "").slice(0, 4); if (p.value.length === 4) pinGo(); });
+  }
   if (L.step === "new") {
     $("#ava-pick").addEventListener("click", e => { const b = e.target.closest("[data-ava]"); if (!b) return; $("#ava-pick").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); });
     $("#seed")?.addEventListener("click", e => { const s = e.currentTarget; s.setAttribute("aria-checked", s.getAttribute("aria-checked") !== "true"); });
@@ -880,14 +884,23 @@ async function codeNew() {
   } catch (e) { console.error(e); L.err = "연결하지 못했어요. Firebase 설정을 확인해 주세요."; }
   render();
 }
+let pinBusy = false;
 async function pinGo() {
   const L = S.login, pin = $("#pin").value.trim();
+  if (pinBusy) return;
   if (!/^\d{4}$/.test(pin)) { L.err = "숫자 4자리를 입력해 주세요."; return render(); }
+  pinBusy = true;
+  const btn = $('[data-act="pin-go"]'); if (btn) { btn.disabled = true; btn.textContent = "확인하는 중…"; }
   try {
     const uid = await ensureAuth();
     await fb.set(fb.ref(fb.db, `${baseOf(L.code)}/devices/${L.slot}/${uid}`), pin);
+    pinBusy = false;
     startLive(L.code, L.slot, uid);
-  } catch (e) { L.err = "비밀번호가 맞지 않아요."; render(); }
+  } catch (e) {
+    pinBusy = false; console.warn(e);
+    L.err = String(e?.code || e?.message || e).toLowerCase().includes("permission") ? "비밀번호가 맞지 않아요." : "연결하지 못했어요. 인터넷을 확인하고 다시 눌러 주세요.";
+    render();
+  }
 }
 async function createSlot() {
   const L = S.login;
@@ -1219,6 +1232,7 @@ document.addEventListener("click", async e => {
     case "demo": startDemo(); break;
     case "code-next": codeNext(); break;
     case "code-new": codeNew(); break;
+    case "pin-go": pinGo(); break;
     case "pick-slot": S.login.slot = v; S.login.step = "pin"; S.login.err = ""; render(); break;
     case "pick-new": S.login.step = "new"; S.login.err = ""; render(); break;
     case "login-pick": S.login.step = "pick"; S.login.err = ""; render(); break;
