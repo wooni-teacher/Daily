@@ -71,7 +71,6 @@ main{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:8px calc(1
 .grid-2{display:grid;gap:16px}
 @media (min-width:960px){
   .today-grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:28px;align-items:start}
-  .today-side{position:sticky;top:84px}
   .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
@@ -288,6 +287,115 @@ textarea.input{min-height:84px;resize:vertical}
 @keyframes slideR{from{transform:translateX(-36px);opacity:.3}to{transform:none;opacity:1}}
 .swipe-hint{display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;color:var(--muted);margin:14px 0 0}
 @media (display-mode: standalone){body{overscroll-behavior-y:none}}
+
+/* 우리 둘 (함께한 날·한마디) */
+.hero{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:16px;display:grid;gap:12px;margin-bottom:12px}
+.hero-top{display:flex;align-items:center;gap:12px}
+.hero-avas{display:flex;flex:none}
+.hero-avas .ava{width:48px;height:48px;font-size:26px;border-width:3px}
+.hero-avas .ava + .ava{margin-left:-14px}
+.hero-count{display:grid;min-width:0}
+.hero-count b{font-family:var(--f-display);font-size:22px;line-height:1.25;letter-spacing:-.01em}
+.anniv-line{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:var(--tap);padding:8px 12px;border-radius:12px;background:var(--surface2);text-align:left;font-size:14px}
+.anniv-line > span:first-child{min-width:0}
+.bubbles{display:grid;gap:8px}
+.bubble{display:grid;gap:2px;text-align:left;max-width:88%;padding:10px 14px;border-radius:18px;font-size:15px}
+.bubble.them{background:var(--b-soft);border-bottom-left-radius:6px;justify-self:start}
+.bubble.me{background:var(--a-soft);border-bottom-right-radius:6px;justify-self:end}
+.bubble-who{font-size:12px;color:var(--muted);font-weight:600}
+.bubble-text{overflow-wrap:anywhere}
+.note-btn{justify-self:start}
+.celebrate{background:var(--both);color:#fff;font-weight:600;margin-bottom:12px;text-align:center;font-size:17px}
+/* 새 소식 */
+.news-card{border:2px solid var(--warn);display:grid;gap:10px;margin-bottom:12px}
+.news-card .h3{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--warn)}
+.news-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.news-list li{display:flex;justify-content:space-between;gap:10px;font-size:15px}
+.news-list li span{min-width:0;overflow-wrap:anywhere}
+.news-list small{color:var(--muted);flex:none;font-size:12px;padding-top:2px}
+/* 둘 다 비는 시간 */
+.free-card{background:var(--both-soft);box-shadow:none;margin-bottom:8px}
+.free-card .h3{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--both);font-size:15px;margin-bottom:8px}
+.free-list{display:grid;gap:6px}
+@media (min-width:700px){.free-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.free-slot{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:8px 12px;border-radius:12px;background:var(--surface);text-align:left;font-size:15px}
+.fs-day{font-weight:700;min-width:62px}
+.fs-time{flex:1;min-width:0}
+.fs-go{display:inline-flex;align-items:center;gap:2px;font-size:13px;font-weight:700;color:var(--both);flex:none}
+.free-inline{display:flex;gap:8px;align-items:flex-start;margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--both-soft);color:var(--both);font-size:14px;font-weight:600}
+.free-inline .link{color:var(--both);font-weight:700;text-decoration:underline;text-underline-offset:3px;min-height:32px}
+/* 반응 */
+.react-chip{display:inline-flex;align-items:center;gap:1px;padding:1px 7px;border-radius:999px;background:var(--surface2);font-size:13px}
+.react-chip small{font-size:10px}
+.react-bar{display:flex;gap:6px;flex-wrap:wrap}
+.react-bar button{width:48px;height:48px;border-radius:14px;font-size:22px;background:var(--bg);border:2px solid var(--line)}
+.react-bar button[aria-pressed="true"]{border-color:var(--both);background:var(--both-soft)}
+/* 반복 요일 */
+.wd-pick{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:4px}
+.wd-pick button{min-height:44px;border-radius:12px;border:2px solid var(--line);background:var(--bg);font-weight:700}
+.wd-pick button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+/* 한마디 대화 */
+.chat{display:grid;gap:10px;max-height:44vh;overflow-y:auto;padding:4px 2px}
+.chat-row{display:flex;gap:8px;align-items:flex-end;max-width:90%}
+.chat-row.me{flex-direction:row-reverse;justify-self:end;text-align:right}
+.chat-row .ava{width:32px;height:32px;font-size:17px;flex:none}
+.chat-b{padding:10px 14px;border-radius:18px;background:var(--b-soft);font-size:15px;overflow-wrap:anywhere;text-align:left}
+.chat-row.me .chat-b{background:var(--a-soft)}
+/* 추억 */
+.memories{display:grid;gap:16px}
+.mem-month{display:grid;gap:8px}
+.mem-m{font-weight:700;font-size:14px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.mem{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:12px;border-radius:14px;background:var(--surface);box-shadow:var(--shadow)}
+.mem-emo{width:44px;height:44px;border-radius:12px;background:var(--both-soft);display:grid;place-items:center;font-size:22px;flex:none}
+.mem-body{display:grid;gap:2px;min-width:0}
+.mem-title{font-weight:700;overflow-wrap:anywhere}
+.mem-review{font-family:var(--f-display);font-size:15px;color:var(--ink);margin-top:2px;overflow-wrap:anywhere}
+.mem-add{display:inline-flex;align-items:center;gap:4px}
+
+/* 둘 다 비는 시간 (30분 단위) */
+.free-days{display:grid;gap:10px}
+.free-day{display:grid;gap:6px}
+.fd-label{font-weight:700;font-size:14px}
+@media (min-width:700px){.free-day{grid-template-columns:64px minmax(0,1fr);gap:8px;align-items:start}.fd-label{padding-top:9px}}
+.free-chips{display:flex;flex-wrap:wrap;gap:6px}
+.free-chip{display:inline-flex;align-items:baseline;gap:5px;min-height:40px;padding:8px 12px;border-radius:12px;background:var(--surface);color:var(--ink);font-size:14px}
+.free-chip small{font-size:11px;color:var(--muted)}
+.free-chip:hover{outline:2px solid var(--both)}
+.free-inline{display:grid;gap:8px}
+.fi-title{display:flex;align-items:center;gap:6px}
+/* 월간 */
+.month-nav{display:flex;align-items:center;justify-content:space-between;margin:12px 0}
+.month-nav .arrow{width:48px;height:48px;display:grid;place-items:center;border-radius:12px;color:var(--muted);background:var(--surface)}
+.mn-label{font-weight:700;font-size:17px}
+.month-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;margin-top:4px}
+.mhead{text-align:center;font-size:12px;font-weight:700;color:var(--muted);padding:4px 0}
+.mhead.sun{color:var(--b)} .mhead.sat{color:var(--a)}
+.mcell{min-height:58px;border-radius:10px;background:var(--surface);display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;min-width:0;overflow:hidden}
+.mcell.out{opacity:.4}
+.mnum{font-weight:700;font-size:15px;position:relative;line-height:1.2}
+.mann{position:absolute;left:100%;top:-4px;font-style:normal;font-size:10px}
+.mcell.is-today .mnum{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px}
+.mcell[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.mcell[aria-pressed="true"] .mitem{background:color-mix(in srgb,var(--bg) 18%,transparent);color:var(--bg)}
+.mitems{display:none;width:100%;gap:2px;flex-direction:column}
+.mitem{font-size:11px;line-height:1.3;padding:1px 4px;border-radius:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
+.mitem.a{background:var(--a-soft);color:var(--a)} .mitem.b{background:var(--b-soft);color:var(--b)} .mitem.both{background:var(--both-soft);color:var(--both)}
+.mitem.done{text-decoration:line-through;opacity:.7}
+.mmore{font-size:11px;color:var(--muted)}
+.mdots{align-items:center;height:auto;gap:2px;flex-wrap:wrap;justify-content:center}
+.mdots b{font-size:10px;line-height:1}
+.legend{display:flex;gap:14px;justify-content:center;font-size:12px;color:var(--muted);margin:8px 0 4px}
+.legend span{display:inline-flex;align-items:center;gap:4px}
+.legend i{width:8px;height:8px;border-radius:50%}
+.legend i.a{background:var(--a)} .legend i.b{background:var(--b)} .legend i.both{background:var(--both)}
+.month-day{scroll-margin-top:80px}
+@media (min-width:700px){
+  .mcell{min-height:104px;align-items:stretch;padding:6px}
+  .mnum{align-self:flex-start;font-size:14px}
+  .mitems{display:flex}
+  .mdots{display:none}
+  .month-grid{gap:6px}
+}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 </head>
@@ -350,7 +458,9 @@ const I = {
   x: '<path d="M6 6l12 12M18 6L6 18"/>',
   copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
-  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>'
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>',
+  repeat: '<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>',
+  bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>'
 };
 const ic = (n, cls = "") => `<svg class="icon ${cls}" viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
 
@@ -368,6 +478,7 @@ const S = {
   mode: null,            // 'demo' | 'live'
   code: null, me: "a", uid: null,
   slots: {}, events: {}, plans: {}, goals: {}, logs: {},
+  activity: {}, info: {}, anniv: {}, notes: {}, reactions: {}, actReady: false,
   priv: { events: {}, goals: {}, logs: {} },
   tab: "today", view: "day", sel: todayStr(), filter: "all",
   login: { step: "code", code: "", slots: {}, slot: null, err: "" }
@@ -429,22 +540,48 @@ function subscribeAll() {
   L("plans", v => (S.plans = v));
   L("goals", v => (S.goals = v));
   L("logs", v => (S.logs = v));
+  L("info", v => (S.info = v));
+  L("anniv", v => (S.anniv = v));
+  L("notes", v => (S.notes = v));
+  L("reactions", v => (S.reactions = v));
+  S.actReady = false;
+  L("activity", v => {
+    // 앱을 보고 있는 중에 상대가 바꾼 내용은 바로 알려줌
+    if (S.actReady) {
+      const fresh = entries(v).filter(([k, a]) => !S.activity[k] && a.by === P()).sort((x, y) => x[1].at - y[1].at);
+      if (fresh.length) toast(`${prof(P()).name}님이 ${fresh.at(-1)[1].text}`);
+    }
+    S.activity = v; S.actReady = true;
+  });
   L(`private/${S.me}`, v => (S.priv = { events: v.events || {}, goals: v.goals || {}, logs: v.logs || {} }));
 }
+
+/* 변경 기록 — 공유되는 것을 바꿀 때 남겨서 상대의 '새 소식'에 보여줌 */
+function logAct(text) {
+  if (!store) return;
+  const id = store.newId(), up = { [`activity/${id}`]: { by: S.me, text, at: Date.now() } };
+  const keys = Object.keys(S.activity).sort((a, b) => S.activity[a].at - S.activity[b].at);
+  if (keys.length >= 60) keys.slice(0, keys.length - 59).forEach(k => (up[`activity/${k}`] = null));
+  store.update("", up).catch(() => {});
+}
+const q = t => `‘${t}’`;
 
 /* ========== 5. 샘플 데이터 ========== */
 function sampleData(me, includePartnerOwned) {
   const t = todayStr(), d = n => addDays(t, n), pt = other(me);
   const out = {}; let n = 0;
   const id = () => "s" + (++n).toString(36) + localId().slice(-4);
-  const ev = (scope, owner, date, time, endTime, title, place = "", memo = "", done = false) => {
+  const ev = (scope, owner, date, time, endTime, title, place = "", memo = "", done = false, repeat = null) => {
     const e = { title, date, time, endTime, place, memo, done, owner, sample: true, createdAt: Date.now() };
-    if (scope === "private") { if (owner === me || includePartnerOwned) out[`private/${owner}/events/${id()}`] = e; }
-    else if (owner === me || scope === "together" || includePartnerOwned) out[`events/${id()}`] = { ...e, type: scope };
+    if (repeat) e.repeat = repeat;
+    const key = id();
+    if (scope === "private") { if (owner === me || includePartnerOwned) out[`private/${owner}/events/${key}`] = e; }
+    else if (owner === me || scope === "together" || includePartnerOwned) out[`events/${key}`] = { ...e, type: scope };
+    return key;
   };
   // 오늘
   ev("private", me, t, "07:00", "07:40", "아침 러닝 5km", "한강공원 반포지구", "", true);
-  ev("shared", me, t, "09:00", "18:00", "회사 근무", "판교", "퇴근 후 바로 연남동으로");
+  ev("shared", me, weekStart(t), "09:00", "18:00", "회사 근무", "판교", "", false, { freq: "weekdays" });
   ev("private", me, t, "22:30", "", "책 30쪽 읽기", "", "");
   ev("shared", pt, t, "10:00", "11:00", "팀 주간 회의", "회사 3층", "");
   ev("shared", pt, t, "14:00", "15:30", "고객 미팅", "강남역", "");
@@ -452,7 +589,7 @@ function sampleData(me, includePartnerOwned) {
   // 내일 이후
   ev("together", me, d(1), "07:00", "08:00", "같이 러닝 (6km)", "한강공원", "대회 준비 페이스 연습");
   ev("shared", me, d(1), "12:00", "13:00", "팀 점심", "회사 근처", "");
-  ev("shared", pt, d(1), "18:30", "19:30", "요가 수업", "동네 요가원", "");
+  ev("shared", pt, weekStart(t), "18:30", "19:30", "요가 수업", "동네 요가원", "", false, { freq: "weekly", days: [2, 4] });
   ev("together", pt, d(3), "20:00", "", "부모님께 영상통화", "", "");
   ev("shared", me, d(4), "19:00", "21:00", "동호회 러닝", "올림픽공원", "");
 
@@ -460,7 +597,12 @@ function sampleData(me, includePartnerOwned) {
     if (proposer !== me && !includePartnerOwned) return;
     out[`plans/${id()}`] = { cat, title, date, time, place, memo, proposer, status, done: false, sample: true, createdAt: Date.now() };
   };
-  plan("date", "연남동 파스타 저녁", t, "19:30", "연남동", "7시 30분 2인 예약 완료", pt, "confirmed");
+  const dinner = id();
+  if (includePartnerOwned) out[`plans/${dinner}`] = { cat: "date", title: "연남동 파스타 저녁", date: t, time: "19:30", place: "연남동", memo: "7시 30분 2인 예약 완료", proposer: pt, status: "confirmed", done: false, sample: true, createdAt: Date.now() };
+  const memory = (cat, title, o, time, place, review) => (out[`plans/${id()}`] = { cat, title, date: d(o), time, place, memo: "", review, proposer: me, status: "confirmed", done: true, sample: true, createdAt: Date.now() });
+  memory("trip", "한강 피크닉", -6, "16:00", "반포 한강공원", "노을이 정말 예뻤다. 다음엔 돗자리 큰 걸로!");
+  memory("date", "전시회 데이트", -20, "14:00", "국립현대미술관", "");
+  memory("meal", "생일 저녁", -41, "19:00", "을지로", "케이크 촛불 끄는 영상 꼭 남기기");
   plan("meal", "주말 브런치", d(6), "11:00", "성수동", "웨이팅 있으니 10시 50분까지", pt, "proposed");
   plan("shop", "일주일 장보기", d(2), "18:30", "동네 마트", "우유, 달걀, 닭가슴살, 과일", me, "proposed");
   plan("date", "영화 보기", d(9), "20:00", "CGV 용산", "", me, "confirmed");
@@ -485,6 +627,17 @@ function sampleData(me, includePartnerOwned) {
   [[-3, 10], [-2, 15], [-1, 10], [0, 10]].forEach(([o, v]) => (out[`private/${me}/logs/${prvId}/${id()}`] = { date: d(o), value: v, by: me }));
 
   if (includePartnerOwned) {
+    // 체험 모드에서만: 우리 정보·기념일·한마디·새 소식·반응 예시
+    out["info"] = { startDate: d(-511) };
+    out[`anniv/${id()}`] = { title: `${"우니"} 생일`, date: d(23).replace(/^\d{4}/, "1997"), yearly: true, emoji: "🎂" };
+    out[`anniv/${id()}`] = { title: "처음 여행 간 날", date: d(-300), yearly: true, emoji: "🧳" };
+    const now = Date.now(), H = 3600000;
+    out[`notes/${id()}`] = { by: me, text: "오늘 회의 잘하고 와! 화이팅 💪", at: now - 6 * H };
+    out[`notes/${id()}`] = { by: pt, text: "저녁 파스타 너무 기대돼 🍝", at: now - 2 * H };
+    out[`activity/${id()}`] = { by: pt, text: `${q("주말 브런치")} 계획을 제안했어요`, at: now - 2.5 * H };
+    out[`activity/${id()}`] = { by: pt, text: `${q("연남동 파스타 저녁")}에 ❤️ 반응을 남겼어요`, at: now - 1.5 * H };
+    out[`slots/${me}/lastSeen`] = now - 3 * H;
+    out[`reactions/plan_${dinner}/${pt}`] = "❤️";
     const rd = id();
     out[`goals/${rd}`] = { title: "한 달에 책 2권", kind: "read", unit: "쪽", owner: pt, weekly: 120, targetDate: "", sample: true, createdAt: Date.now() };
     [[-6, 30], [-4, 25], [-2, 40], [0, 20]].forEach(([o, v]) => (out[`logs/${rd}/${id()}`] = { date: d(o), value: v, by: pt }));
@@ -504,13 +657,108 @@ async function removeSamples() {
 }
 
 /* ========== 6. 데이터 가공 ========== */
+/* 반복 일정 */
+const REPEATS = { none: "반복 안 함", daily: "매일", weekdays: "평일", weekly: "매주" };
+const isRepeat = e => e.repeat && e.repeat.freq && e.repeat.freq !== "none";
+function occursOn(e, d) {
+  if (d < e.date || (e.repeat?.until && d > e.repeat.until) || e.skip?.[d]) return false;
+  const wd = parseD(d).getDay(), f = e.repeat?.freq || "none";
+  if (f === "daily") return true;
+  if (f === "weekdays") return wd >= 1 && wd <= 5;
+  if (f === "weekly") return (e.repeat.days?.length ? e.repeat.days : [parseD(e.date).getDay()]).includes(wd);
+  return d === e.date;
+}
+function repeatLabel(r) {
+  if (!r || r.freq === "none") return "";
+  if (r.freq === "weekly") return "매주 " + (r.days?.length ? [...r.days].sort((a, b) => ((a + 6) % 7) - ((b + 6) % 7)).map(x => WD[x]).join("·") : "");
+  return REPEATS[r.freq];
+}
+const monthStart = d => d.slice(0, 8) + "01";
+const monthEnd = d => { const x = parseD(monthStart(d)); x.setMonth(x.getMonth() + 1); x.setDate(0); return ds(x); };
+function itemWindow() {
+  const g0 = weekStart(monthStart(S.sel)), g1 = addDays(weekStart(monthEnd(S.sel)), 6);
+  const a = [todayStr(), g0].sort()[0], b = [todayStr(), g1].sort()[1];
+  return [addDays(a, -42), addDays(b, 21)];
+}
 function allItems() {
+  const base = [];
+  for (const [id, e] of entries(S.priv.events)) base.push({ ...e, id, src: "priv", scope: "private", owner: S.me });
+  for (const [id, e] of entries(S.events)) base.push({ ...e, id, src: "shared", scope: e.type === "together" ? "together" : "shared" });
   const out = [];
-  for (const [id, e] of entries(S.priv.events)) out.push({ ...e, id, src: "priv", scope: "private", owner: S.me });
-  for (const [id, e] of entries(S.events)) out.push({ ...e, id, src: "shared", scope: e.type === "together" ? "together" : "shared" });
+  const [w0, w1] = itemWindow();
+  for (const e of base) {
+    if (!isRepeat(e)) { out.push(e); continue; }
+    for (let d = e.date > w0 ? e.date : w0; d <= w1; d = addDays(d, 1))
+      if (occursOn(e, d)) out.push({ ...e, id: `${e.id}@${d}`, baseId: e.id, occ: d, seriesDate: e.date, date: d, done: !!e.doneDates?.[d] });
+  }
   for (const [id, p] of entries(S.plans)) if (p.status === "confirmed" && p.date)
-    out.push({ id, src: "plan", scope: "together", owner: p.proposer, title: p.title, date: p.date, time: p.time, endTime: "", place: p.place, memo: p.memo, done: !!p.done, cat: p.cat });
+    out.push({ id, src: "plan", scope: "together", owner: p.proposer, title: p.title, date: p.date, time: p.time, endTime: "", place: p.place, memo: p.memo, done: !!p.done, cat: p.cat, review: p.review });
   return out.sort((x, y) => (x.date + (x.time || "00:00")).localeCompare(y.date + (y.time || "00:00")));
+}
+const itemPath = it => (it.src === "priv" ? `private/${S.me}/events/${it.baseId || it.id}` : it.src === "plan" ? `plans/${it.id}` : `events/${it.baseId || it.id}`);
+const reactKey = it => `${it.src}_${it.id}`;
+
+/* 둘 다 비는 시간 — 평일 저녁 6~11시, 주말 오전 10시~오후 10시 중 1시간 30분 이상 빈 구간 */
+const toMin = t => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+const fromMin = m => `${pad(Math.floor(m / 60))}:${pad(m % 60)}`;
+const durText = m => `${Math.floor(m / 60) ? Math.floor(m / 60) + "시간" : ""}${m % 60 ? " " + (m % 60) + "분" : ""}`.trim();
+function freeSlots(from, days) {
+  // 하루 전체(0시~24시)에서 30분 단위로, 둘 다 30분 이상 빈 구간
+  const items = allItems(), out = [], t = todayStr();
+  const fl = m => Math.floor(m / 30) * 30, ce = m => Math.ceil(m / 30) * 30;
+  for (let i = 0; i < days; i++) {
+    const d = addDays(from, i); if (d < t) continue;
+    let ws = 0; const we = 1440;
+    if (d === t) { const n = new Date(); ws = ce(n.getHours() * 60 + n.getMinutes() + 1); }
+    const busy = items.filter(it => it.date === d && it.time).map(it => {
+      const s = toMin(it.time); let e = it.endTime ? toMin(it.endTime) : s + 60;
+      if (e <= s) e = 1440;
+      return [fl(s), Math.min(1440, ce(e))];
+    }).sort((a, b) => a[0] - b[0]);
+    let cur = ws;
+    for (const [s, e] of busy) { if (Math.min(s, we) - cur >= 30) out.push({ d, s: cur, e: Math.min(s, we) }); cur = Math.max(cur, e); }
+    if (we - cur >= 30) out.push({ d, s: cur, e: we });
+  }
+  return out;
+}
+const freeChip = f => `<button class="free-chip" data-act="free" data-d="${f.d}" data-t="${fromMin(f.s % 1440)}" aria-label="${fmtShort(f.d)} ${fromMin(f.s)}부터 ${fromMin(f.e)}까지 계획 제안">
+  <b>${f.s === 0 && f.e === 1440 ? "하루 종일" : `${fromMin(f.s)}–${fromMin(f.e)}`}</b><small>${durText(f.e - f.s)}</small></button>`;
+function freeCard(from, days, title) {
+  const slots = freeSlots(from, days), byDay = {};
+  slots.forEach(f => (byDay[f.d] ||= []).push(f));
+  return `<section class="card free-card" aria-label="${title}">
+    <div class="h3">${ic("heart", "sm")}${title}</div>
+    ${slots.length ? `<div class="free-days">${Object.entries(byDay).map(([d, fs]) => `
+      <div class="free-day"><span class="fd-label">${fmtShort(d)}</span><div class="free-chips">${fs.map(freeChip).join("")}</div></div>`).join("")}</div>`
+      : `<div class="empty">이 기간에는 둘 다 비는 시간이 없어요.</div>`}
+    <p class="small" style="margin:8px 0 0">하루 전체(0시~24시)에서 30분 단위로 찾아요. 시간을 누르면 그 시간으로 계획을 제안해요. ${esc(prof(P()).name)}님의 비공개 일정은 계산에 들어가지 않아요.</p>
+  </section>`;
+}
+
+/* 함께한 날·기념일 */
+function dayCount() { const s = S.info?.startDate; return s ? diffDays(s, todayStr()) + 1 : null; }
+function annivBetween(a, b) {
+  const out = [], s = S.info?.startDate, y0 = parseD(a).getFullYear(), y1 = parseD(b).getFullYear();
+  if (s) {
+    for (let k = 1; ; k++) { const d = addDays(s, k * 100 - 1); if (d > b) break; if (d >= a) out.push({ date: d, title: `${k * 100}일`, emoji: "💯" }); }
+    const sy = parseD(s).getFullYear();
+    for (let y = y0; y <= y1; y++) if (y > sy) out.push({ date: `${y}${s.slice(4)}`, title: `${y - sy}주년`, emoji: "💍" });
+  }
+  for (const [id, x] of entries(S.anniv)) {
+    if (!x.date) continue;
+    if (x.yearly) { for (let y = y0; y <= y1; y++) out.push({ id, date: `${y}${x.date.slice(4)}`, title: x.title, emoji: x.emoji || "🎉" }); }
+    else out.push({ id, date: x.date, title: x.title, emoji: x.emoji || "🎉" });
+  }
+  return out.filter(x => x.date >= a && x.date <= b).sort((p, q) => p.date.localeCompare(q.date));
+}
+const upcomingAnniv = (limit = 3) => annivBetween(todayStr(), addDays(todayStr(), 800)).slice(0, limit);
+const ddayText = d => { const n = diffDays(todayStr(), d); return n === 0 ? "오늘!" : `D-${n}`; };
+const unseenActs = () => entries(S.activity).filter(([, a]) => a.by === P() && a.at > (S.slots[S.me]?.lastSeen || 0)).sort((a, b) => b[1].at - a[1].at);
+function ago(at) { const m = Math.round((Date.now() - at) / 60000); if (m < 1) return "방금"; if (m < 60) return `${m}분 전`; const h = Math.round(m / 60); if (h < 24) return `${h}시간 전`; return `${Math.round(h / 24)}일 전`; }
+const REACTS = ["❤️", "👏", "💪", "😋", "🥺", "🎉"];
+function reactChips(it) {
+  const r = S.reactions[reactKey(it)]; if (!r) return "";
+  return ["a", "b"].filter(s => r[s]).map(s => `<span class="react-chip" title="${esc(prof(s).name)}">${r[s]}<small>${esc(prof(s).avatar)}</small></span>`).join("");
 }
 const whoOf = it => (it.scope === "together" ? "both" : it.owner);
 const canEdit = it => it.src === "priv" || it.scope === "together" || it.owner === S.me;
@@ -555,21 +803,29 @@ function render() {
         `<button class="tab" data-act="tab" data-v="${k}" ${S.tab === k ? 'aria-current="page"' : ""}>${ic(i)}${k === "plans" && pc ? `<span class="badge">${pc}</span>` : ""}<span>${l}</span></button>`).join("")}
     </div></nav>`;
   window.scrollTo(0, y);
-  if (slideDir) { $("#swipe")?.classList.add(slideDir > 0 ? "slide-l" : "slide-r"); $(".week-strip")?.classList.add(slideDir > 0 ? "slide-l" : "slide-r"); slideDir = 0; }
+  if (slideDir) { $("#swipe")?.classList.add(slideDir > 0 ? "slide-l" : "slide-r"); $(".week-strip, .month-grid")?.classList.add(slideDir > 0 ? "slide-l" : "slide-r"); slideDir = 0; }
 }
 let slideDir = 0;
 function moveDate(step) { slideDir = step; S.sel = addDays(S.sel, step); render(); }
+function moveMonth(n) {
+  const d = parseD(S.sel), day = d.getDate();
+  d.setDate(1); d.setMonth(d.getMonth() + n);
+  const last = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+  d.setDate(Math.min(day, last));
+  slideDir = n; S.sel = ds(d); render();
+}
 
 function rowHTML(it, { showDate = false } = {}) {
   const w = whoOf(it), edit = canEdit(it);
   const scopeTag = it.scope === "private" ? `<span class="tag">${ic("lock", "sm")}나만</span>` : it.scope === "shared" && it.owner === S.me ? `<span class="tag">${ic("eye", "sm")}공유 중</span>` : "";
   const cat = it.src === "plan" ? `<span class="tag">${PLAN_CATS[it.cat]?.[0] || "✨"} 함께할 계획</span>` : "";
+  const rep = isRepeat(it) ? `<span class="tag">${ic("repeat", "sm")}${repeatLabel(it.repeat)}</span>` : "";
   return `<div class="row ${it.done ? "done" : ""}">
     <div class="row-time">${it.time || "종일"}${it.endTime ? `<small>~${it.endTime}</small>` : ""}${showDate ? `<small>${fmtShort(it.date)}</small>` : ""}</div>
     <div class="row-bar ${w}"></div>
     <button class="row-main" data-act="open" data-src="${it.src}" data-id="${it.id}">
       <span class="row-title" data-time="${it.time || "종일"}">${esc(it.title)}</span>
-      <span class="row-meta">${whoChip(w)}${scopeTag}${cat}${it.place ? `<span class="tag">${ic("pin", "sm")}${esc(it.place)}</span>` : ""}</span>
+      <span class="row-meta">${whoChip(w)}${scopeTag}${cat}${rep}${it.place ? `<span class="tag">${ic("pin", "sm")}${esc(it.place)}</span>` : ""}${it.scope !== "private" ? reactChips(it) : ""}</span>
     </button>
     ${edit
       ? `<button class="check ${it.done ? "on" : ""}" data-act="done" data-src="${it.src}" data-id="${it.id}" aria-label="${esc(it.title)} ${it.done ? "완료 취소" : "완료로 표시"}" aria-pressed="${!!it.done}">${ic("check")}</button>`
@@ -585,6 +841,35 @@ function relTime(t) {
   return `${Math.floor(mins / 60)}시간${mins % 60 ? ` ${mins % 60}분` : ""} 후`;
 }
 
+function coupleHero() {
+  const n = dayCount(), up = upcomingAnniv(1)[0];
+  const notes = entries(S.notes).sort((a, b) => b[1].at - a[1].at);
+  const theirs = notes.find(([, x]) => x.by === P()), mine = notes.find(([, x]) => x.by === S.me);
+  const bubble = (nt, side) => nt ? `<button class="bubble ${side}" data-act="note">
+      <span class="bubble-who">${esc(prof(nt[1].by).avatar)} ${esc(prof(nt[1].by).name)} · ${ago(nt[1].at)}</span>
+      <span class="bubble-text">${esc(nt[1].text)}</span></button>` : "";
+  return `<section class="hero" aria-label="우리 둘">
+    <div class="hero-top">
+      <span class="hero-avas"><span class="ava ${S.me}">${esc(prof(S.me).avatar)}</span><span class="ava ${P()}">${esc(prof(P()).avatar)}</span></span>
+      <div class="hero-count">${n ? `<span class="small">${esc(prof(S.me).name)} ♥ ${esc(prof(P()).name)}</span><b>함께한 지 ${n.toLocaleString()}일째</b>`
+        : `<button class="link" data-act="anniv">처음 만난 날을 입력하면 함께한 날을 세어 줘요</button>`}</div>
+    </div>
+    ${up ? `<button class="anniv-line" data-act="anniv"><span>${up.emoji} 다음 기념일 <b>${esc(up.title)}</b> · ${fmtShort(up.date)}</span><span class="pill dday">${ddayText(up.date)}</span></button>` : ""}
+    <div class="bubbles">${bubble(theirs, "them")}${bubble(mine, "me")}
+      <button class="btn sm ghost note-btn" data-act="note">${ic("note", "sm")}${mine || theirs ? "한마디 남기기" : `${esc(prof(P()).name)}님에게 한마디 남기기`}</button></div>
+  </section>`;
+}
+
+function newsCard() {
+  const list = unseenActs(); if (!list.length) return "";
+  return `<section class="card news-card" aria-label="새 소식">
+    <div class="h3">${ic("bell", "sm")}${esc(prof(P()).name)}님의 새 소식 <span class="pill wait">${list.length}</span></div>
+    <ul class="news-list">${list.slice(0, 5).map(([, a]) => `<li><span>${esc(prof(P()).avatar)} ${esc(a.text)}</span><small>${ago(a.at)}</small></li>`).join("")}</ul>
+    ${list.length > 5 ? `<div class="small">외 ${list.length - 5}개</div>` : ""}
+    <button class="btn sm block" data-act="seen">${ic("check", "sm")}확인했어요</button>
+  </section>`;
+}
+
 function renderToday() {
   const t = todayStr(), items = allItems().filter(i => i.date === t);
   const now = nowHM();
@@ -594,11 +879,15 @@ function renderToday() {
   const pendingToday = entries(S.plans).filter(([, p]) => p.status === "proposed" && p.date === t).map(([id, p]) => ({ id, ...p }));
   const myCount = items.filter(i => i.owner === S.me && i.scope !== "together").length;
   const ptCount = items.filter(i => i.owner === P() && i.scope !== "together").length;
+  const annivToday = upcomingAnniv(5).filter(a => a.date === t);
   return `
     <div class="screen-head"><div><div class="eyebrow">오늘</div><h1 class="big-date">${fmtDate(t)}</h1></div>
       <div class="small">${esc(prof(S.me).name)} ${myCount} · ${esc(prof(P()).name)} ${ptCount} · 함께 ${tgToday.length}</div></div>
+    ${annivToday.length ? `<div class="card celebrate">${annivToday.map(a => `${a.emoji} 오늘은 <b>${esc(a.title)}</b>이에요!`).join("<br>")}</div>` : ""}
     <div class="today-grid">
       <div class="today-side">
+        ${coupleHero()}
+        ${newsCard()}
         <section class="card next-card" aria-label="다음 일정">
           <div class="next-label">${ic("clock", "sm")}다음 일정${next ? `<span class="rel">${relTime(next.time)}</span>` : ""}</div>
           ${next ? `<button class="row-main" data-act="open" data-src="${next.src}" data-id="${next.id}">
@@ -610,7 +899,7 @@ function renderToday() {
           <div class="h3">${ic("heart", "sm")}오늘 함께</div>
           ${tgToday.length || pendingToday.length ? tgToday.map(i => `
             <button class="tg-item" data-act="open" data-src="${i.src}" data-id="${i.id}">
-              <span class="tg-time">${i.time || "종일"}</span><span class="tg-title">${i.src === "plan" ? (PLAN_CATS[i.cat]?.[0] || "") + " " : ""}${esc(i.title)}</span>${i.done ? '<span class="pill ok">완료</span>' : ""}
+              <span class="tg-time">${i.time || "종일"}</span><span class="tg-title">${i.src === "plan" ? (PLAN_CATS[i.cat]?.[0] || "") + " " : ""}${esc(i.title)}</span>${reactChips(i)}${i.done ? '<span class="pill ok">완료</span>' : ""}
             </button>`).join("") + pendingToday.map(p => `
             <button class="tg-item" data-act="tab" data-v="plans">
               <span class="tg-time">${p.time || "종일"}</span><span class="tg-title">${PLAN_CATS[p.cat]?.[0] || ""} ${esc(p.title)}</span><span class="pill wait">${p.proposer === S.me ? "답 기다림" : "확인 필요"}</span>
@@ -626,46 +915,88 @@ function renderToday() {
     </div>`;
 }
 
+function dayListHTML(all, d) {
+  const t = todayStr(), its = all.filter(i => i.date === d);
+  const free = d >= t ? freeSlots(d, 1) : [];
+  const ann = annivBetween(d, d);
+  return `<div class="day-label ${d === t ? "today" : ""}">${fmtDate(d)}</div>
+    ${ann.length ? `<div class="anniv-line" style="margin-bottom:8px">${ann.map(a => `<span>${a.emoji} <b>${esc(a.title)}</b></span>`).join("")}</div>` : ""}
+    ${its.length ? `<div class="timeline">${its.map(i => rowHTML(i)).join("")}</div>` : `<div class="card empty">이 날은 일정이 없어요. <button class="link" data-act="new-event" data-date="${d}">이 날 일정 추가</button></div>`}
+    ${free.length ? `<div class="free-inline"><span class="fi-title">${ic("heart", "sm")}둘 다 비는 시간</span><div class="free-chips">${free.map(freeChip).join("")}</div></div>` : ""}`;
+}
+
+function monthHTML(all) {
+  const t = todayStr(), m0 = monthStart(S.sel), m1 = monthEnd(S.sel);
+  const g0 = weekStart(m0), g1 = addDays(weekStart(m1), 6);
+  const ann = {}; annivBetween(g0, g1).forEach(a => (ann[a.date] ||= []).push(a));
+  const cells = [];
+  for (let d = g0; d <= g1; d = addDays(d, 1)) {
+    const its = all.filter(i => i.date === d), out = d < m0 || d > m1;
+    const kinds = [...new Set(its.map(whoOf))];
+    cells.push(`<button class="mcell ${out ? "out" : ""} ${d === t ? "is-today" : ""}" data-act="msel" data-v="${d}" aria-pressed="${d === S.sel}" aria-label="${fmtDate(d)}, 일정 ${its.length}개${ann[d] ? ", " + ann[d].map(a => a.title).join(", ") : ""}">
+      <span class="mnum">${parseD(d).getDate()}${ann[d] ? `<i class="mann">${ann[d][0].emoji}</i>` : ""}</span>
+      <span class="mitems">${its.slice(0, 3).map(i => `<span class="mitem ${whoOf(i)} ${i.done ? "done" : ""}">${esc(i.title)}</span>`).join("")}${its.length > 3 ? `<span class="mmore">+${its.length - 3}</span>` : ""}</span>
+      <span class="dots mdots">${kinds.map(k => `<i class="${k}"></i>`).join("")}${its.length > 2 ? `<b>${its.length}</b>` : ""}</span>
+    </button>`);
+  }
+  return `<div class="month-grid" role="grid" aria-label="${parseD(m0).getMonth() + 1}월 달력">
+      ${["월", "화", "수", "목", "금", "토", "일"].map(w => `<span class="mhead ${w === "토" ? "sat" : w === "일" ? "sun" : ""}">${w}</span>`).join("")}
+      ${cells.join("")}
+    </div>
+    <div class="legend"><span><i class="a"></i>${esc(prof("a").name)}</span><span><i class="b"></i>${esc(prof("b").name)}</span><span><i class="both"></i>함께</span></div>
+    <div class="month-day">${dayListHTML(all, S.sel)}</div>`;
+}
+
 function renderSchedule() {
   const ws = weekStart(S.sel), t = todayStr();
   const all = allItems().filter(passFilter);
   const days = [...Array(7)].map((_, i) => addDays(ws, i));
-  const strip = days.map(d => {
-    const its = all.filter(i => i.date === d);
-    const kinds = [...new Set(its.map(whoOf))].slice(0, 3);
-    return `<button class="wday ${d === t ? "is-today" : ""}" data-act="sel" data-v="${d}" aria-pressed="${d === S.sel}" aria-label="${fmtDate(d)}, 일정 ${its.length}개">
-      ${WD[parseD(d).getDay()]}<b>${parseD(d).getDate()}</b><span class="dots">${kinds.map(k => `<i class="${k}"></i>`).join("")}</span></button>`;
-  }).join("");
   const filters = [["all", "전체"], ["me", `${prof(S.me).avatar} 나`], ["partner", `${prof(P()).avatar} ${prof(P()).name}`], ["both", "💞 함께"]];
-  let body;
-  if (S.view === "day") {
-    const its = all.filter(i => i.date === S.sel);
-    body = `<div class="day-label ${S.sel === t ? "today" : ""}">${fmtDate(S.sel)}</div>
-      ${its.length ? `<div class="timeline">${its.map(i => rowHTML(i)).join("")}</div>` : `<div class="card empty">이 날은 일정이 없어요. <button class="link" data-act="new-event" data-date="${S.sel}">이 날 일정 추가</button></div>`}`;
+  let body, title, nav;
+  if (S.view === "month") {
+    const m = parseD(S.sel);
+    title = `${m.getFullYear()}년 ${m.getMonth() + 1}월`;
+    nav = `<div class="month-nav">
+      <button class="arrow" data-act="month" data-v="-1" aria-label="지난달">${ic("left")}</button>
+      <span class="mn-label">${m.getMonth() + 1}월</span>
+      <button class="arrow" data-act="month" data-v="1" aria-label="다음 달">${ic("right")}</button></div>`;
+    body = monthHTML(all);
   } else {
-    body = `<div class="week-grid">${days.map(d => {
+    title = `${fmtShort(ws).split(" ")[0]} – ${fmtShort(addDays(ws, 6)).split(" ")[0]}`;
+    const strip = days.map(d => {
       const its = all.filter(i => i.date === d);
-      return `<section><div class="day-label ${d === t ? "today" : ""}">${fmtShort(d)}</div>
-        ${its.length ? `<div class="timeline">${its.map(i => rowHTML(i)).join("")}</div>` : `<button class="btn ghost sm block" data-act="new-event" data-date="${d}">${ic("plus", "sm")}추가</button>`}</section>`;
-    }).join("")}</div>`;
+      const kinds = [...new Set(its.map(whoOf))].slice(0, 3);
+      return `<button class="wday ${d === t ? "is-today" : ""}" data-act="sel" data-v="${d}" aria-pressed="${d === S.sel}" aria-label="${fmtDate(d)}, 일정 ${its.length}개">
+        ${WD[parseD(d).getDay()]}<b>${parseD(d).getDate()}</b><span class="dots">${kinds.map(k => `<i class="${k}"></i>`).join("")}</span></button>`;
+    }).join("");
+    nav = `<div class="week-nav">
+      <button class="arrow" data-act="week" data-v="-7" aria-label="지난주">${ic("left")}</button>
+      <div class="week-strip">${strip}</div>
+      <button class="arrow" data-act="week" data-v="7" aria-label="다음 주">${ic("right")}</button></div>`;
+    if (S.view === "day") body = dayListHTML(all, S.sel);
+    else {
+      const showFree = addDays(ws, 6) >= t;
+      body = `${showFree ? freeCard(ws, 7, "이번 주 둘 다 비는 시간") : ""}<div class="week-grid">${days.map(d => {
+        const its = all.filter(i => i.date === d);
+        return `<section><div class="day-label ${d === t ? "today" : ""}">${fmtShort(d)}</div>
+          ${its.length ? `<div class="timeline">${its.map(i => rowHTML(i)).join("")}</div>` : `<button class="btn ghost sm block" data-act="new-event" data-date="${d}">${ic("plus", "sm")}추가</button>`}</section>`;
+      }).join("")}</div>`;
+    }
   }
   return `
-    <div class="screen-head"><div><div class="eyebrow">일정</div><h1 class="big-date">${fmtShort(ws).split(" ")[0]} – ${fmtShort(addDays(ws, 6)).split(" ")[0]}</h1></div>
+    <div class="screen-head"><div><div class="eyebrow">일정</div><h1 class="big-date">${title}</h1></div>
       <div class="seg" role="group" aria-label="보기 전환">
         <button data-act="view" data-v="day" aria-pressed="${S.view === "day"}">하루</button>
         <button data-act="view" data-v="week" aria-pressed="${S.view === "week"}">주간</button>
+        <button data-act="view" data-v="month" aria-pressed="${S.view === "month"}">월간</button>
       </div></div>
-    <div class="week-nav">
-      <button class="arrow" data-act="week" data-v="-7" aria-label="지난주">${ic("left")}</button>
-      <div class="week-strip">${strip}</div>
-      <button class="arrow" data-act="week" data-v="7" aria-label="다음 주">${ic("right")}</button>
-    </div>
+    ${nav}
     <div class="chips" role="group" aria-label="누구 일정 보기">
       ${filters.map(([k, l]) => `<button class="chip" data-act="filter" data-v="${k}" aria-pressed="${S.filter === k}">${esc(l)}</button>`).join("")}
       ${S.sel !== t ? `<button class="chip" data-act="sel" data-v="${t}">오늘로</button>` : ""}
     </div>
     <div class="swipe-area" id="swipe">${body}</div>
-    <p class="swipe-hint">${ic("left", "sm")}좌우로 밀면 ${S.view === "day" ? "하루씩" : "한 주씩"} 넘어가요${ic("right", "sm")}</p>`;
+    <p class="swipe-hint">${ic("left", "sm")}좌우로 밀면 ${S.view === "day" ? "하루씩" : S.view === "week" ? "한 주씩" : "한 달씩"} 넘어가요${ic("right", "sm")}</p>`;
 }
 
 function planCard(id, p) {
@@ -679,27 +1010,49 @@ function planCard(id, p) {
     <div class="plan-top"><div class="plan-ico" aria-hidden="true">${emo}</div>
       <div class="plan-body"><button class="plan-title" style="text-align:left" data-act="plan-edit" data-id="${id}">${esc(p.title)}</button>
         <div class="plan-meta"><span>${catName}</span>${p.date ? `<span>${fmtShort(p.date)} ${p.time ? fmtTimeKo(p.time) : ""}</span>` : "<span>날짜 미정</span>"}${p.place ? `<span>${ic("pin", "sm")} ${esc(p.place)}</span>` : ""}</div>
-        <div class="row-meta">${status}<span class="tag">${esc(prof(p.proposer).avatar)} ${esc(prof(p.proposer).name)}${mine ? "(나)" : ""} 제안</span></div>
+        <div class="row-meta">${status}<span class="tag">${esc(prof(p.proposer).avatar)} ${esc(prof(p.proposer).name)}${mine ? "(나)" : ""} 제안</span>${reactChips({ src: "plan", id })}</div>
       </div></div>
     ${p.memo ? `<div class="note">${ic("note", "sm")}<span>${esc(p.memo)}</span></div>` : ""}
     ${actions}</article>`;
+}
+
+function memories() {
+  const t = todayStr(), list = [];
+  for (const [id, p] of entries(S.plans)) if (p.status === "confirmed" && p.date && (p.date < t || (p.date === t && p.done)))
+    list.push({ id, src: "plan", date: p.date, title: p.title, place: p.place, emoji: PLAN_CATS[p.cat]?.[0] || "✨", review: p.review });
+  for (const [id, e] of entries(S.events)) if (e.type === "together" && !isRepeat(e) && e.date < t)
+    list.push({ id, src: "shared", date: e.date, title: e.title, place: e.place, emoji: "💞", review: e.review });
+  list.sort((a, b) => b.date.localeCompare(a.date));
+  const months = {};
+  list.forEach(m => (months[m.date.slice(0, 7)] ||= []).push(m));
+  return { count: list.length, html: Object.entries(months).map(([ym, ms]) => `
+    <div class="mem-month"><div class="mem-m">${+ym.slice(0, 4)}년 ${+ym.slice(5)}월 <span class="count">${ms.length}</span></div>
+      ${ms.map(m => `<button class="mem" data-act="${m.src === "plan" ? "plan-edit" : "open"}" data-src="${m.src}" data-id="${m.id}">
+        <span class="mem-emo" aria-hidden="true">${m.emoji}</span>
+        <span class="mem-body"><span class="mem-title">${esc(m.title)}</span><span class="small">${fmtShort(m.date)}${m.place ? " · " + esc(m.place) : ""}</span>
+        ${m.review ? `<span class="mem-review">“${esc(m.review)}”</span>` : m.src === "plan" ? `<span class="small mem-add">${ic("edit", "sm")}한 줄 후기 남기기</span>` : ""}</span>
+      </button>`).join("")}</div>`).join("") };
 }
 
 function renderPlans() {
   const t = todayStr(), ps = entries(S.plans).sort((a, b) => ((a[1].date || "9") + (a[1].time || "")).localeCompare((b[1].date || "9") + (b[1].time || "")));
   const need = ps.filter(([, p]) => p.status === "proposed" && p.proposer !== S.me);
   const wait = ps.filter(([, p]) => p.status === "proposed" && p.proposer === S.me);
-  const conf = ps.filter(([, p]) => p.status === "confirmed" && (!p.date || p.date >= t));
-  const past = ps.filter(([, p]) => p.status === "declined" || (p.status === "confirmed" && p.date && p.date < t)).reverse();
+  const conf = ps.filter(([, p]) => p.status === "confirmed" && p.date >= t && !(p.date === t && p.done));
+  const declined = ps.filter(([, p]) => p.status === "declined");
+  const mem = memories();
   const sec = (title, list, emptyMsg) => `<h2 class="h2">${title} <span class="count">${list.length}</span></h2>
     ${list.length ? `<div class="grid-2">${list.map(([id, p]) => planCard(id, p)).join("")}</div>` : `<div class="empty">${emptyMsg}</div>`}`;
   return `
     <div class="screen-head"><div><div class="eyebrow">함께할 계획</div><h1 class="big-date">둘이 함께할 일</h1></div></div>
-    <p class="small" style="margin:0">한 사람이 제안하면 다른 사람이 확인해서 확정해요. 확정된 계획은 오늘·일정 화면에 <b>함께</b>로 표시돼요.</p>
+    <p class="small" style="margin:0 0 12px">한 사람이 제안하면 다른 사람이 확인해서 확정해요. 확정된 계획은 오늘·일정 화면에 <b>함께</b>로 표시돼요.</p>
+    ${freeCard(t, 7, "앞으로 7일, 둘 다 비는 시간")}
     ${sec(`${esc(prof(P()).name)}님이 제안했어요`, need, "확인할 제안이 없어요.")}
     ${sec("내가 제안한 계획", wait, "답을 기다리는 제안이 없어요.")}
     ${sec("확정된 계획", conf, "아직 확정된 계획이 없어요.")}
-    ${past.length ? sec("지난 계획", past.slice(0, 6), "") : ""}`;
+    ${declined.length ? sec("다음에 하기로 한 계획", declined.slice(0, 4), "") : ""}
+    <h2 class="h2">${ic("heart", "sm")}우리의 추억 <span class="count">함께한 일 ${mem.count}개</span></h2>
+    ${mem.count ? `<div class="memories">${mem.html}</div>` : `<div class="empty">함께한 계획이 지나가면 여기에 모여요.</div>`}`;
 }
 
 function goalStats(g) {
@@ -974,81 +1327,144 @@ function armDelete(btn, fn) {
   });
 }
 
+function reactBar(it) {
+  const r = S.reactions[reactKey(it)] || {};
+  return `<div class="field"><span class="lbl">반응 남기기</span><div class="react-bar" data-key="${esc(reactKey(it))}" data-title="${esc(it.title)}">
+    ${REACTS.map(e => `<button type="button" data-react="${e}" aria-pressed="${r[S.me] === e}" aria-label="${e} 반응">${e}</button>`).join("")}</div>
+    ${r[P()] ? `<span class="small">${esc(prof(P()).avatar)} ${esc(prof(P()).name)}님은 ${r[P()]} 반응을 남겼어요.</span>` : ""}</div>`;
+}
+function bindReact(root) {
+  const bar = root.querySelector(".react-bar"); if (!bar) return;
+  bar.addEventListener("click", async e => {
+    const b = e.target.closest("[data-react]"); if (!b) return;
+    const key = bar.dataset.key, emo = b.dataset.react, cur = S.reactions[key]?.[S.me];
+    const next = cur === emo ? null : emo;
+    bar.querySelectorAll("[data-react]").forEach(x => x.setAttribute("aria-pressed", x.dataset.react === next));
+    if (await save(() => store.set(`reactions/${key}/${S.me}`, next)) && next) logAct(`${q(bar.dataset.title)}에 ${next} 반응을 남겼어요`);
+  });
+}
+const repeatHTML = r => {
+  const f = r?.freq || "none", days = r?.days || [];
+  return `<div class="field"><span class="lbl">반복</span>
+    <div class="chips" id="ev-rep" style="flex-wrap:wrap">${Object.entries(REPEATS).map(([k, n]) => `<button type="button" class="chip" data-v="${k}" aria-pressed="${k === f}">${n}</button>`).join("")}</div>
+    <div class="wd-pick" id="ev-days" ${f === "weekly" ? "" : "hidden"}>${[1, 2, 3, 4, 5, 6, 0].map(d => `<button type="button" data-d="${d}" aria-pressed="${days.includes(d)}" aria-label="${WD[d]}요일">${WD[d]}</button>`).join("")}</div>
+    <div class="field" id="ev-until-f" ${f === "none" ? "hidden" : ""}><label for="ev-until">반복 끝나는 날 (선택)</label><input class="input" type="date" id="ev-until" value="${r?.until || ""}"></div>
+  </div>`;
+};
+
 function eventSheet(it, presetDate) {
   const isNew = !it;
   if (it && !canEdit(it)) return eventDetail(it);
   if (it?.src === "plan") return planSheet(it.id);
   const scopeLocked = it && it.owner !== S.me;  // 상대가 만든 '함께' 일정은 범위 변경 불가
   const cur = it?.scope || "private";
+  const series = it && isRepeat(it);
   const nextHour = `${pad(Math.min(23, new Date().getHours() + 1))}:00`;
   const scopeBtns = Object.entries(SCOPES).map(([k, s]) => `<button type="button" data-v="${k}" aria-pressed="${k === cur}" ${scopeLocked && k !== cur ? "disabled hidden" : ""}>
       <span class="s-ico ${k}">${ic(s.icon)}</span><span><b>${s.name}</b><span>${k === "shared" ? `${esc(prof(P()).name)}님이 볼 수 있고 수정은 나만` : s.desc}</span></span><span class="ring"></span></button>`).join("");
-  openSheet(isNew ? "일정 추가" : "일정 수정", `
+  openSheet(isNew ? "일정 추가" : series ? "반복 일정 수정" : "일정 수정", `
     <form class="form" id="ev-form">
+      ${series ? `<div class="note">${ic("repeat", "sm")}<span>${fmtShort(it.occ)} 일정을 열었어요. 여기서 바꾸는 내용은 반복되는 모든 날에 적용돼요.</span></div>` : ""}
       <div class="field"><label for="ev-title">무엇을 하나요?</label><input class="input" id="ev-title" required maxlength="60" placeholder="예: 저녁 장보기" value="${esc(it?.title)}"></div>
       <div class="field"><span class="lbl">누가 볼 수 있나요?</span><div class="scope" id="ev-scope">${scopeBtns}</div></div>
-      <div class="field"><label for="ev-date">날짜</label><input class="input" type="date" id="ev-date" required value="${it?.date || presetDate || S.sel || todayStr()}"></div>
+      <div class="field"><label for="ev-date">${series ? "반복 시작 날짜" : "날짜"}</label><input class="input" type="date" id="ev-date" required value="${it?.seriesDate || it?.date || presetDate || S.sel || todayStr()}"></div>
       <div class="two">
         <div class="field"><label for="ev-time">시작</label><input class="input" type="time" id="ev-time" value="${it ? it.time || "" : nextHour}"></div>
         <div class="field"><label for="ev-end">끝 (선택)</label><input class="input" type="time" id="ev-end" value="${it?.endTime || ""}"></div>
       </div>
+      ${repeatHTML(it?.repeat)}
       <div class="field"><label for="ev-place">장소 (선택)</label><input class="input" id="ev-place" maxlength="40" value="${esc(it?.place)}" placeholder="예: 연남동"></div>
       <div class="field"><label for="ev-memo">메모 (선택)</label><textarea class="input" id="ev-memo" maxlength="300">${esc(it?.memo)}</textarea></div>
+      ${it && it.scope !== "private" ? reactBar(it) : ""}
       <button class="btn primary block" type="submit">${isNew ? "추가하기" : "저장하기"}</button>
-      ${isNew ? "" : `<div class="actions"><button class="btn" type="button" id="ev-done">${it.done ? "완료 취소" : `${ic("check")}완료로 표시`}</button><button class="btn danger" type="button" id="ev-del">삭제</button></div>`}
+      ${isNew ? "" : `<div class="actions"><button class="btn" type="button" id="ev-done">${it.done ? "완료 취소" : `${ic("check")}${series ? "이 날 완료" : "완료로 표시"}`}</button>
+        ${series ? `<button class="btn ghost" type="button" id="ev-skip">이 날만 빼기</button>` : ""}
+        <button class="btn danger" type="button" id="ev-del">${series ? "반복 전체 삭제" : "삭제"}</button></div>`}
     </form>`, root => {
-    bindSeg(root, "#ev-scope");
+    bindSeg(root, "#ev-scope"); bindSeg(root, "#ev-rep"); bindReact(root);
+    $("#ev-rep", root).addEventListener("change", () => {
+      const f = segVal(root, "#ev-rep");
+      $("#ev-days", root).hidden = f !== "weekly"; $("#ev-until-f", root).hidden = f === "none";
+      if (f === "weekly" && !$("#ev-days [aria-pressed='true']", root)) { const d = parseD($("#ev-date", root).value || todayStr()).getDay(); $(`#ev-days [data-d="${d}"]`, root).setAttribute("aria-pressed", "true"); }
+    });
+    $("#ev-days", root).addEventListener("click", e => { const b = e.target.closest("[data-d]"); if (b) b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"); });
     if (isNew) $("#ev-title", root).focus();
     $("#ev-form", root).addEventListener("submit", async e => {
       e.preventDefault();
       const scope = segVal(root, "#ev-scope") || "private";
+      const freq = segVal(root, "#ev-rep") || "none";
       const data = {
         title: $("#ev-title", root).value.trim(), date: $("#ev-date", root).value, time: $("#ev-time", root).value,
         endTime: $("#ev-end", root).value, place: $("#ev-place", root).value.trim(), memo: $("#ev-memo", root).value.trim(),
-        done: !!it?.done, owner: it?.owner || S.me, createdAt: it?.createdAt || Date.now(), updatedAt: Date.now()
+        done: series ? false : !!it?.done, owner: it?.owner || S.me, createdAt: it?.createdAt || Date.now(), updatedAt: Date.now()
       };
+      if (freq !== "none") {
+        data.repeat = { freq, until: $("#ev-until", root).value || "" };
+        if (freq === "weekly") data.repeat.days = [...root.querySelectorAll("#ev-days [aria-pressed='true']")].map(b => +b.dataset.d);
+        if (freq === "weekly" && !data.repeat.days.length) return toast("반복할 요일을 하나 이상 골라 주세요.");
+        if (data.repeat.until && data.repeat.until < data.date) return toast("반복 끝나는 날이 시작보다 빨라요.");
+        if (it?.doneDates) data.doneDates = it.doneDates;
+        if (it?.skip) data.skip = it.skip;
+      }
+      if (it?.review) data.review = it.review;
       if (it?.sample) data.sample = true;
       if (!data.title || !data.date) return;
       if (data.endTime && data.time && data.endTime < data.time) return toast("끝나는 시간이 시작보다 빨라요.");
-      const id = it?.id || store.newId();
+      const id = it ? it.baseId || it.id : store.newId();
       const up = {};
-      if (it) up[it.src === "priv" ? `private/${S.me}/events/${id}` : `events/${id}`] = null;
+      if (it) up[itemPath(it)] = null;
       if (scope === "private") up[`private/${S.me}/events/${id}`] = { ...data, owner: S.me };
       else up[`events/${id}`] = { ...data, type: scope };
       const ok = await save(() => store.update("", up), isNew ? "일정을 추가했어요." : "저장했어요.");
-      if (ok) { closeSheet(); if (isNew) { S.sel = data.date; } }
+      if (ok) {
+        if (scope !== "private") logAct(`${q(data.title)} ${scope === "together" ? "함께하는 " : ""}일정을 ${isNew || it.scope === "private" ? "추가했어요" : "수정했어요"}`);
+        else if (it && it.scope !== "private") logAct(`${q(data.title)} 일정을 공유에서 뺐어요`);
+        closeSheet(); if (isNew) S.sel = data.date;
+      }
     });
     if (!isNew) {
       $("#ev-done", root).addEventListener("click", async () => { await toggleDone(it); closeSheet(); });
-      armDelete($("#ev-del", root), async () => { if (await save(() => store.remove(it.src === "priv" ? `private/${S.me}/events/${it.id}` : `events/${it.id}`), "삭제했어요.")) closeSheet(); });
+      $("#ev-skip", root)?.addEventListener("click", async () => { if (await save(() => store.set(`${itemPath(it)}/skip/${it.occ}`, true), `${fmtShort(it.occ)}만 뺐어요.`)) closeSheet(); });
+      armDelete($("#ev-del", root), async () => {
+        if (await save(() => store.remove(itemPath(it)), "삭제했어요.")) { if (it.scope !== "private") logAct(`${q(it.title)} 일정을 삭제했어요`); closeSheet(); }
+      });
     }
   });
 }
 
 function eventDetail(it) {
   openSheet(esc(it.title), `<div class="detail">
-    <div class="row-meta">${whoChip(whoOf(it))}<span class="tag">${ic("eye", "sm")}읽기 전용</span></div>
+    <div class="row-meta">${whoChip(whoOf(it))}<span class="tag">${ic("eye", "sm")}읽기 전용</span>${isRepeat(it) ? `<span class="tag">${ic("repeat", "sm")}${repeatLabel(it.repeat)}</span>` : ""}</div>
     <div class="detail-row">${ic("cal")}<span>${fmtDate(it.date)}</span></div>
     <div class="detail-row">${ic("clock")}<span>${fmtTimeKo(it.time)}${it.endTime ? " ~ " + fmtTimeKo(it.endTime) : ""}</span></div>
     ${it.place ? `<div class="detail-row">${ic("pin")}<span>${esc(it.place)}</span></div>` : ""}
     ${it.memo ? `<div class="detail-row">${ic("note")}<span>${esc(it.memo)}</span></div>` : ""}
     ${it.done ? `<span class="pill ok">${ic("check", "sm")}완료</span>` : ""}
+    ${reactBar(it)}
     <div class="note">${ic("lock", "sm")}<span>${esc(prof(it.owner).name)}님이 공유한 일정이라 수정할 수 없어요. 같이 하고 싶다면 함께할 계획으로 제안해 보세요.</span></div>
-    <div class="actions"><button class="btn both" id="dt-plan">${ic("heart")}이 시간에 함께 계획 제안</button></div>
-  </div>`, root => $("#dt-plan", root).addEventListener("click", () => { closeSheet(); planSheet(null, { date: it.date, time: it.endTime || it.time }); }));
+    <div class="actions"><button class="btn both" id="dt-plan">${ic("heart")}이 시간 뒤에 함께 계획 제안</button></div>
+  </div>`, root => {
+    bindReact(root);
+    $("#dt-plan", root).addEventListener("click", () => { closeSheet(); planSheet(null, { date: it.date, time: it.endTime || it.time }); });
+  });
 }
 
 async function toggleDone(it) {
   if (!canEdit(it)) return;
-  const path = it.src === "priv" ? `private/${S.me}/events/${it.id}` : it.src === "plan" ? `plans/${it.id}` : `events/${it.id}`;
-  await save(() => store.update(path, { done: !it.done }), !it.done ? "완료했어요." : "완료를 취소했어요.");
+  const path = itemPath(it);
+  const ok = it.occ
+    ? await save(() => store.set(`${path}/doneDates/${it.occ}`, it.done ? null : true), !it.done ? "완료했어요." : "완료를 취소했어요.")
+    : await save(() => store.update(path, { done: !it.done }), !it.done ? "완료했어요." : "완료를 취소했어요.");
+  if (ok && !it.done && it.scope !== "private") logAct(`${q(it.title)} 일정을 ${it.scope === "together" ? "함께 " : ""}완료했어요`);
 }
 
 function planSheet(id, preset = {}) {
   const p = id ? S.plans[id] : null, isNew = !p;
   const cat = p?.cat || preset.cat || "date";
-  openSheet(isNew ? "함께할 계획 제안" : "계획 수정", `
+  const past = p && p.status === "confirmed" && p.date && p.date <= todayStr();
+  openSheet(isNew ? "함께할 계획 제안" : past ? "함께한 기록" : "계획 수정", `
     <form class="form" id="pl-form">
+      ${past ? `<div class="field"><label for="pl-review">한 줄 후기</label><textarea class="input" id="pl-review" maxlength="120" placeholder="어땠는지 짧게 남겨 보세요">${esc(p.review)}</textarea></div>` : ""}
       <div class="field"><span class="lbl">종류</span><div class="chips" id="pl-cat" style="flex-wrap:wrap">
         ${Object.entries(PLAN_CATS).map(([k, [e, n]]) => `<button type="button" class="chip" data-v="${k}" aria-pressed="${k === cat}">${e} ${n}</button>`).join("")}</div></div>
       <div class="field"><label for="pl-title">무엇을 할까요?</label><input class="input" id="pl-title" required maxlength="60" value="${esc(p?.title)}" placeholder="예: 토요일 브런치"></div>
@@ -1058,25 +1474,87 @@ function planSheet(id, preset = {}) {
       </div>
       <div class="field"><label for="pl-place">장소 (선택)</label><input class="input" id="pl-place" maxlength="40" value="${esc(p?.place)}"></div>
       <div class="field"><label for="pl-memo">메모 (선택)</label><textarea class="input" id="pl-memo" maxlength="300">${esc(p?.memo)}</textarea></div>
-      ${p && p.status === "confirmed" ? `<div class="note">${ic("info", "sm")}<span>날짜나 시간을 바꾸면 ${esc(prof(P()).name)}님이 다시 확인하도록 제안 상태로 돌아가요.</span></div>` : ""}
+      ${p ? reactBar({ src: "plan", id, title: p.title }) : ""}
+      ${p && p.status === "confirmed" && !past ? `<div class="note">${ic("info", "sm")}<span>날짜나 시간을 바꾸면 ${esc(prof(P()).name)}님이 다시 확인하도록 제안 상태로 돌아가요.</span></div>` : ""}
       <button class="btn both block" type="submit">${isNew ? `${esc(prof(P()).name)}님에게 제안하기` : p.status === "declined" ? "다시 제안하기" : "저장하기"}</button>
       ${isNew ? "" : `<button class="btn danger block" type="button" id="pl-del">삭제</button>`}
     </form>`, root => {
-    bindSeg(root, "#pl-cat");
+    bindSeg(root, "#pl-cat"); bindReact(root);
     $("#pl-form", root).addEventListener("submit", async e => {
       e.preventDefault();
       const d = { cat: segVal(root, "#pl-cat") || "etc", title: $("#pl-title", root).value.trim(), date: $("#pl-date", root).value, time: $("#pl-time", root).value, place: $("#pl-place", root).value.trim(), memo: $("#pl-memo", root).value.trim() };
+      if (past) d.review = $("#pl-review", root).value.trim();
       if (!d.title) return;
-      let up;
-      if (isNew) up = { ...d, proposer: S.me, status: "proposed", done: false, createdAt: Date.now() };
+      let up, act;
+      if (isNew) { up = { ...d, proposer: S.me, status: "proposed", done: false, createdAt: Date.now() }; act = `${q(d.title)} 계획을 제안했어요`; }
       else {
         const moved = d.date !== p.date || d.time !== p.time;
         up = { ...p, ...d, updatedAt: Date.now() };
-        if (p.status === "declined" || (moved && p.status === "confirmed")) { up.status = "proposed"; up.proposer = S.me; }
+        if (p.status === "declined" || (moved && p.status === "confirmed" && !past)) { up.status = "proposed"; up.proposer = S.me; act = `${q(d.title)} 계획을 ${fmtShort(d.date)} ${fmtTimeKo(d.time)}에 하자고 다시 제안했어요`; }
+        else if (past && d.review && d.review !== p.review) act = `${q(d.title)}에 후기를 남겼어요: “${d.review}”`;
+        else act = `${q(d.title)} 계획을 수정했어요`;
       }
-      if (await save(() => store.set(`plans/${id || store.newId()}`, up), isNew ? "제안을 보냈어요." : "저장했어요.")) closeSheet();
+      if (await save(() => store.set(`plans/${id || store.newId()}`, up), isNew ? "제안을 보냈어요." : "저장했어요.")) { logAct(act); closeSheet(); }
     });
-    if (!isNew) armDelete($("#pl-del", root), async () => { if (await save(() => store.remove(`plans/${id}`), "삭제했어요.")) closeSheet(); });
+    if (!isNew) armDelete($("#pl-del", root), async () => { if (await save(() => store.remove(`plans/${id}`), "삭제했어요.")) { logAct(`${q(p.title)} 계획을 삭제했어요`); closeSheet(); } });
+  });
+}
+
+function noteSheet() {
+  const list = entries(S.notes).sort((a, b) => a[1].at - b[1].at).slice(-12);
+  const quick = ["오늘도 화이팅! 💪", "보고 싶어 🥺", "저녁 뭐 먹을까? 😋", "고마워 ❤️", "조심히 와!", "잘 자 🌙"];
+  openSheet("오늘의 한마디", `
+    <div class="chat">${list.length ? list.map(([, n]) => `<div class="chat-row ${n.by === S.me ? "me" : "them"}"><span class="ava ${n.by}">${esc(prof(n.by).avatar)}</span>
+      <div><div class="chat-b">${esc(n.text)}</div><div class="small">${ago(n.at)}</div></div></div>`).join("") : `<div class="empty">첫 한마디를 남겨 보세요.</div>`}</div>
+    <form class="form" id="nt-form" style="margin-top:12px">
+      <div class="quick">${quick.map(x => `<button type="button" class="chip" data-q="${esc(x)}">${esc(x)}</button>`).join("")}</div>
+      <div class="field"><label class="sr" for="nt-text">한마디</label><input class="input" id="nt-text" maxlength="60" placeholder="${esc(prof(P()).name)}님에게 짧게 한마디" autocomplete="off"></div>
+      <button class="btn both block" type="submit">${ic("heart")}보내기</button>
+    </form>`, root => {
+    const chat = $(".chat", root); chat.scrollTop = chat.scrollHeight;
+    root.querySelectorAll("[data-q]").forEach(b => b.addEventListener("click", () => ($("#nt-text", root).value = b.dataset.q)));
+    $("#nt-form", root).addEventListener("submit", async e => {
+      e.preventDefault();
+      const text = $("#nt-text", root).value.trim(); if (!text) return;
+      const up = { [`notes/${store.newId()}`]: { by: S.me, text, at: Date.now() } };
+      const keys = Object.keys(S.notes).sort((a, b) => S.notes[a].at - S.notes[b].at);
+      if (keys.length >= 100) keys.slice(0, keys.length - 99).forEach(k => (up[`notes/${k}`] = null));
+      if (await save(() => store.update("", up), "한마디를 남겼어요.")) { logAct(`한마디를 남겼어요: “${text}”`); closeSheet(); }
+    });
+  });
+}
+
+function annivSheet() {
+  const list = entries(S.anniv).sort((a, b) => a[1].date.slice(5).localeCompare(b[1].date.slice(5)));
+  const up = upcomingAnniv(6);
+  openSheet("우리 기념일", `<div class="form">
+    <div class="field"><label for="an-start">처음 만난 날 (사귄 날)</label><input class="input" type="date" id="an-start" value="${S.info?.startDate || ""}">
+      <span class="small">이 날을 1일로 세어요. 100일 단위와 매년 주년을 자동으로 알려줘요.</span></div>
+    <button class="btn primary block" id="an-save-start">저장</button>
+    ${up.length ? `<div class="field"><span class="lbl">다가오는 날</span>${up.map(a => `<div class="detail-row" style="justify-content:space-between"><span>${a.emoji} ${esc(a.title)} · ${fmtShort(a.date)}</span><span class="pill dday">${ddayText(a.date)}</span></div>`).join("")}</div>` : ""}
+    <div class="field"><span class="lbl">직접 추가한 기념일</span>
+      ${list.length ? list.map(([id, a]) => `<div class="detail-row" style="justify-content:space-between;align-items:center"><span>${a.emoji || "🎉"} ${esc(a.title)} · ${+a.date.slice(5, 7)}월 ${+a.date.slice(8)}일${a.yearly ? " (매년)" : ""}</span><button class="btn ghost sm" data-del="${id}">지우기</button></div>`).join("") : `<span class="small">생일이나 처음 여행 간 날 같은 날을 추가해 보세요.</span>`}</div>
+    <form class="form" id="an-form" style="gap:12px">
+      <div class="emoji-pick" id="an-emo">${["🎂", "💍", "🧳", "🌸", "🎉", "⭐"].map((x, i) => `<button type="button" data-v="${x}" aria-pressed="${i === 0}" aria-label="${x}">${x}</button>`).join("")}</div>
+      <div class="two"><div class="field"><label for="an-title">이름</label><input class="input" id="an-title" maxlength="20" required placeholder="예: 우니 생일"></div>
+        <div class="field"><label for="an-date">날짜</label><input class="input" type="date" id="an-date" required></div></div>
+      <button type="button" class="switch" id="an-yearly" role="switch" aria-checked="true"><span class="t"><b>매년 반복</b><span>생일처럼 해마다 돌아오는 날</span></span><span class="knob"></span></button>
+      <button class="btn both block" type="submit">${ic("plus")}기념일 추가</button>
+    </form></div>`, root => {
+    bindSeg(root, "#an-emo");
+    $("#an-yearly", root).addEventListener("click", e => { const s = e.currentTarget; s.setAttribute("aria-checked", s.getAttribute("aria-checked") !== "true"); });
+    $("#an-save-start", root).addEventListener("click", async () => {
+      const v = $("#an-start", root).value; if (!v) return toast("날짜를 골라 주세요.");
+      if (v > todayStr()) return toast("오늘이나 지난 날짜를 골라 주세요.");
+      if (await save(() => store.update("info", { startDate: v }), "처음 만난 날을 저장했어요.")) closeSheet();
+    });
+    root.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", async () => { if (await save(() => store.remove(`anniv/${b.dataset.del}`), "지웠어요.")) closeSheet(); }));
+    $("#an-form", root).addEventListener("submit", async e => {
+      e.preventDefault();
+      const a = { title: $("#an-title", root).value.trim(), date: $("#an-date", root).value, yearly: $("#an-yearly", root).getAttribute("aria-checked") === "true", emoji: segVal(root, "#an-emo") || "🎉" };
+      if (!a.title || !a.date) return;
+      if (await save(() => store.set(`anniv/${store.newId()}`, a), "기념일을 추가했어요.")) { logAct(`${q(a.title)} 기념일을 추가했어요`); closeSheet(); }
+    });
   });
 }
 
@@ -1147,7 +1625,10 @@ function logSheet(g) {
     $("#lg-form", root).addEventListener("submit", async e => {
       e.preventDefault();
       const v = +val.value; if (!(v > 0)) return toast("0보다 큰 값을 입력해 주세요.");
-      if (await save(() => store.set(`${lp}/${store.newId()}`, { date: $("#lg-date", root).value, value: v, by: S.me, at: Date.now() }), `${v}${unit} 기록했어요.`)) closeSheet();
+      if (await save(() => store.set(`${lp}/${store.newId()}`, { date: $("#lg-date", root).value, value: v, by: S.me, at: Date.now() }), `${v}${unit} 기록했어요.`)) {
+        if (g.src === "shared") logAct(`${q(g.title)}에 ${v}${unit} 기록했어요`);
+        closeSheet();
+      }
     });
   });
 }
@@ -1167,6 +1648,7 @@ function settingsSheet() {
         <div class="field"><input class="input" id="st-link" readonly value="${esc(link)}" aria-label="초대 링크"></div>
         <button class="btn block" id="st-copy" style="margin-top:8px">${ic("copy")}초대 링크 복사</button>
       </div>` : ""}
+    <button class="btn block" id="st-anniv">${ic("heart")}처음 만난 날·기념일 설정</button>
     <div class="field"><span class="lbl">샘플 데이터</span><div class="actions">
       <button class="btn" id="st-seed">샘플 넣기</button><button class="btn" id="st-unseed">샘플 지우기</button></div></div>
     ${S.mode === "live" && partner ? `<div class="field"><span class="lbl">상대 자리 다시 열기</span>
@@ -1185,6 +1667,7 @@ function settingsSheet() {
       try { await navigator.clipboard.writeText(link); toast("초대 링크를 복사했어요."); }
       catch { const i = $("#st-link", root); i.focus(); i.select(); toast("링크를 길게 눌러 복사해 주세요."); }
     });
+    $("#st-anniv", root).addEventListener("click", () => { closeSheet(); annivSheet(); });
     $("#st-seed", root).addEventListener("click", async () => { if (await save(() => store.update("", sampleData(S.me, S.mode === "demo")), "샘플을 넣었어요.")) closeSheet(); });
     $("#st-unseed", root).addEventListener("click", async () => { await removeSamples(); closeSheet(); });
     const rs = $("#st-reset", root);
@@ -1195,7 +1678,7 @@ function settingsSheet() {
     $("#st-out", root).addEventListener("click", async () => {
       if (S.mode === "live") { try { await store.remove(`devices/${S.me}/${S.uid}`); await fb.authM.signOut(fb.auth); } catch {} lsSet("uh.code", null); }
       unsubs.forEach(u => u()); unsubs = [];
-      Object.assign(S, { mode: null, slots: {}, events: {}, plans: {}, goals: {}, logs: {}, priv: { events: {}, goals: {}, logs: {} }, tab: "today", login: { step: "code", code: "", slots: {}, slot: null, err: "" } });
+      Object.assign(S, { mode: null, slots: {}, events: {}, plans: {}, goals: {}, logs: {}, activity: {}, info: {}, anniv: {}, notes: {}, reactions: {}, priv: { events: {}, goals: {}, logs: {} }, tab: "today", login: { step: "code", code: "", slots: {}, slot: null, err: "" } });
       closeSheet(); render();
     });
   });
@@ -1215,15 +1698,21 @@ document.addEventListener("click", async e => {
     case "tab": S.tab = v; window.scrollTo(0, 0); render(); break;
     case "view": S.view = v; render(); break;
     case "week": moveDate(+v); break;
+    case "month": moveMonth(+v); break;
     case "sel": S.sel = v; render(); break;
+    case "msel": S.sel = v; render(); $(".month-day")?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" }); break;
     case "filter": S.filter = v; render(); break;
     case "open": { const it = findItem(src, id); if (it) eventSheet(it); break; }
     case "done": { const it = findItem(src, id); if (it) toggleDone(it); break; }
     case "fab": S.tab === "plans" ? planSheet() : S.tab === "goals" ? goalSheet() : eventSheet(null, S.tab === "today" ? todayStr() : S.sel); break;
     case "new-event": eventSheet(null, b.dataset.date); break;
     case "new-plan": planSheet(null, { date: todayStr() }); break;
-    case "plan-ok": save(() => store.update(`plans/${id}`, { status: "confirmed", confirmedAt: Date.now() }), "계획을 확정했어요. 함께 일정에 들어갔어요."); break;
-    case "plan-no": save(() => store.update(`plans/${id}`, { status: "declined" }), "다음에 하기로 했어요."); break;
+    case "plan-ok": if (await save(() => store.update(`plans/${id}`, { status: "confirmed", confirmedAt: Date.now() }), "계획을 확정했어요. 함께 일정에 들어갔어요.")) logAct(`${q(S.plans[id]?.title || "")} 계획을 확정했어요 💞`); break;
+    case "plan-no": if (await save(() => store.update(`plans/${id}`, { status: "declined" }), "다음에 하기로 했어요.")) logAct(`${q(S.plans[id]?.title || "")} 계획은 다음에 하자고 했어요`); break;
+    case "free": planSheet(null, { date: b.dataset.d, time: b.dataset.t }); break;
+    case "seen": save(() => store.update(`slots/${S.me}`, { lastSeen: Date.now() })); break;
+    case "note": noteSheet(); break;
+    case "anniv": annivSheet(); break;
     case "plan-edit": planSheet(id); break;
     case "goal-edit": { const g = goalList().find(x => x.id === id && x.src === src); if (g) goalSheet(g); break; }
     case "log": { const g = goalList().find(x => x.id === id && x.src === src); if (g) logSheet(g); break; }
@@ -1244,7 +1733,7 @@ document.addEventListener("click", async e => {
 let touch0 = null;
 document.addEventListener("touchstart", e => {
   if (S.tab !== "schedule" || !S.mode || $("#sheet-root").innerHTML || e.touches.length > 1) return (touch0 = null);
-  if (!e.target.closest("#swipe, .week-nav")) return (touch0 = null);
+  if (!e.target.closest("#swipe, .week-nav, .month-nav")) return (touch0 = null);
   touch0 = { x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now() };
 }, { passive: true });
 document.addEventListener("touchend", e => {
@@ -1252,8 +1741,8 @@ document.addEventListener("touchend", e => {
   const t = e.changedTouches[0], dx = t.clientX - touch0.x, dy = t.clientY - touch0.y, dt = Date.now() - touch0.t;
   touch0 = null;
   if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5 || dt > 800) return;
-  const step = S.view === "day" ? 1 : 7;
-  moveDate(dx < 0 ? step : -step);
+  if (S.view === "month") moveMonth(dx < 0 ? 1 : -1);
+  else { const step = S.view === "day" ? 1 : 7; moveDate(dx < 0 ? step : -step); }
   navigator.vibrate?.(8);
 }, { passive: true });
 

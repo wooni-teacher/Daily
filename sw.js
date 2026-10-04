@@ -1,6 +1,6 @@
 // 우리 하루 — 앱 화면을 기기에 저장해 두고, 인터넷이 느리거나 끊겨도 화면이 열리게 합니다.
 // 일정 데이터는 Firebase가 따로 동기화하므로 여기서는 앱 파일만 다룹니다.
-const CACHE = "uri-haru-v3";
+const CACHE = "uri-haru-v5";
 const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL))); self.skipWaiting(); });
 self.addEventListener("activate", e => {
