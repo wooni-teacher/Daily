@@ -39,6 +39,7 @@
   --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent;font-variant-numeric:tabular-nums}
 button,input,textarea,select{font:inherit;color:inherit}
@@ -396,6 +397,30 @@ textarea.input{min-height:84px;resize:vertical}
   .mdots{display:none}
   .month-grid{gap:6px}
 }
+
+/* 매일 체크 */
+.ck-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.ck-day{display:grid;justify-items:center;gap:4px;padding:6px 0;border-radius:12px;min-height:64px}
+.ck-day:disabled{cursor:default}
+.ck-wd{font-size:12px;font-weight:700;color:var(--muted)}
+.ck-day.today .ck-wd{color:var(--ink)}
+.ck-dot{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;color:var(--muted);font-size:13px}
+.ck-day.today .ck-dot{border-color:var(--ink)}
+.ck-day.full .ck-dot{background:var(--fillc);border-color:var(--fillc);color:#fff}
+.ck-day.half .ck-dot{background:linear-gradient(90deg,var(--fillc) 50%,transparent 50%);border-color:var(--fillc);color:#fff}
+.ck-day.off .ck-dot{border-style:dashed;opacity:.6}
+.ck-day:disabled:not(.full):not(.half) .ck-dot{opacity:.5}
+.btn.ck-done{background:var(--ok-soft);color:var(--ok)}
+.ck-today{margin-bottom:12px;display:grid;gap:4px}
+.ck-today .h3{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:4px}
+.ck-row{display:flex;align-items:center;gap:10px;min-height:56px;border-top:1px solid var(--line)}
+.ck-row:first-of-type{border-top:0}
+.ck-name{flex:1;min-width:0;font-weight:600;display:flex;flex-wrap:wrap;gap:2px 8px;align-items:center}
+.ck-name small{font-size:12px;color:var(--muted);font-weight:500}
+.bars.has-line{position:relative}
+.bars.has-line::after{content:"";position:absolute;left:0;right:0;bottom:calc(21px + (100% - 40px) * var(--line));border-top:2px dashed var(--muted);opacity:.6;pointer-events:none}
+.bar.met .fill{background:var(--ok)}
+.chip small{font-size:12px;opacity:.7}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 </head>
@@ -466,7 +491,7 @@ const ic = (n, cls = "") => `<svg class="icon ${cls}" viewBox="0 0 24 24" aria-h
 
 const AVATARS = ["🐹", "🐻", "🐰", "🦊", "🐱", "🐶", "🐼", "🐧", "🦁", "🐯", "🐨", "🌻", "🌙"];
 const PLAN_CATS = { date: ["💑", "데이트"], meal: ["🍽️", "식사"], workout: ["🏃", "운동"], shop: ["🛒", "장보기"], trip: ["🧳", "여행·나들이"], etc: ["✨", "기타"] };
-const GOAL_KINDS = { run: ["🏃", "러닝", "km"], workout: ["💪", "운동", "분"], read: ["📚", "독서", "쪽"], custom: ["⭐", "직접 입력", ""] };
+const GOAL_KINDS = { check: ["✅", "매일 체크", ""], run: ["🏃", "러닝", "km"], workout: ["💪", "운동", "분"], read: ["📚", "독서", "쪽"], custom: ["⭐", "직접 입력", ""] };
 const SCOPES = {
   private: { icon: "lock", name: "내 일정", desc: "나만 볼 수 있어요" },
   shared: { icon: "eye", name: "상대에게 공유", desc: "상대가 볼 수 있지만 수정은 나만" },
@@ -609,7 +634,7 @@ function sampleData(me, includePartnerOwned) {
 
   // 목표 — 10km 대회
   const raceId = id();
-  out[`goals/${raceId}`] = { title: "가을 10km 대회 완주", kind: "run", unit: "km", owner: me, weekly: 20, targetDate: d(41), memo: "목표 기록 55분", sample: true, createdAt: Date.now() };
+  out[`goals/${raceId}`] = { title: "가을 10km 대회 완주", kind: "run", unit: "km", owner: me, period: "week", target: 20, targetDate: d(41), memo: "목표 기록 55분", sample: true, createdAt: Date.now() };
   const ws = weekStart(t);
   const runs = [[-27, 5], [-25, 6], [-23, 4.5], [-20, 7], [-18, 5], [-16, 5.5], [-13, 6], [-11, 4], [-9, 8], [-6, 5], [-4, 6.5], [-2, 7]];
   runs.forEach(([o, km]) => (out[`logs/${raceId}/${id()}`] = { date: d(o), value: km, by: me }));
@@ -619,11 +644,15 @@ function sampleData(me, includePartnerOwned) {
   out[`logs/${raceId}/${id()}`] = { date: t, value: 5, by: me };
 
   const togId = id();
-  out[`goals/${togId}`] = { title: "주 2회 같이 운동하기", kind: "custom", unit: "회", owner: "both", weekly: 2, targetDate: "", sample: true, createdAt: Date.now() };
+  out[`goals/${togId}`] = { title: "주 2회 같이 운동하기", kind: "custom", unit: "회", owner: "both", period: "week", target: 2, targetDate: "", sample: true, createdAt: Date.now() };
   [[-12, 1], [-9, 1], [-5, 1], [-1, 1]].forEach(([o, v]) => (out[`logs/${togId}/${id()}`] = { date: d(o), value: v, by: me }));
 
+  // 매일 체크 목표
+  const ck = (path, logPath, g, offsets, who) => { out[path] = { ...g, kind: "check", sample: true, createdAt: Date.now() - 40 * 864e5 }; offsets.forEach(([o, s]) => (out[`${logPath}/${d(o)}_${s}`] = { date: d(o), value: 1, by: s })); };
+  const ck1 = id(); ck(`private/${me}/goals/${ck1}`, `private/${me}/logs/${ck1}`, { title: "영양제 먹기", owner: me, days: [0, 1, 2, 3, 4, 5, 6] }, [-1, -2, -3, -4, -5, -7, -8].map(o => [o, me]));
+  const ck2 = id(); ck(`goals/${ck2}`, `logs/${ck2}`, { title: "자기 전 10분 통화", owner: "both", days: [0, 1, 2, 3, 4, 5, 6] }, [[-1, me], [-1, pt], [-2, me], [-2, pt], [-3, me], [-3, pt], [0, pt]]);
   const prvId = id();
-  out[`private/${me}/goals/${prvId}`] = { title: "매일 스트레칭", kind: "workout", unit: "분", owner: me, weekly: 70, targetDate: "", sample: true, createdAt: Date.now() };
+  out[`private/${me}/goals/${prvId}`] = { title: "스트레칭", kind: "workout", unit: "분", owner: me, period: "day", target: 10, targetDate: "", sample: true, createdAt: Date.now() };
   [[-3, 10], [-2, 15], [-1, 10], [0, 10]].forEach(([o, v]) => (out[`private/${me}/logs/${prvId}/${id()}`] = { date: d(o), value: v, by: me }));
 
   if (includePartnerOwned) {
@@ -638,8 +667,9 @@ function sampleData(me, includePartnerOwned) {
     out[`activity/${id()}`] = { by: pt, text: `${q("연남동 파스타 저녁")}에 ❤️ 반응을 남겼어요`, at: now - 1.5 * H };
     out[`slots/${me}/lastSeen`] = now - 3 * H;
     out[`reactions/plan_${dinner}/${pt}`] = "❤️";
+    const ck3 = id(); ck(`goals/${ck3}`, `logs/${ck3}`, { title: "물 2L 마시기", owner: pt, days: [1, 2, 3, 4, 5] }, [[-1, pt], [-2, pt], [-3, pt]]);
     const rd = id();
-    out[`goals/${rd}`] = { title: "한 달에 책 2권", kind: "read", unit: "쪽", owner: pt, weekly: 120, targetDate: "", sample: true, createdAt: Date.now() };
+    out[`goals/${rd}`] = { title: "한 달에 책 2권", kind: "read", unit: "쪽", owner: pt, period: "month", target: 500, targetDate: "", sample: true, createdAt: Date.now() };
     [[-6, 30], [-4, 25], [-2, 40], [0, 20]].forEach(([o, v]) => (out[`logs/${rd}/${id()}`] = { date: d(o), value: v, by: pt }));
   }
   return out;
@@ -888,6 +918,7 @@ function renderToday() {
       <div class="today-side">
         ${coupleHero()}
         ${newsCard()}
+        ${todayChecks()}
         <section class="card next-card" aria-label="다음 일정">
           <div class="next-label">${ic("clock", "sm")}다음 일정${next ? `<span class="rel">${relTime(next.time)}</span>` : ""}</div>
           ${next ? `<button class="row-main" data-act="open" data-src="${next.src}" data-id="${next.id}">
@@ -1055,54 +1086,145 @@ function renderPlans() {
     ${mem.count ? `<div class="memories">${mem.html}</div>` : `<div class="empty">함께한 계획이 지나가면 여기에 모여요.</div>`}`;
 }
 
+/* 목표: 양 목표(일간·주간·월간 목표량)와 매일 체크 목표 */
+const PERIODS = { day: "일간", week: "주간", month: "월간" };
+const PERIOD_NOW = { day: "오늘", week: "이번 주", month: "이번 달" };
+const isCheck = g => g.kind === "check";
+const goalPer = g => (isCheck(g) ? "day" : g.period || "week");
+const goalTarget = g => +(g.target ?? g.weekly ?? 0) || 0;
+const checkDays = g => (g.days?.length ? g.days : [0, 1, 2, 3, 4, 5, 6]);
+
 function goalStats(g) {
   const t = todayStr(), ws = weekStart(t), logs = Object.values(g.logs || {});
   const sumRange = (a, b) => num(logs.filter(l => l.date >= a && l.date <= b).reduce((s, l) => s + (+l.value || 0), 0));
   const days = [...Array(7)].map((_, i) => { const d = addDays(ws, i); return { d, v: sumRange(d, d) }; });
-  const weeks = [-3, -2, -1, 0].map(k => { const a = addDays(ws, k * 7); return { a, v: sumRange(a, addDays(a, 6)) }; });
-  return { days, weeks, week: weeks[3].v };
+  const weeks = [-3, -2, -1, 0].map(k => { const a = addDays(ws, k * 7); return { a, label: k === 0 ? "이번 주" : fmtShort(a).split(" ")[0] + "~", v: sumRange(a, addDays(a, 6)) }; });
+  const months = [-3, -2, -1, 0].map(k => { const x = parseD(monthStart(t)); x.setMonth(x.getMonth() + k); const a = ds(x); return { a, label: k === 0 ? "이번 달" : `${x.getMonth() + 1}월`, v: sumRange(a, monthEnd(a)) }; });
+  return { days, weeks, months, today: sumRange(t, t), week: weeks[3].v, month: months[3].v };
+}
+
+/* 매일 체크 */
+const checkKey = (d, s) => `${d}_${s}`;
+function checkState(g, d) {
+  const L = g.logs || {};
+  if (g.owner === "both") { const a = !!L[checkKey(d, "a")], b = !!L[checkKey(d, "b")]; return { mine: !!L[checkKey(d, S.me)], full: a && b, half: a !== b }; }
+  const done = !!L[checkKey(d, g.owner)] || Object.values(L).some(l => l.date === d);
+  return { mine: done, full: done, half: false };
+}
+function checkStreak(g) {
+  const t = todayStr(); let n = 0, d = checkState(g, t).full ? t : addDays(t, -1);
+  for (let i = 0; i < 400; i++, d = addDays(d, -1)) {
+    if (!checkDays(g).includes(parseD(d).getDay())) continue;
+    if (checkState(g, d).full) n++; else break;
+  }
+  return n;
+}
+function checkMonth(g) {
+  const t = todayStr(); let done = 0, total = 0;
+  for (let d = monthStart(t); d <= t; d = addDays(d, 1)) if (checkDays(g).includes(parseD(d).getDay())) { total++; if (checkState(g, d).full) done++; }
+  return { done, total };
+}
+const goalLogPath = g => (g.src === "priv" ? `private/${S.me}/logs/${g.id}` : `logs/${g.id}`);
+async function toggleCheck(g, d) {
+  if (!canEditGoal(g) || d > todayStr()) return;
+  const was = checkState(g, d).mine, path = `${goalLogPath(g)}/${checkKey(d, S.me)}`;
+  const ok = await save(() => store.set(path, was ? null : { date: d, value: 1, by: S.me, at: Date.now() }), was ? "체크를 취소했어요." : d === todayStr() ? "오늘 체크했어요! ✅" : `${fmtShort(d)} 체크했어요.`);
+  if (ok && !was && g.src === "shared") logAct(`${q(g.title)} ${d === todayStr() ? "오늘" : fmtShort(d)} 체크했어요 ✅`);
+}
+
+function goalHead(g, extra = "") {
+  const [emo, kindName] = GOAL_KINDS[g.kind] || GOAL_KINDS.custom;
+  const t = todayStr(), dd = g.targetDate ? diffDays(t, g.targetDate) : null, edit = canEditGoal(g);
+  const vis = g.owner === "both" ? whoChip("both") : `${whoChip(g.owner)}${g.owner === S.me ? (g.shared ? `<span class="tag">${ic("eye", "sm")}공유 중</span>` : `<span class="tag">${ic("lock", "sm")}나만</span>`) : ""}`;
+  const perTag = isCheck(g) ? `<span class="tag">${checkDays(g).length === 7 ? "매일" : [1, 2, 3, 4, 5, 6, 0].filter(x => checkDays(g).includes(x)).map(x => WD[x]).join("·")} 체크</span>`
+    : `<span class="tag">${kindName} · ${PERIODS[goalPer(g)]}${goalTarget(g) ? ` ${goalTarget(g)}${esc(g.unit || "")}` : ""}</span>`;
+  return `<div class="goal-head"><div class="goal-ico" aria-hidden="true">${emo}</div>
+      <div style="flex:1;min-width:0"><button class="goal-title" style="text-align:left" data-act="goal-edit" data-src="${g.src}" data-id="${g.id}" ${edit ? "" : "disabled"}>${esc(g.title)}</button>
+        <div class="goal-sub">${vis}${perTag}</div></div>
+      ${extra || (dd !== null ? `<div class="dday-box"><b>${dd > 0 ? "D-" + dd : dd === 0 ? "D-DAY" : "D+" + -dd}</b><span>${fmtShort(g.targetDate)}</span></div>` : "")}
+    </div>${g.memo ? `<div class="small">${esc(g.memo)}</div>` : ""}`;
+}
+
+function checkCard(g) {
+  const t = todayStr(), ws = weekStart(t), edit = canEditGoal(g);
+  const color = g.owner === "both" ? "var(--both)" : `var(--${g.owner})`;
+  const st = checkState(g, t), streak = checkStreak(g), mo = checkMonth(g), sched = checkDays(g).includes(parseD(t).getDay());
+  const week = [...Array(7)].map((_, i) => {
+    const d = addDays(ws, i), on = checkDays(g).includes(parseD(d).getDay()), c = checkState(g, d), fut = d > t;
+    const cls = c.full ? "full" : c.half ? "half" : "";
+    return `<button class="ck-day ${cls} ${d === t ? "today" : ""} ${on ? "" : "off"}" data-act="check" data-src="${g.src}" data-id="${g.id}" data-d="${d}" ${!edit || fut ? "disabled" : ""}
+      aria-pressed="${c.mine}" aria-label="${fmtDate(d)} ${c.full ? "완료" : c.half ? "한 사람 완료" : "미완료"}"><span class="ck-wd">${WD[parseD(d).getDay()]}</span><span class="ck-dot">${c.full || c.half ? ic("check", "sm") : on ? "" : "–"}</span></button>`;
+  }).join("");
+  const partnerNote = g.owner === "both" ? (() => { const L = g.logs || {}; const p = !!L[checkKey(t, P())]; return `<span class="small">${esc(prof(P()).avatar)} ${esc(prof(P()).name)}님 오늘 ${p ? "체크 완료 ✅" : "아직이에요"}</span>`; })() : "";
+  return `<article class="card goal" style="--fillc:${color}">
+    ${goalHead(g, `<div class="dday-box"><b>${streak}</b><span>🔥 연속</span></div>`)}
+    <div class="ck-week" aria-label="이번 주 체크">${week}</div>
+    <div class="progress">
+      <div class="progress-line"><span>이번 달</span><span><b>${mo.done}</b> / ${mo.total}일</span></div>
+      <div class="meter"><i style="width:${mo.total ? (mo.done / mo.total) * 100 : 0}%"></i></div>
+    </div>
+    ${partnerNote}
+    ${edit ? (sched || st.mine ? `<button class="btn block ${st.mine ? "ck-done" : "primary"}" data-act="check" data-src="${g.src}" data-id="${g.id}" data-d="${t}">${st.mine ? `${ic("check")}오늘 완료! (누르면 취소)` : `${ic("check")}오늘 체크하기`}</button>` : `<div class="small">오늘은 체크하는 날이 아니에요.</div>`)
+      : `<div class="small">${ic("eye", "sm")} ${esc(prof(g.owner).name)}님이 공유한 목표예요. 보기만 할 수 있어요.</div>`}
+  </article>`;
 }
 
 function goalCard(g) {
-  const [emo, kindName] = GOAL_KINDS[g.kind] || GOAL_KINDS.custom;
+  if (isCheck(g)) return checkCard(g);
   const unit = g.unit || GOAL_KINDS[g.kind]?.[2] || "";
-  const st = goalStats(g), t = todayStr();
+  const st = goalStats(g), t = todayStr(), per = goalPer(g), target = goalTarget(g);
   const color = g.owner === "both" ? "var(--both)" : `var(--${g.owner})`;
-  const max = Math.max(...st.days.map(d => d.v), g.weekly ? g.weekly / 3 : 1, 0.1);
-  const dd = g.targetDate ? diffDays(t, g.targetDate) : null;
+  const cur = per === "day" ? st.today : per === "week" ? st.week : st.month;
+  const max = Math.max(...st.days.map(d => d.v), per === "day" && target ? target : target ? target / 3 : 1, 0.1);
   const edit = canEditGoal(g);
-  const vis = g.owner === "both" ? whoChip("both") : `${whoChip(g.owner)}${g.owner === S.me ? (g.shared ? `<span class="tag">${ic("eye", "sm")}공유 중</span>` : `<span class="tag">${ic("lock", "sm")}나만</span>`) : ""}`;
+  const metDays = per === "day" && target ? st.days.filter(d => d.d <= t && d.v >= target).length : null;
+  const summary = per === "month" ? st.months : st.weeks;
   return `<article class="card goal" style="--fillc:${color}">
-    <div class="goal-head"><div class="goal-ico" aria-hidden="true">${emo}</div>
-      <div style="flex:1;min-width:0"><button class="goal-title" style="text-align:left" data-act="goal-edit" data-src="${g.src}" data-id="${g.id}" ${edit ? "" : "disabled"}>${esc(g.title)}</button>
-        <div class="goal-sub">${vis}<span class="tag">${kindName}</span></div></div>
-      ${dd !== null ? `<div class="dday-box"><b>${dd > 0 ? "D-" + dd : dd === 0 ? "D-DAY" : "D+" + -dd}</b><span>${fmtShort(g.targetDate)}</span></div>` : ""}
-    </div>
-    ${g.memo ? `<div class="small">${esc(g.memo)}</div>` : ""}
+    ${goalHead(g)}
     <div class="progress">
-      <div class="progress-line"><span>이번 주 기록</span><span><b>${st.week}</b> ${g.weekly ? `/ ${g.weekly}` : ""} ${esc(unit)}</span></div>
-      ${g.weekly ? `<div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="${g.weekly}" aria-valuenow="${st.week}"><i style="width:${Math.min(100, (st.week / g.weekly) * 100)}%"></i></div>` : ""}
+      <div class="progress-line"><span>${PERIOD_NOW[per]} 기록</span><span><b>${cur}</b> ${target ? `/ ${target}` : ""} ${esc(unit)}${target && cur >= target ? " 🎉" : ""}</span></div>
+      ${target ? `<div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="${target}" aria-valuenow="${cur}"><i style="width:${Math.min(100, (cur / target) * 100)}%"></i></div>` : ""}
     </div>
-    <div class="bars" aria-label="이번 주 요일별 기록">
-      ${st.days.map(d => `<div class="bar ${d.d === t ? "today" : ""}"><span class="v">${d.v || ""}</span><span class="track"><span class="fill" style="height:${(d.v / max) * 100}%"></span></span><span class="d">${WD[parseD(d.d).getDay()]}</span></div>`).join("")}
+    <div class="bars ${per === "day" && target ? "has-line" : ""}" style="--line:${per === "day" && target ? Math.min(1, target / max).toFixed(3) : 0}" aria-label="이번 주 요일별 기록">
+      ${st.days.map(d => `<div class="bar ${d.d === t ? "today" : ""} ${per === "day" && target && d.v >= target ? "met" : ""}"><span class="v">${d.v || ""}</span><span class="track"><span class="fill" style="height:${(d.v / max) * 100}%"></span></span><span class="d">${WD[parseD(d.d).getDay()]}</span></div>`).join("")}
     </div>
-    <div class="weeks4" aria-label="최근 4주 합계">
-      ${st.weeks.map((w, i) => `<div class="${i === 3 ? "cur" : ""}">${i === 3 ? "이번 주" : fmtShort(w.a).split(" ")[0] + "~"}<b>${w.v}${esc(unit)}</b></div>`).join("")}
+    ${metDays !== null ? `<div class="small">이번 주 하루 목표 달성 <b>${metDays}일</b> (점선이 하루 목표 ${target}${esc(unit)})</div>` : ""}
+    <div class="weeks4" aria-label="${per === "month" ? "최근 4달" : "최근 4주"} 합계">
+      ${summary.map((w, i) => `<div class="${i === 3 ? "cur" : ""}">${w.label}<b>${w.v}${esc(unit)}</b></div>`).join("")}
     </div>
     ${edit ? `<button class="btn primary block" data-act="log" data-src="${g.src}" data-id="${g.id}">${ic("plus")}오늘 기록 추가</button>` : `<div class="small">${ic("eye", "sm")} ${esc(prof(g.owner).name)}님이 공유한 목표예요. 보기만 할 수 있어요.</div>`}
   </article>`;
 }
 
 function renderGoals() {
-  const gs = goalList();
-  const mine = gs.filter(g => g.owner === S.me), theirs = gs.filter(g => g.owner === P()), both = gs.filter(g => g.owner === "both");
+  const f = S.goalFilter || "all";
+  const pass = g => f === "all" || (f === "check" ? isCheck(g) : !isCheck(g) && goalPer(g) === f);
+  const gs = goalList(), shown = gs.filter(pass);
+  const mine = shown.filter(g => g.owner === S.me), theirs = shown.filter(g => g.owner === P()), both = shown.filter(g => g.owner === "both");
+  const cnt = k => gs.filter(g => k === "all" || (k === "check" ? isCheck(g) : !isCheck(g) && goalPer(g) === k)).length;
   const sec = (title, list, empty) => `<h2 class="h2">${title} <span class="count">${list.length}</span></h2>
     ${list.length ? `<div class="grid-2">${list.map(goalCard).join("")}</div>` : `<div class="empty">${empty}</div>`}`;
   return `
     <div class="screen-head"><div><div class="eyebrow">습관과 목표</div><h1 class="big-date">꾸준히, 따로 또 같이</h1></div></div>
-    ${sec(`${esc(prof(S.me).avatar)} 내 목표`, mine, "아직 목표가 없어요. 아래 <b>목표 추가</b>로 시작해 보세요.")}
+    <div class="chips" role="group" aria-label="목표 기간">
+      ${[["all", "전체"], ["check", "✅ 매일 체크"], ["day", "일간"], ["week", "주간"], ["month", "월간"]].map(([k, l]) => `<button class="chip" data-act="gfilter" data-v="${k}" aria-pressed="${f === k}">${l} <small>${cnt(k)}</small></button>`).join("")}
+    </div>
+    ${sec(`${esc(prof(S.me).avatar)} 내 목표`, mine, "이 종류의 목표가 아직 없어요. 아래 <b>목표 추가</b>로 시작해 보세요.")}
     ${sec("💞 함께하는 목표", both, "둘이 함께할 목표를 만들어 보세요.")}
     ${sec(`${esc(prof(P()).avatar)} ${esc(prof(P()).name)}님의 목표`, theirs, `${esc(prof(P()).name)}님이 공유한 목표가 아직 없어요.`)}`;
+}
+
+/* 오늘 화면용: 오늘 체크할 목표 */
+function todayChecks() {
+  const t = todayStr();
+  const list = goalList().filter(g => isCheck(g) && canEditGoal(g) && checkDays(g).includes(parseD(t).getDay()));
+  if (!list.length) return "";
+  const done = list.filter(g => checkState(g, t).mine).length;
+  return `<section class="card ck-today" aria-label="오늘 체크">
+    <div class="h3">${ic("check", "sm")}오늘 체크 <span class="pill ${done === list.length ? "ok" : "no"}">${done}/${list.length}</span></div>
+    ${list.map(g => { const c = checkState(g, t); return `<div class="ck-row"><span class="ck-name">${GOAL_KINDS[g.kind]?.[0] || "✅"} ${esc(g.title)}${g.owner === "both" ? ` <small>💞 함께</small>` : ""}<small class="ck-streak">🔥 ${checkStreak(g)}일</small></span>
+      <button class="check ${c.mine ? "on" : ""}" data-act="check" data-src="${g.src}" data-id="${g.id}" data-d="${t}" aria-pressed="${c.mine}" aria-label="${esc(g.title)} ${c.mine ? "체크 취소" : "체크"}">${ic("check")}</button></div>`; }).join("")}
+  </section>`;
 }
 
 /* ========== 8. 시작(로그인) 화면 ========== */
@@ -1560,19 +1682,33 @@ function annivSheet() {
 
 function goalSheet(g) {
   const isNew = !g;
-  const kind = g?.kind || "run", owner = g ? (g.owner === "both" ? "both" : "me") : "me";
+  const kind = g?.kind || "check", owner = g ? (g.owner === "both" ? "both" : "me") : "me";
+  const per = g ? goalPer(g) : "day", days = g?.days?.length ? g.days : [0, 1, 2, 3, 4, 5, 6];
   openSheet(isNew ? "목표 추가" : "목표 수정", `
     <form class="form" id="gl-form">
       <div class="field"><span class="lbl">누구의 목표인가요?</span><div class="seg" id="gl-owner" style="display:flex">
         <button type="button" data-v="me" aria-pressed="${owner === "me"}" style="flex:1" ${g ? "disabled" : ""}>${esc(prof(S.me).avatar)} 내 목표</button>
         <button type="button" data-v="both" aria-pressed="${owner === "both"}" style="flex:1" ${g ? "disabled" : ""}>💞 함께</button></div></div>
       <div class="field"><span class="lbl">종류</span><div class="chips" id="gl-kind" style="flex-wrap:wrap">
-        ${Object.entries(GOAL_KINDS).map(([k, [e, n, u]]) => `<button type="button" class="chip" data-v="${k}" aria-pressed="${k === kind}">${e} ${n}${u ? ` (${u})` : ""}</button>`).join("")}</div></div>
-      <div class="field"><label for="gl-title">목표 이름</label><input class="input" id="gl-title" required maxlength="40" value="${esc(g?.title)}" placeholder="예: 가을 10km 대회 완주"></div>
-      <div class="two">
-        <div class="field"><label for="gl-weekly">주간 목표량</label><input class="input" id="gl-weekly" type="number" inputmode="decimal" min="0" step="0.5" value="${g?.weekly ?? ""}" placeholder="예: 20"></div>
-        <div class="field"><label for="gl-unit">단위</label><input class="input" id="gl-unit" maxlength="6" value="${esc(g?.unit ?? GOAL_KINDS[kind][2])}"></div>
+        ${Object.entries(GOAL_KINDS).map(([k, [e, n, u]]) => `<button type="button" class="chip" data-v="${k}" aria-pressed="${k === kind}" ${g && (k === "check") !== isCheck(g) ? "disabled" : ""}>${e} ${n}${u ? ` (${u})` : ""}</button>`).join("")}</div>
+        <span class="small" id="gl-kind-help">${kind === "check" ? "양을 재지 않고, 했는지만 매일 체크해요. 예: 영양제 먹기, 스트레칭, 일기 쓰기" : "얼마나 했는지 숫자로 기록해요."}</span></div>
+      <div class="field"><label for="gl-title">목표 이름</label><input class="input" id="gl-title" required maxlength="40" value="${esc(g?.title)}" placeholder="${kind === "check" ? "예: 영양제 먹기" : "예: 가을 10km 대회 완주"}"></div>
+
+      <div class="field" id="gl-check-f" ${kind === "check" ? "" : "hidden"}><span class="lbl">체크하는 요일</span>
+        <div class="wd-pick" id="gl-days">${[1, 2, 3, 4, 5, 6, 0].map(d => `<button type="button" data-d="${d}" aria-pressed="${days.includes(d)}" aria-label="${WD[d]}요일">${WD[d]}</button>`).join("")}</div>
+        <span class="small">모두 켜면 매일이에요. 쉬는 요일은 연속 기록이 끊기지 않아요.${owner === "both" ? "" : ""}</span></div>
+
+      <div id="gl-amount-f" ${kind === "check" ? "hidden" : ""} class="form" style="gap:12px">
+        <div class="field"><span class="lbl">목표량 기간</span>
+          <div class="seg" id="gl-per" style="display:flex" role="group" aria-label="목표량 기간">
+            ${Object.entries(PERIODS).map(([k, n]) => `<button type="button" data-v="${k}" aria-pressed="${k === per}" style="flex:1">${n}</button>`).join("")}</div></div>
+        <div class="two">
+          <div class="field"><label for="gl-target" id="gl-target-l">${PERIODS[per]} 목표량</label><input class="input" id="gl-target" type="number" inputmode="decimal" min="0" step="0.5" value="${g ? goalTarget(g) || "" : ""}" placeholder="${{ day: "예: 30", week: "예: 20", month: "예: 80" }[per]}"></div>
+          <div class="field"><label for="gl-unit">단위</label><input class="input" id="gl-unit" maxlength="6" value="${esc(g?.unit ?? GOAL_KINDS[kind][2])}"></div>
+        </div>
+        <span class="small" id="gl-per-help"></span>
       </div>
+
       <div class="field"><label for="gl-date">목표 날짜·대회일 (선택)</label><input class="input" type="date" id="gl-date" value="${g?.targetDate || ""}"><span class="small">날짜를 넣으면 D-day가 표시돼요.</span></div>
       <div class="field"><label for="gl-memo">메모 (선택)</label><input class="input" id="gl-memo" maxlength="60" value="${esc(g?.memo)}" placeholder="예: 목표 기록 55분"></div>
       <button type="button" class="switch" id="gl-share" role="switch" aria-checked="${g ? !!g.shared : false}" ${owner === "both" ? "hidden" : ""}>
@@ -1580,22 +1716,46 @@ function goalSheet(g) {
       <button class="btn primary block" type="submit">${isNew ? "추가하기" : "저장하기"}</button>
       ${isNew ? "" : `<button class="btn danger block" type="button" id="gl-del">삭제</button>`}
     </form>`, root => {
-    bindSeg(root, "#gl-owner"); bindSeg(root, "#gl-kind");
-    $("#gl-kind", root).addEventListener("change", () => { const k = segVal(root, "#gl-kind"); if (GOAL_KINDS[k][2]) $("#gl-unit", root).value = GOAL_KINDS[k][2]; });
+    bindSeg(root, "#gl-owner"); bindSeg(root, "#gl-kind"); bindSeg(root, "#gl-per");
+    const perHelp = () => {
+      const p = segVal(root, "#gl-per") || "week";
+      $("#gl-target-l", root).textContent = `${PERIODS[p]} 목표량`;
+      $("#gl-per-help", root).textContent = { day: "하루에 채울 양이에요. 날마다 달성했는지 보여줘요.", week: "월요일부터 일요일까지 합계로 봐요.", month: "그 달 1일부터 말일까지 합계로 봐요." }[p];
+    };
+    perHelp();
+    $("#gl-per", root).addEventListener("change", perHelp);
+    $("#gl-kind", root).addEventListener("change", () => {
+      const k = segVal(root, "#gl-kind"), chk = k === "check";
+      $("#gl-check-f", root).hidden = !chk; $("#gl-amount-f", root).hidden = chk;
+      $("#gl-kind-help", root).textContent = chk ? "양을 재지 않고, 했는지만 매일 체크해요. 예: 영양제 먹기, 스트레칭, 일기 쓰기" : "얼마나 했는지 숫자로 기록해요.";
+      $("#gl-title", root).placeholder = chk ? "예: 영양제 먹기" : "예: 가을 10km 대회 완주";
+      if (GOAL_KINDS[k][2]) $("#gl-unit", root).value = GOAL_KINDS[k][2];
+    });
+    $("#gl-days", root).addEventListener("click", e => { const b = e.target.closest("[data-d]"); if (b) b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"); });
     $("#gl-owner", root).addEventListener("change", () => ($("#gl-share", root).hidden = segVal(root, "#gl-owner") === "both"));
     $("#gl-share", root).addEventListener("click", e => { const s = e.currentTarget; s.setAttribute("aria-checked", s.getAttribute("aria-checked") !== "true"); });
     $("#gl-form", root).addEventListener("submit", async e => {
       e.preventDefault();
       const own = segVal(root, "#gl-owner") === "both" ? "both" : S.me;
       const shared = own === "both" || $("#gl-share", root).getAttribute("aria-checked") === "true";
-      const d = { title: $("#gl-title", root).value.trim(), kind: segVal(root, "#gl-kind") || "custom", unit: $("#gl-unit", root).value.trim(), weekly: +$("#gl-weekly", root).value || 0, targetDate: $("#gl-date", root).value, memo: $("#gl-memo", root).value.trim(), owner: own, createdAt: g?.createdAt || Date.now() };
+      const k = segVal(root, "#gl-kind") || "custom";
+      const d = { title: $("#gl-title", root).value.trim(), kind: k, targetDate: $("#gl-date", root).value, memo: $("#gl-memo", root).value.trim(), owner: own, createdAt: g?.createdAt || Date.now() };
+      if (k === "check") {
+        d.days = [...root.querySelectorAll("#gl-days [aria-pressed='true']")].map(b => +b.dataset.d);
+        if (!d.days.length) return toast("체크할 요일을 하나 이상 골라 주세요.");
+      } else {
+        d.period = segVal(root, "#gl-per") || "week"; d.target = +$("#gl-target", root).value || 0; d.unit = $("#gl-unit", root).value.trim();
+      }
       if (g?.sample) d.sample = true;
       if (!d.title) return;
       const id = g?.id || store.newId(), up = {};
       const pathG = s => (s ? `goals/${id}` : `private/${S.me}/goals/${id}`), pathL = s => (s ? `logs/${id}` : `private/${S.me}/logs/${id}`);
       if (g && g.shared !== shared) { up[pathG(g.shared)] = null; up[pathL(g.shared)] = null; up[pathL(shared)] = g.logs || null; }
       up[pathG(shared)] = d;
-      if (await save(() => store.update("", up), isNew ? "목표를 추가했어요." : g && g.shared !== shared ? (shared ? "목표를 공유했어요." : "목표를 나만 보기로 바꿨어요.") : "저장했어요.")) closeSheet();
+      if (await save(() => store.update("", up), isNew ? "목표를 추가했어요." : g && g.shared !== shared ? (shared ? "목표를 공유했어요." : "목표를 나만 보기로 바꿨어요.") : "저장했어요.")) {
+        if (shared && (isNew || !g.shared)) logAct(`${q(d.title)} 목표를 ${own === "both" ? "함께 하자고 만들었어요" : "공유했어요"}`);
+        closeSheet();
+      }
     });
     if (!isNew) armDelete($("#gl-del", root), async () => {
       const up = g.shared ? { [`goals/${g.id}`]: null, [`logs/${g.id}`]: null } : { [`private/${S.me}/goals/${g.id}`]: null, [`private/${S.me}/logs/${g.id}`]: null };
@@ -1715,6 +1875,8 @@ document.addEventListener("click", async e => {
     case "anniv": annivSheet(); break;
     case "plan-edit": planSheet(id); break;
     case "goal-edit": { const g = goalList().find(x => x.id === id && x.src === src); if (g) goalSheet(g); break; }
+    case "check": { const g = goalList().find(x => x.id === id && x.src === src); if (g) toggleCheck(g, b.dataset.d); break; }
+    case "gfilter": S.goalFilter = v; render(); break;
     case "log": { const g = goalList().find(x => x.id === id && x.src === src); if (g) logSheet(g); break; }
     case "settings": settingsSheet(); break;
     case "swap-view": S.me = P(); subscribeAll(); toast(`${prof(S.me).name} 시점으로 바꿨어요.`); break;
