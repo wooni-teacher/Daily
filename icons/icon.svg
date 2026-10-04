@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#FFF6E8"/>
+      <stop offset="0.55" stop-color="#FFE3D8"/>
+      <stop offset="1" stop-color="#FFCFC8"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.55" r="0.5">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bearFur" cx="0.4" cy="0.35" r="0.75">
+      <stop offset="0" stop-color="#FFF7EA"/>
+      <stop offset="0.7" stop-color="#F8E6CC"/>
+      <stop offset="1" stop-color="#EDD3B2"/>
+    </radialGradient>
+    <radialGradient id="hamFur" cx="0.45" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#F2C597"/>
+      <stop offset="1" stop-color="#DDA673"/>
+    </radialGradient>
+    <radialGradient id="heart" cx="0.38" cy="0.32" r="0.8">
+      <stop offset="0" stop-color="#FFA3B1"/>
+      <stop offset="1" stop-color="#EF6F86"/>
+    </radialGradient>
+    <clipPath id="hamHeadClip"><circle cx="0" cy="0" r="86"/></clipPath>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <circle cx="256" cy="290" r="230" fill="url(#glow)"/>
+
+  <!-- 반짝임 -->
+  <g fill="#FFFFFF">
+    <path d="M78 92l7 20 20 7-20 7-7 20-7-20-20-7 20-7z" opacity=".95"/>
+    <path d="M440 120l5 14 14 5-14 5-5 14-5-14-14-5 14-5z" opacity=".9"/>
+    <path d="M444 404l4 11 11 4-11 4-4 11-4-11-11-4 11-4z" opacity=".85"/>
+    <path d="M66 330l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" opacity=".8"/>
+  </g>
+  <g fill="#FFD98A">
+    <circle cx="410" cy="70" r="5"/><circle cx="120" cy="440" r="4"/><circle cx="470" cy="260" r="3.5"/>
+  </g>
+
+  <!-- 바닥 그림자 -->
+  <ellipse cx="262" cy="470" rx="190" ry="20" fill="#E9A9A0" opacity=".35"/>
+
+  <g stroke="#5E4034" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+
+    <!-- ===== 우니 (곰) 몸 ===== -->
+    <ellipse cx="196" cy="378" rx="116" ry="96" fill="url(#bearFur)"/>
+    <ellipse cx="128" cy="452" rx="40" ry="24" fill="#FBEBD3"/>
+    <ellipse cx="128" cy="456" rx="16" ry="10" fill="#F6C9B8" stroke="none"/>
+
+    <!-- ===== 슷하 (햄스터) 몸 ===== -->
+    <ellipse cx="358" cy="398" rx="96" ry="78" fill="url(#hamFur)"/>
+    <ellipse cx="364" cy="414" rx="62" ry="54" fill="#FFF9F2" stroke="none"/>
+    <ellipse cx="420" cy="460" rx="28" ry="16" fill="#F4CDA3"/>
+
+    <!-- ===== 우니 머리 (오른쪽으로 기울임) ===== -->
+    <g transform="translate(206 216) rotate(9)">
+      <circle cx="-74" cy="-78" r="36" fill="#F8E6CC"/>
+      <circle cx="-74" cy="-78" r="18" fill="#F6C3B5" stroke="none"/>
+      <circle cx="74" cy="-78" r="36" fill="#F8E6CC"/>
+      <circle cx="74" cy="-78" r="18" fill="#F6C3B5" stroke="none"/>
+      <ellipse cx="0" cy="0" rx="116" ry="104" fill="url(#bearFur)"/>
+      <ellipse cx="0" cy="34" rx="46" ry="34" fill="#FFFBF4" stroke-width="5"/>
+      <!-- 편안하게 감은 눈 -->
+      <path d="M-58 -6q16-16 32 0" fill="none" stroke-width="7"/>
+      <path d="M26 -6q16-16 32 0" fill="none" stroke-width="7"/>
+      <ellipse cx="0" cy="20" rx="15" ry="11" fill="#5E4034" stroke="none"/>
+      <ellipse cx="-4" cy="16" rx="5" ry="3" fill="#FFFFFF" stroke="none" opacity=".8"/>
+      <path d="M-14 38q14 12 28 0" fill="none" stroke-width="5"/>
+      <ellipse cx="-74" cy="26" rx="20" ry="12" fill="#F7A9A6" stroke="none" opacity=".75"/>
+      <ellipse cx="74" cy="26" rx="20" ry="12" fill="#F7A9A6" stroke="none" opacity=".75"/>
+    </g>
+
+    <!-- ===== 슷하 머리 (왼쪽으로 기대기) ===== -->
+    <g transform="translate(346 284) rotate(-12)">
+      <circle cx="-58" cy="-66" r="24" fill="#E3AE7D"/>
+      <circle cx="-58" cy="-66" r="12" fill="#F6C3B5" stroke="none"/>
+      <circle cx="56" cy="-68" r="24" fill="#E3AE7D"/>
+      <circle cx="56" cy="-68" r="12" fill="#F6C3B5" stroke="none"/>
+      <g clip-path="url(#hamHeadClip)">
+        <circle cx="0" cy="0" r="86" fill="url(#hamFur)" stroke="none"/>
+        <!-- 얼굴 아래쪽 흰 털 -->
+        <path d="M-90 4q22-18 46 -4q20 12 44 -2q24 -12 46 4q22 14 44 0V100H-90z" fill="#FFF9F2" stroke="none"/>
+        <!-- 이마 줄무늬 -->
+        <path d="M-10 -86q10 30 0 44q-10-14 0-44z" fill="#D1965F" stroke="none" opacity=".7"/>
+      </g>
+      <circle cx="0" cy="0" r="86" fill="none"/>
+      <!-- 반짝이는 눈 -->
+      <ellipse cx="-34" cy="-6" rx="11" ry="13" fill="#3E2A22" stroke="none"/>
+      <ellipse cx="34" cy="-6" rx="11" ry="13" fill="#3E2A22" stroke="none"/>
+      <circle cx="-30" cy="-11" r="4.5" fill="#FFFFFF" stroke="none"/>
+      <circle cx="38" cy="-11" r="4.5" fill="#FFFFFF" stroke="none"/>
+      <circle cx="-37" cy="-1" r="2" fill="#FFFFFF" stroke="none"/>
+      <circle cx="31" cy="-1" r="2" fill="#FFFFFF" stroke="none"/>
+      <ellipse cx="0" cy="14" rx="7" ry="5" fill="#E77D87" stroke="none"/>
+      <path d="M-11 24q5.5 7 11 0q5.5 7 11 0" fill="none" stroke-width="4"/>
+      <ellipse cx="-56" cy="22" rx="18" ry="11" fill="#F7A0A0" stroke="none" opacity=".8"/>
+      <ellipse cx="56" cy="22" rx="18" ry="11" fill="#F7A0A0" stroke="none" opacity=".8"/>
+    </g>
+
+    <!-- ===== 함께 안은 하트 ===== -->
+    <path d="M268 448C226 420 192 392 192 358c0-26 20-44 42-44 16 0 28 9 34 22 6-13 18-22 34-22 22 0 42 18 42 44 0 34-34 62-76 90z" fill="url(#heart)"/>
+    <path d="M222 346q4-14 18-16" fill="none" stroke="#FFFFFF" stroke-width="8" opacity=".85"/>
+    <circle cx="214" cy="364" r="4" fill="#FFFFFF" stroke="none" opacity=".85"/>
+
+    <!-- 우니 팔 (하트 왼쪽) -->
+    <path d="M150 366q30-30 64-8q10 18-8 30q-34 12-56-22z" fill="#F8E6CC"/>
+    <!-- 슷하 팔 (하트 오른쪽) -->
+    <path d="M336 384q14-28 44-22q14 14 0 30q-24 14-44-8z" fill="#E8B686"/>
+  </g>
+</svg>
