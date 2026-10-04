@@ -443,6 +443,8 @@ const FIREBASE_CONFIG = {
   messagingSenderId: "527862457033",
   appId: "1:527862457033:web:41c8fcb5978ffb67476318"
 };
+/* 휴대폰 알림용 웹 푸시 키 — Firebase 콘솔 > 프로젝트 설정 > 클라우드 메시징 > 웹 푸시 인증서의 '키 쌍' */
+const VAPID_KEY = "";
 const ROOT = "couplePlanner";
 const CONFIGURED = !!(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.databaseURL);
 
@@ -1313,7 +1315,7 @@ async function loadFirebase() {
   const v = "10.12.2", u = m => `https://www.gstatic.com/firebasejs/${v}/firebase-${m}.js`;
   const [appM, authM, dbM] = await Promise.all([import(u("app")), import(u("auth")), import(u("database"))]);
   const app = appM.initializeApp(FIREBASE_CONFIG);
-  fb = { ...dbM, auth: authM.getAuth(app), db: dbM.getDatabase(app), authM };
+  fb = { ...dbM, app, auth: authM.getAuth(app), db: dbM.getDatabase(app), authM };
   return fb;
 }
 async function ensureAuth() {
@@ -1808,6 +1810,7 @@ function settingsSheet() {
         <div class="field"><input class="input" id="st-link" readonly value="${esc(link)}" aria-label="초대 링크"></div>
         <button class="btn block" id="st-copy" style="margin-top:8px">${ic("copy")}초대 링크 복사</button>
       </div>` : ""}
+    ${S.mode === "live" && VAPID_KEY ? notifySection() : ""}
     <button class="btn block" id="st-anniv">${ic("heart")}처음 만난 날·기념일 설정</button>
     <div class="field"><span class="lbl">샘플 데이터</span><div class="actions">
       <button class="btn" id="st-seed">샘플 넣기</button><button class="btn" id="st-unseed">샘플 지우기</button></div></div>
@@ -1827,6 +1830,7 @@ function settingsSheet() {
       try { await navigator.clipboard.writeText(link); toast("초대 링크를 복사했어요."); }
       catch { const i = $("#st-link", root); i.focus(); i.select(); toast("링크를 길게 눌러 복사해 주세요."); }
     });
+    bindNotify(root);
     $("#st-anniv", root).addEventListener("click", () => { closeSheet(); annivSheet(); });
     $("#st-seed", root).addEventListener("click", async () => { if (await save(() => store.update("", sampleData(S.me, S.mode === "demo")), "샘플을 넣었어요.")) closeSheet(); });
     $("#st-unseed", root).addEventListener("click", async () => { await removeSamples(); closeSheet(); });
@@ -1836,12 +1840,86 @@ function settingsSheet() {
       if (await save(() => store.update("", { [`slots/${p}`]: null, [`pins/${p}`]: null, [`devices/${p}`]: null, [`private/${p}`]: null }), "상대 자리를 다시 열었어요.")) closeSheet();
     });
     $("#st-out", root).addEventListener("click", async () => {
-      if (S.mode === "live") { try { await store.remove(`devices/${S.me}/${S.uid}`); await fb.authM.signOut(fb.auth); } catch {} lsSet("uh.code", null); }
+      if (S.mode === "live") { try { if (lsGet("uh.pushTid")) await disablePush(); await store.remove(`devices/${S.me}/${S.uid}`); await fb.authM.signOut(fb.auth); } catch {} lsSet("uh.code", null); }
       unsubs.forEach(u => u()); unsubs = [];
       Object.assign(S, { mode: null, slots: {}, events: {}, plans: {}, goals: {}, logs: {}, activity: {}, info: {}, anniv: {}, notes: {}, reactions: {}, priv: { events: {}, goals: {}, logs: {} }, tab: "today", login: { step: "code", code: "", slots: {}, slot: null, err: "" } });
       closeSheet(); render();
     });
   });
+}
+
+/* ========== 휴대폰 알림 (Firebase Cloud Messaging) ========== */
+const isIOS = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+const isStandalone = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const NOTIFY_DEFAULT = { partner: true, before: true, check: true };
+const myNotify = () => ({ ...NOTIFY_DEFAULT, ...(S.slots[S.me]?.notify || {}) });
+function pushStatus() {
+  if (S.mode !== "live") return { ok: false, msg: "체험 모드에서는 알림을 켤 수 없어요." };
+  if (!VAPID_KEY) return { ok: false, msg: "알림 키(VAPID)가 아직 설정되지 않았어요. README의 알림 설정 1단계를 먼저 해 주세요." };
+  if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window))
+    return { ok: false, msg: isIOS() ? "아이폰은 사파리에서 홈 화면에 추가한 앱으로 열어야 알림을 켤 수 있어요. (iOS 16.4 이상)" : "이 브라우저는 알림을 지원하지 않아요. 크롬이나 삼성 인터넷으로 열어 주세요." };
+  if (isIOS() && !isStandalone()) return { ok: false, msg: "아이폰은 공유 버튼 → 홈 화면에 추가 후, 홈 화면 아이콘으로 열어서 알림을 켜 주세요." };
+  if (Notification.permission === "denied") return { ok: false, msg: "알림이 차단돼 있어요. 휴대폰 설정 → 알림에서 이 앱(또는 브라우저)의 알림을 허용해 주세요." };
+  return { ok: true, on: Notification.permission === "granted" && !!lsGet("uh.pushToken") };
+}
+async function tokenId(token) {
+  const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(token));
+  return [...new Uint8Array(h)].slice(0, 12).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+async function enablePush() {
+  const st = pushStatus(); if (!st.ok) return toast(st.msg);
+  const perm = await Notification.requestPermission();
+  if (perm !== "granted") return toast("알림이 허용되지 않았어요.");
+  try {
+    const reg = await navigator.serviceWorker.register("sw.js");
+    await navigator.serviceWorker.ready;
+    const mm = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js");
+    if (!(await mm.isSupported())) return toast("이 브라우저는 알림을 지원하지 않아요.");
+    const token = await mm.getToken(mm.getMessaging(fb.app), { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+    if (!token) return toast("알림 등록에 실패했어요. 다시 눌러 주세요.");
+    const tid = await tokenId(token);
+    await store.set(`push/${S.me}/${tid}`, { token, at: Date.now(), device: isIOS() ? "iPhone" : /Android/.test(navigator.userAgent) ? "Android" : "컴퓨터" });
+    lsSet("uh.pushToken", token); lsSet("uh.pushTid", tid);
+    toast("이 기기에서 알림을 받아요. 🔔");
+  } catch (e) { console.error(e); toast("알림을 켜지 못했어요. 앱을 새로고침한 뒤 다시 시도해 주세요."); }
+}
+async function disablePush() {
+  const tid = lsGet("uh.pushTid");
+  try {
+    if (tid) await store.remove(`push/${S.me}/${tid}`);
+    const mm = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js");
+    await mm.deleteToken(mm.getMessaging(fb.app)).catch(() => {});
+  } catch {}
+  lsSet("uh.pushToken", null); lsSet("uh.pushTid", null);
+  toast("이 기기의 알림을 껐어요.");
+}
+async function testPush() {
+  if (Notification.permission !== "granted") return toast("먼저 알림을 켜 주세요.");
+  const reg = await navigator.serviceWorker.ready;
+  reg.showNotification("우리 하루 알림 테스트", { body: "이렇게 알림이 와요 🐹🐻", icon: "icons/icon-192.png", badge: "icons/icon-192.png" });
+}
+function notifySection() {
+  const st = pushStatus(), n = myNotify();
+  const sw = (k, t, d) => `<button type="button" class="switch" data-notify="${k}" role="switch" aria-checked="${!!n[k]}"><span class="t"><b>${t}</b><span>${d}</span></span><span class="knob"></span></button>`;
+  return `<div class="field"><span class="lbl">휴대폰 알림</span>
+    ${st.ok ? (st.on
+      ? `<div class="note">${ic("bell", "sm")}<span>이 기기에서 알림을 받고 있어요. 알림은 보통 5~15분 안에 와요.</span></div>
+         <div class="actions"><button class="btn" id="st-push-test">테스트 알림</button><button class="btn ghost" id="st-push-off">이 기기 알림 끄기</button></div>`
+      : `<button class="btn both block" id="st-push-on">${ic("bell")}이 기기에서 알림 받기</button>`)
+      : `<div class="note">${ic("info", "sm")}<span>${esc(st.msg)}</span></div>`}
+    ${sw("partner", `${esc(prof(P()).name)}님 소식`, "일정·계획·한마디·반응을 바꾸면 알려줘요")}
+    ${sw("before", "일정 시작 전", "내 일정과 함께하는 일정이 20분 안에 시작하면 알려줘요")}
+    ${sw("check", "저녁 9시 체크 알림", "오늘 체크 안 한 목표가 있으면 알려줘요")}
+  </div>`;
+}
+function bindNotify(root) {
+  $("#st-push-on", root)?.addEventListener("click", async () => { await enablePush(); closeSheet(); settingsSheet(); });
+  $("#st-push-off", root)?.addEventListener("click", async () => { await disablePush(); closeSheet(); settingsSheet(); });
+  $("#st-push-test", root)?.addEventListener("click", testPush);
+  root.querySelectorAll("[data-notify]").forEach(b => b.addEventListener("click", async () => {
+    const on = b.getAttribute("aria-checked") !== "true"; b.setAttribute("aria-checked", on);
+    await save(() => store.update(`slots/${S.me}/notify`, { [b.dataset.notify]: on }));
+  }));
 }
 
 /* ========== 12. 이벤트 ========== */
