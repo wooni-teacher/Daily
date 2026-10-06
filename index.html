@@ -206,7 +206,7 @@ main{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:8px calc(1
 
 /* 하단 탭 + FAB */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
-.tabbar-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.tabbar-in{max-width:600px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
 .tab{position:relative;min-height:56px;border-radius:14px;display:grid;place-items:center;align-content:center;gap:2px;font-size:12px;font-weight:600;color:var(--muted)}
 .tab .icon{width:24px;height:24px}
 .tab[aria-current="page"]{color:var(--ink);background:var(--surface2)}
@@ -421,6 +421,54 @@ textarea.input{min-height:84px;resize:vertical}
 .bars.has-line::after{content:"";position:absolute;left:0;right:0;bottom:calc(21px + (100% - 40px) * var(--line));border-top:2px dashed var(--muted);opacity:.6;pointer-events:none}
 .bar.met .fill{background:var(--ok)}
 .chip small{font-size:12px;opacity:.7}
+/* 기록 수정 */
+.log-list{display:grid;gap:6px}
+.log-row{border:1.5px solid var(--line);border-radius:12px;padding:8px 10px}
+.log-view{display:flex;align-items:center;gap:10px;min-height:40px}
+.log-d{min-width:64px;font-size:14px;color:var(--muted);font-weight:600}
+.log-btns{margin-left:auto}
+.log-edit{display:grid;gap:8px}
+.log-edit .input{min-height:46px}
+button.bar{background:none;padding:0;border-radius:8px}
+button.bar:hover .track{outline:2px solid var(--line)}
+.ck-cal-head,.ck-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
+.ck-cal-head span{font-size:12px;font-weight:700;color:var(--muted)}
+.ck-cal{margin-top:6px}
+.ck-cell{aspect-ratio:1;max-width:100%;border-radius:50%;border:2px solid var(--line);font-weight:700;font-size:14px;display:grid;place-items:center}
+.ck-cell.out{visibility:hidden}
+.ck-cell.off{border-style:dashed;opacity:.55}
+.ck-cell.full{background:var(--fillc);border-color:var(--fillc);color:#fff}
+.ck-cell.half{background:linear-gradient(90deg,var(--fillc) 50%,transparent 50%);border-color:var(--fillc)}
+.ck-cell.today{box-shadow:0 0 0 2px var(--ink)}
+.ck-cell:disabled:not(.full):not(.half){opacity:.4}
+/* 일기 */
+.mood-pick{display:flex;gap:6px;flex-wrap:wrap}
+.mood-pick button{display:grid;justify-items:center;width:58px;padding:6px 0;border-radius:14px;border:2px solid var(--line);background:var(--bg)}
+.mood-pick button span{font-size:24px;line-height:1.2}
+.mood-pick button small{font-size:11px;color:var(--muted)}
+.mood-pick button[aria-pressed="true"]{border-color:var(--ink);background:var(--surface)}
+.diary-text{min-height:200px;line-height:1.7}
+.diary-cta{display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin-bottom:12px}
+.diary-cta > span{flex:1;display:grid}
+.diary-days{display:grid;gap:4px}
+.diary-day{display:grid;gap:8px}
+.diary-item{display:grid;gap:8px;text-align:left;width:100%}
+.diary-item + .diary-item{margin-top:0}
+.di-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.di-mood{font-size:20px}
+.di-text{font-family:var(--f-display);font-size:16px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.diary-full{font-family:var(--f-display);font-size:17px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}
+/* 감사 */
+.thanks-card{display:grid;gap:8px;margin-bottom:12px;background:var(--b-soft);box-shadow:none}
+.thanks-card .h3{display:flex;align-items:center;gap:8px;font-weight:700}
+.th-row{display:grid;gap:2px;width:100%;text-align:left;padding:10px 12px;border-radius:12px;background:var(--surface)}
+.th-who{font-size:12px;font-weight:700;color:var(--muted)}
+.th-text{font-family:var(--f-display);font-size:16px;overflow-wrap:anywhere}
+.th-pair{display:grid;gap:6px}
+.th-pair .th-row{background:var(--b-soft)}
+.th-pair .th-row.me{background:var(--a-soft)}
+.th-pair .th-row:disabled{cursor:default;opacity:1}
+.tab span:last-child{white-space:nowrap}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 </head>
@@ -487,6 +535,7 @@ const I = {
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
   edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>',
   repeat: '<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>',
+  book: '<path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 21.5V4.5"/><path d="M9 7h7"/>',
   bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>'
 };
 const ic = (n, cls = "") => `<svg class="icon ${cls}" viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
@@ -505,8 +554,8 @@ const S = {
   mode: null,            // 'demo' | 'live'
   code: null, me: "a", uid: null,
   slots: {}, events: {}, plans: {}, goals: {}, logs: {},
-  activity: {}, info: {}, anniv: {}, notes: {}, reactions: {}, actReady: false,
-  priv: { events: {}, goals: {}, logs: {} },
+  activity: {}, info: {}, anniv: {}, notes: {}, reactions: {}, diary: {}, thanks: {}, actReady: false,
+  priv: { events: {}, goals: {}, logs: {}, diary: {} },
   tab: "today", view: "day", sel: todayStr(), filter: "all",
   login: { step: "code", code: "", slots: {}, slot: null, err: "" }
 };
@@ -580,7 +629,9 @@ function subscribeAll() {
     }
     S.activity = v; S.actReady = true;
   });
-  L(`private/${S.me}`, v => (S.priv = { events: v.events || {}, goals: v.goals || {}, logs: v.logs || {} }));
+  L("diary", v => (S.diary = v));
+  L("thanks", v => (S.thanks = v));
+  L(`private/${S.me}`, v => (S.priv = { events: v.events || {}, goals: v.goals || {}, logs: v.logs || {}, diary: v.diary || {} }));
 }
 
 /* 변경 기록 — 공유되는 것을 바꿀 때 남겨서 상대의 '새 소식'에 보여줌 */
@@ -668,6 +719,12 @@ function sampleData(me, includePartnerOwned) {
     out[`activity/${id()}`] = { by: pt, text: `${q("주말 브런치")} 계획을 제안했어요`, at: now - 2.5 * H };
     out[`activity/${id()}`] = { by: pt, text: `${q("연남동 파스타 저녁")}에 ❤️ 반응을 남겼어요`, at: now - 1.5 * H };
     out[`slots/${me}/lastSeen`] = now - 3 * H;
+    // 일기·감사 예시
+    out[`private/${me}/diary/${d(-1)}`] = { text: "퇴근길에 노을이 예뻤다. 내일은 러닝 6km 꼭 하기.\n요즘 잠을 조금 더 자야겠다.", mood: "😌", at: now - 20 * H };
+    out[`diary/${me}_${d(-2)}`] = { by: me, date: d(-2), text: "같이 장 보고 집에서 파스타 해 먹은 날. 소스가 좀 짰지만 둘 다 웃었다 🍝", mood: "🥰", at: now - 44 * H };
+    out[`diary/${pt}_${d(-1)}`] = { by: pt, date: d(-1), text: "회의가 길어서 지쳤는데 저녁 통화로 기분이 풀렸다. 주말 브런치 기대된다!", mood: "😊", at: now - 18 * H };
+    [[-1, me, "회의 끝날 때까지 기다렸다가 전화해 줘서 고마워"], [-1, pt, "아침에 응원 메시지 보내 줘서 힘이 났어"], [-2, me, "파스타 같이 만들어 줘서 고마워"], [-2, pt, "설거지 다 해 줘서 고마워 🫧"], [0, pt, "오늘 아침 커피 사다 줘서 고마워 ☕"]]
+      .forEach(([o, s, text]) => (out[`thanks/${d(o)}_${s}`] = { by: s, date: d(o), text, at: now - (1 - o) * H }));
     out[`reactions/plan_${dinner}/${pt}`] = "❤️";
     const ck3 = id(); ck(`goals/${ck3}`, `logs/${ck3}`, { title: "물 2L 마시기", owner: pt, days: [1, 2, 3, 4, 5] }, [[-1, pt], [-2, pt], [-3, pt]]);
     const rd = id();
@@ -814,8 +871,8 @@ function render() {
   const app = $("#app");
   if (!S.mode) { app.innerHTML = renderStart(); afterStart(); $("#fab-slot")?.remove(); return; }
   const y = window.scrollY;
-  const screens = { today: renderToday, schedule: renderSchedule, plans: renderPlans, goals: renderGoals };
-  const fabLabel = { today: "일정 추가", schedule: "일정 추가", plans: "계획 제안", goals: "목표 추가" }[S.tab];
+  const screens = { today: renderToday, schedule: renderSchedule, plans: renderPlans, goals: renderGoals, diary: renderDiary };
+  const fabLabel = { today: "일정 추가", schedule: "일정 추가", plans: "계획 제안", goals: "목표 추가", diary: myDiary(todayStr()) ? "오늘 일기 고치기" : "일기 쓰기" }[S.tab];
   const pc = pendingCount();
   app.innerHTML = `
     <header class="top"><div class="top-in">
@@ -831,7 +888,7 @@ function render() {
     <main>${screens[S.tab]()}</main>
     <button class="fab" data-act="fab">${ic("plus")}${fabLabel}</button>
     <nav class="tabbar" aria-label="주요 화면"><div class="tabbar-in">
-      ${[["today", "sun", "오늘"], ["schedule", "cal", "일정"], ["plans", "heart", "함께"], ["goals", "target", "습관·목표"]].map(([k, i, l]) =>
+      ${[["today", "sun", "오늘"], ["schedule", "cal", "일정"], ["plans", "heart", "함께"], ["goals", "target", "목표"], ["diary", "book", "일기"]].map(([k, i, l]) =>
         `<button class="tab" data-act="tab" data-v="${k}" ${S.tab === k ? 'aria-current="page"' : ""}>${ic(i)}${k === "plans" && pc ? `<span class="badge">${pc}</span>` : ""}<span>${l}</span></button>`).join("")}
     </div></nav>`;
   window.scrollTo(0, y);
@@ -921,6 +978,7 @@ function renderToday() {
         ${coupleHero()}
         ${newsCard()}
         ${todayChecks()}
+        ${thanksCard()}
         <section class="card next-card" aria-label="다음 일정">
           <div class="next-label">${ic("clock", "sm")}다음 일정${next ? `<span class="rel">${relTime(next.time)}</span>` : ""}</div>
           ${next ? `<button class="row-main" data-act="open" data-src="${next.src}" data-id="${next.id}">
@@ -1166,6 +1224,7 @@ function checkCard(g) {
       <div class="meter"><i style="width:${mo.total ? (mo.done / mo.total) * 100 : 0}%"></i></div>
     </div>
     ${partnerNote}
+    <button class="btn ghost sm block" data-act="check-hist" data-src="${g.src}" data-id="${g.id}">${ic("cal", "sm")}지난 기록 보기${edit ? "·수정" : ""}</button>
     ${edit ? (sched || st.mine ? `<button class="btn block ${st.mine ? "ck-done" : "primary"}" data-act="check" data-src="${g.src}" data-id="${g.id}" data-d="${t}">${st.mine ? `${ic("check")}오늘 완료! (누르면 취소)` : `${ic("check")}오늘 체크하기`}</button>` : `<div class="small">오늘은 체크하는 날이 아니에요.</div>`)
       : `<div class="small">${ic("eye", "sm")} ${esc(prof(g.owner).name)}님이 공유한 목표예요. 보기만 할 수 있어요.</div>`}
   </article>`;
@@ -1188,13 +1247,13 @@ function goalCard(g) {
       ${target ? `<div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="${target}" aria-valuenow="${cur}"><i style="width:${Math.min(100, (cur / target) * 100)}%"></i></div>` : ""}
     </div>
     <div class="bars ${per === "day" && target ? "has-line" : ""}" style="--line:${per === "day" && target ? Math.min(1, target / max).toFixed(3) : 0}" aria-label="이번 주 요일별 기록">
-      ${st.days.map(d => `<div class="bar ${d.d === t ? "today" : ""} ${per === "day" && target && d.v >= target ? "met" : ""}"><span class="v">${d.v || ""}</span><span class="track"><span class="fill" style="height:${(d.v / max) * 100}%"></span></span><span class="d">${WD[parseD(d.d).getDay()]}</span></div>`).join("")}
+      ${st.days.map(d => `<${edit && d.d <= t ? `button type="button" data-act="log-day" data-src="${g.src}" data-id="${g.id}" data-d="${d.d}" aria-label="${fmtDate(d.d)} 기록 보기·수정"` : "div"} class="bar ${d.d === t ? "today" : ""} ${per === "day" && target && d.v >= target ? "met" : ""}"><span class="v">${d.v || ""}</span><span class="track"><span class="fill" style="height:${(d.v / max) * 100}%"></span></span><span class="d">${WD[parseD(d.d).getDay()]}</span></${edit && d.d <= t ? "button" : "div"}>`).join("")}
     </div>
     ${metDays !== null ? `<div class="small">이번 주 하루 목표 달성 <b>${metDays}일</b> (점선이 하루 목표 ${target}${esc(unit)})</div>` : ""}
     <div class="weeks4" aria-label="${per === "month" ? "최근 4달" : "최근 4주"} 합계">
       ${summary.map((w, i) => `<div class="${i === 3 ? "cur" : ""}">${w.label}<b>${w.v}${esc(unit)}</b></div>`).join("")}
     </div>
-    ${edit ? `<button class="btn primary block" data-act="log" data-src="${g.src}" data-id="${g.id}">${ic("plus")}오늘 기록 추가</button>` : `<div class="small">${ic("eye", "sm")} ${esc(prof(g.owner).name)}님이 공유한 목표예요. 보기만 할 수 있어요.</div>`}
+    ${edit ? `<div class="actions"><button class="btn primary" data-act="log" data-src="${g.src}" data-id="${g.id}">${ic("plus")}기록 추가</button><button class="btn ghost" data-act="log" data-src="${g.src}" data-id="${g.id}" data-d="${addDays(t, -1)}">${ic("edit", "sm")}지난 기록 수정</button></div>` : `<div class="small">${ic("eye", "sm")} ${esc(prof(g.owner).name)}님이 공유한 목표예요. 보기만 할 수 있어요.</div>`}
   </article>`;
 }
 
@@ -1766,33 +1825,219 @@ function goalSheet(g) {
   });
 }
 
-function logSheet(g) {
+function logSheet(g, presetDate) {
   const unit = g.unit || "";
   const quick = { km: [3, 5, 7, 10], 분: [10, 20, 30, 60], 쪽: [10, 20, 30, 50], 회: [1] }[unit] || [1, 5, 10];
-  const recent = Object.entries(g.logs || {}).sort((a, b) => b[1].date.localeCompare(a[1].date)).slice(0, 5);
+  const lp = goalLogPath(g);
+  let shown = 20;
+  const rows = () => Object.entries(g.logs || {}).filter(([, l]) => l && l.date).sort((a, b) => b[1].date.localeCompare(a[1].date) || (b[1].at || 0) - (a[1].at || 0));
+  const rowHTML = ([lid, l]) => `<div class="log-row" data-lid="${lid}">
+      <div class="log-view"><span class="log-d">${fmtShort(l.date)}</span><b>${l.value}${esc(unit)}</b>${g.owner === "both" ? `<span class="small">${esc(prof(l.by).avatar)} ${esc(prof(l.by).name)}</span>` : ""}
+        ${g.owner !== "both" || l.by === S.me ? `<span class="log-btns"><button type="button" class="btn ghost sm" data-edit="${lid}">${ic("edit", "sm")}수정</button></span>` : ""}</div>
+      <div class="log-edit" hidden>
+        <input class="input" type="date" value="${l.date}" max="${todayStr()}" aria-label="날짜">
+        <input class="input" type="number" inputmode="decimal" min="0" step="0.1" value="${l.value}" aria-label="기록 (${esc(unit)})">
+        <div class="actions"><button type="button" class="btn primary sm" data-save="${lid}">저장</button><button type="button" class="btn danger sm" data-del="${lid}">삭제</button><button type="button" class="btn ghost sm" data-cancel="${lid}">취소</button></div>
+      </div></div>`;
+  const listHTML = () => { const r = rows(); return r.length ? r.slice(0, shown).map(rowHTML).join("") + (r.length > shown ? `<button type="button" class="btn ghost sm block" id="lg-more">이전 기록 더 보기 (${r.length - shown}개)</button>` : "") : `<div class="empty">아직 기록이 없어요.</div>`; };
   openSheet(`${esc(g.title)} 기록`, `
     <form class="form" id="lg-form">
       <div class="two">
         <div class="field"><label for="lg-val">기록 (${esc(unit) || "값"})</label><input class="input" id="lg-val" type="number" inputmode="decimal" min="0" step="0.1" required style="font-size:22px;font-weight:700"></div>
-        <div class="field"><label for="lg-date">날짜</label><input class="input" id="lg-date" type="date" value="${todayStr()}" required></div>
+        <div class="field"><label for="lg-date">날짜</label><input class="input" id="lg-date" type="date" value="${presetDate || todayStr()}" max="${todayStr()}" required></div>
       </div>
-      <div class="quick">${quick.map(q => `<button type="button" class="chip" data-q="${q}">${q}${esc(unit)}</button>`).join("")}</div>
+      <div class="quick">${quick.map(x => `<button type="button" class="chip" data-q="${x}">${x}${esc(unit)}</button>`).join("")}</div>
       <button class="btn primary block" type="submit">기록하기</button>
-      ${recent.length ? `<div class="field"><span class="lbl">최근 기록</span>${recent.map(([lid, l]) => `<div class="detail-row" style="justify-content:space-between;align-items:center"><span>${fmtShort(l.date)} · <b>${l.value}${esc(unit)}</b>${g.owner === "both" ? " · " + esc(prof(l.by).name) : ""}</span><button type="button" class="btn ghost sm" data-del="${lid}">지우기</button></div>`).join("")}</div>` : ""}
-    </form>`, root => {
-    const val = $("#lg-val", root); val.focus();
+    </form>
+    <div class="field" style="margin-top:18px"><span class="lbl">지난 기록 · 눌러서 수정</span><div class="log-list" id="lg-list">${listHTML()}</div></div>`, root => {
+    const val = $("#lg-val", root); if (!presetDate) val.focus();
     root.querySelectorAll("[data-q]").forEach(b => b.addEventListener("click", () => (val.value = b.dataset.q)));
-    const lp = g.src === "priv" ? `private/${S.me}/logs/${g.id}` : `logs/${g.id}`;
-    root.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", async () => { if (await save(() => store.remove(`${lp}/${b.dataset.del}`), "기록을 지웠어요.")) closeSheet(); }));
+    const list = $("#lg-list", root);
+    list.addEventListener("click", async e => {
+      const t = e.target.closest("button"); if (!t) return;
+      const row = t.closest(".log-row");
+      if (t.id === "lg-more") { shown += 30; list.innerHTML = listHTML(); return; }
+      if (t.dataset.edit) { list.querySelectorAll(".log-edit").forEach(x => (x.hidden = true)); list.querySelectorAll(".log-view").forEach(x => (x.hidden = false)); row.querySelector(".log-view").hidden = true; row.querySelector(".log-edit").hidden = false; return; }
+      if (t.dataset.cancel) { row.querySelector(".log-view").hidden = false; row.querySelector(".log-edit").hidden = true; return; }
+      if (t.dataset.del) {
+        if (!t.classList.contains("armed")) { t.classList.add("armed"); t.textContent = "한 번 더"; return; }
+        if (await save(() => store.remove(`${lp}/${t.dataset.del}`), "기록을 지웠어요.")) { delete g.logs[t.dataset.del]; list.innerHTML = listHTML(); }
+        return;
+      }
+      if (t.dataset.save) {
+        const [di, vi] = row.querySelectorAll(".log-edit input"), v = +vi.value;
+        if (!di.value) return toast("날짜를 골라 주세요.");
+        if (!(v > 0)) return toast("0보다 큰 값을 입력해 주세요.");
+        const old = g.logs[t.dataset.save], nl = { ...old, date: di.value, value: v, editedAt: Date.now() };
+        if (await save(() => store.set(`${lp}/${t.dataset.save}`, nl), "기록을 고쳤어요.")) {
+          g.logs[t.dataset.save] = nl; list.innerHTML = listHTML();
+          if (g.src === "shared") logAct(`${q(g.title)} ${fmtShort(di.value)} 기록을 ${v}${unit}(으)로 고쳤어요`);
+        }
+      }
+    });
     $("#lg-form", root).addEventListener("submit", async e => {
       e.preventDefault();
       const v = +val.value; if (!(v > 0)) return toast("0보다 큰 값을 입력해 주세요.");
-      if (await save(() => store.set(`${lp}/${store.newId()}`, { date: $("#lg-date", root).value, value: v, by: S.me, at: Date.now() }), `${v}${unit} 기록했어요.`)) {
-        if (g.src === "shared") logAct(`${q(g.title)}에 ${v}${unit} 기록했어요`);
+      const d = $("#lg-date", root).value;
+      if (await save(() => store.set(`${lp}/${store.newId()}`, { date: d, value: v, by: S.me, at: Date.now() }), `${v}${unit} 기록했어요.`)) {
+        if (g.src === "shared") logAct(`${q(g.title)}에 ${d === todayStr() ? "" : fmtShort(d) + " "}${v}${unit} 기록했어요`);
         closeSheet();
       }
     });
   });
+}
+
+/* 매일 체크: 지난 기록 달력에서 보고 고치기 */
+function checkHistorySheet(g, month) {
+  const m = month || monthStart(todayStr()), t = todayStr(), edit = canEditGoal(g);
+  const fresh = () => goalList().find(x => x.id === g.id && x.src === g.src) || g;
+  const gridHTML = () => {
+    const G = fresh(), g0 = weekStart(m), g1 = addDays(weekStart(monthEnd(m)), 6), cells = [];
+    let done = 0, total = 0;
+    for (let d = g0; d <= g1; d = addDays(d, 1)) {
+      const out = d < m || d > monthEnd(m), on = checkDays(G).includes(parseD(d).getDay()), c = checkState(G, d);
+      if (!out && on && d <= t) { total++; if (c.full) done++; }
+      cells.push(`<button type="button" class="ck-cell ${out ? "out" : ""} ${c.full ? "full" : c.half ? "half" : ""} ${on ? "" : "off"} ${d === t ? "today" : ""}" data-d="${d}" ${!edit || d > t || out ? "disabled" : ""} aria-pressed="${c.mine}" aria-label="${fmtDate(d)} ${c.full ? "완료" : c.half ? "한 사람 완료" : "미완료"}">${parseD(d).getDate()}</button>`);
+    }
+    return `<div class="ck-cal-head">${["월", "화", "수", "목", "금", "토", "일"].map(w => `<span>${w}</span>`).join("")}</div><div class="ck-cal">${cells.join("")}</div>
+      <div class="progress-line" style="margin-top:10px"><span>${+m.slice(5, 7)}월 달성</span><span><b>${done}</b> / ${total}일</span></div>`;
+  };
+  const color = g.owner === "both" ? "var(--both)" : `var(--${g.owner})`;
+  const prev = (() => { const x = parseD(m); x.setMonth(x.getMonth() - 1); return ds(x); })(), next = (() => { const x = parseD(m); x.setMonth(x.getMonth() + 1); return ds(x); })();
+  openSheet(`${esc(g.title)} 지난 기록`, `
+    <div class="month-nav" style="margin-top:0"><button class="arrow" id="ch-prev" aria-label="지난달">${ic("left")}</button><span class="mn-label">${parseD(m).getFullYear()}년 ${+m.slice(5, 7)}월</span>
+      <button class="arrow" id="ch-next" aria-label="다음 달" ${next > t ? "disabled" : ""}>${ic("right")}</button></div>
+    <div id="ch-grid" style="--fillc:${color}">${gridHTML()}</div>
+    <p class="small">${edit ? "날짜를 누르면 체크하거나 취소해요." : "보기만 할 수 있어요."}${g.owner === "both" ? " 반만 채워진 날은 한 사람만 체크한 날이에요. 누르면 내 체크만 바뀌어요." : ""}</p>`, root => {
+    $("#ch-prev", root).addEventListener("click", () => checkHistorySheet(g, prev));
+    $("#ch-next", root).addEventListener("click", () => next <= t && checkHistorySheet(g, next));
+    $("#ch-grid", root).addEventListener("click", async e => {
+      const b = e.target.closest("[data-d]"); if (!b || b.disabled) return;
+      await toggleCheck(fresh(), b.dataset.d);
+      setTimeout(() => { const gr = $("#ch-grid", root); if (gr) gr.innerHTML = gridHTML(); }, 120);
+    });
+  });
+}
+
+/* ========== 일기 · 감사 ========== */
+const MOODS = [["🥰", "행복"], ["😊", "좋음"], ["😌", "평온"], ["😐", "그저 그럼"], ["😢", "슬픔"], ["😤", "속상"], ["😴", "피곤"]];
+function diaryList() {
+  const out = [];
+  for (const [d, x] of entries(S.priv.diary)) out.push({ ...x, date: d, by: S.me, shared: false, key: `p_${d}` });
+  for (const [k, x] of entries(S.diary)) out.push({ ...x, shared: true, key: k });
+  return out.sort((a, b) => b.date.localeCompare(a.date) || (a.by === S.me ? -1 : 1));
+}
+const myDiary = d => diaryList().find(x => x.by === S.me && x.date === d);
+function diarySheet(date) {
+  const d = date || todayStr(), cur = myDiary(d);
+  openSheet(cur ? "일기 고치기" : "일기 쓰기", `
+    <form class="form" id="dy-form">
+      <div class="field"><label for="dy-date">날짜</label><input class="input" type="date" id="dy-date" value="${d}" max="${todayStr()}" required></div>
+      <div class="field"><span class="lbl">오늘 기분</span><div class="mood-pick" id="dy-mood">${MOODS.map(([e, n]) => `<button type="button" data-v="${e}" aria-pressed="${cur?.mood === e}" aria-label="${n}"><span>${e}</span><small>${n}</small></button>`).join("")}</div></div>
+      <div class="field"><label for="dy-text">오늘 있었던 일</label><textarea class="input diary-text" id="dy-text" maxlength="3000" placeholder="오늘 하루는 어땠나요?">${esc(cur?.text)}</textarea><span class="small" id="dy-count"></span></div>
+      <button type="button" class="switch" id="dy-share" role="switch" aria-checked="${!!cur?.shared}"><span class="t"><b>${esc(prof(P()).name)}님에게 보여주기</b><span>끄면 나만 볼 수 있어요</span></span><span class="knob"></span></button>
+      <button class="btn primary block" type="submit">${cur ? "저장하기" : "일기 저장"}</button>
+      ${cur ? `<button class="btn danger block" type="button" id="dy-del">삭제</button>` : ""}
+    </form>`, root => {
+    bindSeg(root, "#dy-mood");
+    const ta = $("#dy-text", root), cnt = () => ($("#dy-count", root).textContent = `${ta.value.length} / 3000자`);
+    ta.addEventListener("input", cnt); cnt(); if (!cur) ta.focus();
+    $("#dy-date", root).addEventListener("change", e => { const v = e.target.value; if (v && v !== d) { closeSheet(); diarySheet(v); } });
+    $("#dy-share", root).addEventListener("click", e => { const s = e.currentTarget; s.setAttribute("aria-checked", s.getAttribute("aria-checked") !== "true"); });
+    $("#dy-form", root).addEventListener("submit", async e => {
+      e.preventDefault();
+      const text = ta.value.trim(); if (!text) return toast("내용을 적어 주세요.");
+      const shared = $("#dy-share", root).getAttribute("aria-checked") === "true";
+      const data = { text, mood: segVal(root, "#dy-mood") || "", at: cur?.at || Date.now(), updatedAt: Date.now() };
+      const up = { [`private/${S.me}/diary/${d}`]: shared ? null : data, [`diary/${S.me}_${d}`]: shared ? { ...data, by: S.me, date: d } : null };
+      if (await save(() => store.update("", up), "일기를 저장했어요.")) {
+        if (shared && !cur?.shared) logAct(`${d === todayStr() ? "오늘" : fmtShort(d)} 일기를 보여줬어요 📖`);
+        closeSheet();
+      }
+    });
+    if (cur) armDelete($("#dy-del", root), async () => {
+      if (await save(() => store.update("", { [`private/${S.me}/diary/${d}`]: null, [`diary/${S.me}_${d}`]: null }), "일기를 지웠어요.")) closeSheet();
+    });
+  });
+}
+function diaryRead(x) {
+  if (x.by === S.me) return diarySheet(x.date);
+  const it = { src: "diary", id: x.key, title: `${fmtShort(x.date)} 일기` };
+  openSheet(`${esc(prof(x.by).name)}님의 일기`, `<div class="detail">
+    <div class="row-meta">${whoChip(x.by)}<span class="tag">${fmtDate(x.date)}</span>${x.mood ? `<span class="tag">${x.mood} ${MOODS.find(m => m[0] === x.mood)?.[1] || ""}</span>` : ""}</div>
+    <div class="diary-full">${esc(x.text)}</div>
+    ${reactBar(it)}
+  </div>`, root => bindReact(root));
+}
+
+/* 감사: 하루에 한 사람당 한 가지, 서로에게 */
+const thanksOf = (d, s) => S.thanks[`${d}_${s}`];
+function thanksStreak() {
+  let n = 0, d = thanksOf(todayStr(), "a") && thanksOf(todayStr(), "b") ? todayStr() : addDays(todayStr(), -1);
+  for (let i = 0; i < 1000 && thanksOf(d, "a") && thanksOf(d, "b"); i++, d = addDays(d, -1)) n++;
+  return n;
+}
+function thanksSheet(date) {
+  const d = date || todayStr(), cur = thanksOf(d, S.me);
+  const ideas = ["출근길에 연락해 줘서", "맛있는 밥 해 줘서", "내 얘기 끝까지 들어줘서", "먼저 웃게 해 줘서", "기다려 줘서"];
+  openSheet(`💌 ${esc(prof(P()).name)}님에게 고마운 점`, `
+    <form class="form" id="th-form">
+      <div class="field"><label for="th-date">날짜</label><input class="input" type="date" id="th-date" value="${d}" max="${todayStr()}" required></div>
+      <div class="field"><label for="th-text">${fmtShort(d)}, 고마웠던 한 가지</label><textarea class="input" id="th-text" maxlength="200" placeholder="예: 비 오는데 우산 챙겨 줘서 고마워">${esc(cur?.text)}</textarea></div>
+      <div class="quick">${ideas.map(x => `<button type="button" class="chip" data-q="${esc(x)}">${esc(x)}</button>`).join("")}</div>
+      <button class="btn both block" type="submit">${ic("heart")}${cur ? "고쳐서 저장" : "감사 전하기"}</button>
+      ${cur ? `<button class="btn danger block" type="button" id="th-del">삭제</button>` : ""}
+    </form>`, root => {
+    const ta = $("#th-text", root); if (!cur) ta.focus();
+    root.querySelectorAll("[data-q]").forEach(b => b.addEventListener("click", () => { ta.value = `${b.dataset.q} 고마워`; ta.focus(); }));
+    $("#th-date", root).addEventListener("change", e => { const v = e.target.value; if (v && v !== d) { closeSheet(); thanksSheet(v); } });
+    $("#th-form", root).addEventListener("submit", async e => {
+      e.preventDefault();
+      const text = ta.value.trim(); if (!text) return toast("고마운 점을 적어 주세요.");
+      if (await save(() => store.set(`thanks/${d}_${S.me}`, { by: S.me, date: d, text, at: cur?.at || Date.now() }), "감사를 전했어요 💌")) {
+        if (!cur) logAct(`${d === todayStr() ? "오늘" : fmtShort(d)} 고마운 점을 남겼어요 💌 “${text}”`);
+        closeSheet();
+      }
+    });
+    if (cur) armDelete($("#th-del", root), async () => { if (await save(() => store.remove(`thanks/${d}_${S.me}`), "지웠어요.")) closeSheet(); });
+  });
+}
+function thanksCard() {
+  const t = todayStr(), mine = thanksOf(t, S.me), theirs = thanksOf(t, P()), n = thanksStreak();
+  return `<section class="card thanks-card" aria-label="오늘의 감사">
+    <div class="h3">💌 오늘의 감사 ${n ? `<span class="pill ok">둘 다 ${n}일 연속</span>` : ""}</div>
+    <div class="th-row them">${theirs ? `<span class="th-who">${esc(prof(P()).avatar)} ${esc(prof(P()).name)} → 나</span><span class="th-text">“${esc(theirs.text)}”</span>` : `<span class="th-who">${esc(prof(P()).avatar)} ${esc(prof(P()).name)}</span><span class="small">아직 오늘 감사를 쓰지 않았어요</span>`}</div>
+    ${mine ? `<button class="th-row me" data-act="thanks"><span class="th-who">${esc(prof(S.me).avatar)} 나 → ${esc(prof(P()).name)}</span><span class="th-text">“${esc(mine.text)}”</span></button>`
+      : `<button class="btn both block" data-act="thanks">${ic("heart")}${esc(prof(P()).name)}님에게 고마운 점 한 가지</button>`}
+  </section>`;
+}
+
+function renderDiary() {
+  const f = S.diaryFilter || "all", m = S.diaryMonth || monthStart(todayStr());
+  const all = diaryList().filter(x => x.date.slice(0, 7) === m.slice(0, 7)).filter(x => f === "all" || (f === "me" ? x.by === S.me : f === "partner" ? x.by === P() : true));
+  const days = {}; all.forEach(x => (days[x.date] ||= []).push(x));
+  const thanksDays = {}; for (const [, x] of entries(S.thanks)) if (x.date?.slice(0, 7) === m.slice(0, 7)) (thanksDays[x.date] ||= {})[x.by] = x;
+  const dates = [...new Set([...(f !== "thanks" ? Object.keys(days) : []), ...(f === "all" || f === "thanks" ? Object.keys(thanksDays) : [])])].sort().reverse();
+  const t = todayStr(), mineToday = myDiary(t);
+  const x = parseD(m), next = new Date(x.getFullYear(), x.getMonth() + 1, 1), canNext = ds(next) <= t;
+  return `
+    <div class="screen-head"><div><div class="eyebrow">일기와 감사</div><h1 class="big-date">우리의 하루 기록</h1></div></div>
+    ${thanksCard()}
+    ${mineToday ? "" : `<button class="card diary-cta" data-act="diary">${ic("edit")}<span><b>오늘 일기 쓰기</b><span class="small">기분 하나, 한 줄이라도 좋아요</span></span>${ic("right")}</button>`}
+    <div class="month-nav"><button class="arrow" data-act="dmonth" data-v="-1" aria-label="지난달">${ic("left")}</button><span class="mn-label">${x.getFullYear()}년 ${x.getMonth() + 1}월</span>
+      <button class="arrow" data-act="dmonth" data-v="1" aria-label="다음 달" ${canNext ? "" : "disabled"}>${ic("right")}</button></div>
+    <div class="chips" role="group" aria-label="보기">
+      ${[["all", "전체"], ["me", `${prof(S.me).avatar} 내 일기`], ["partner", `${prof(P()).avatar} ${prof(P()).name} 일기`], ["thanks", "💌 감사만"]].map(([k, l]) => `<button class="chip" data-act="dfilter" data-v="${k}" aria-pressed="${f === k}">${esc(l)}</button>`).join("")}
+    </div>
+    ${dates.length ? `<div class="diary-days">${dates.map(d => `
+      <section class="diary-day"><div class="day-label ${d === t ? "today" : ""}">${fmtShort(d)}</div>
+        ${(f === "thanks" ? [] : days[d] || []).map(e => `<button class="card diary-item" data-act="diary-open" data-key="${esc(e.key)}" data-by="${e.by}">
+          <span class="di-top">${whoChip(e.by)}${e.mood ? `<span class="di-mood">${e.mood}</span>` : ""}${e.by === S.me ? (e.shared ? `<span class="tag">${ic("eye", "sm")}공유</span>` : `<span class="tag">${ic("lock", "sm")}나만</span>`) : ""}${reactChips({ src: "diary", id: e.key })}</span>
+          <span class="di-text">${esc(e.text)}</span></button>`).join("")}
+        ${(f === "all" || f === "thanks") && thanksDays[d] ? `<div class="th-pair">${["a", "b"].filter(s => thanksDays[d][s]).map(s => `<button class="th-row ${s === S.me ? "me" : "them"}" ${s === S.me ? `data-act="thanks" data-d="${d}"` : "disabled"}><span class="th-who">💌 ${esc(prof(s).avatar)} ${esc(prof(s).name)} → ${esc(prof(other(s)).name)}</span><span class="th-text">“${esc(thanksDays[d][s].text)}”</span></button>`).join("")}</div>` : ""}
+      </section>`).join("")}</div>`
+      : `<div class="card empty">이 달에는 아직 기록이 없어요. 아래 <b>일기 쓰기</b>로 시작해 보세요.</div>`}
+    <p class="small">${esc(prof(P()).name)}님의 일기는 '보여주기'를 켠 것만 보여요. 감사는 늘 서로에게 보여요.</p>`;
 }
 
 function settingsSheet() {
@@ -1842,7 +2087,7 @@ function settingsSheet() {
     $("#st-out", root).addEventListener("click", async () => {
       if (S.mode === "live") { try { if (lsGet("uh.pushTid")) await disablePush(); await store.remove(`devices/${S.me}/${S.uid}`); await fb.authM.signOut(fb.auth); } catch {} lsSet("uh.code", null); }
       unsubs.forEach(u => u()); unsubs = [];
-      Object.assign(S, { mode: null, slots: {}, events: {}, plans: {}, goals: {}, logs: {}, activity: {}, info: {}, anniv: {}, notes: {}, reactions: {}, priv: { events: {}, goals: {}, logs: {} }, tab: "today", login: { step: "code", code: "", slots: {}, slot: null, err: "" } });
+      Object.assign(S, { mode: null, slots: {}, events: {}, plans: {}, goals: {}, logs: {}, activity: {}, info: {}, anniv: {}, notes: {}, reactions: {}, diary: {}, thanks: {}, priv: { events: {}, goals: {}, logs: {}, diary: {} }, tab: "today", login: { step: "code", code: "", slots: {}, slot: null, err: "" } });
       closeSheet(); render();
     });
   });
@@ -1942,7 +2187,7 @@ document.addEventListener("click", async e => {
     case "filter": S.filter = v; render(); break;
     case "open": { const it = findItem(src, id); if (it) eventSheet(it); break; }
     case "done": { const it = findItem(src, id); if (it) toggleDone(it); break; }
-    case "fab": S.tab === "plans" ? planSheet() : S.tab === "goals" ? goalSheet() : eventSheet(null, S.tab === "today" ? todayStr() : S.sel); break;
+    case "fab": S.tab === "diary" ? diarySheet() : S.tab === "plans" ? planSheet() : S.tab === "goals" ? goalSheet() : eventSheet(null, S.tab === "today" ? todayStr() : S.sel); break;
     case "new-event": eventSheet(null, b.dataset.date); break;
     case "new-plan": planSheet(null, { date: todayStr() }); break;
     case "plan-ok": if (await save(() => store.update(`plans/${id}`, { status: "confirmed", confirmedAt: Date.now() }), "계획을 확정했어요. 함께 일정에 들어갔어요.")) logAct(`${q(S.plans[id]?.title || "")} 계획을 확정했어요 💞`); break;
@@ -1950,12 +2195,19 @@ document.addEventListener("click", async e => {
     case "free": planSheet(null, { date: b.dataset.d, time: b.dataset.t }); break;
     case "seen": save(() => store.update(`slots/${S.me}`, { lastSeen: Date.now() })); break;
     case "note": noteSheet(); break;
+    case "diary": diarySheet(); break;
+    case "diary-open": { const x = diaryList().find(e => e.key === b.dataset.key); if (x) diaryRead(x); break; }
+    case "thanks": thanksSheet(b.dataset.d); break;
+    case "dfilter": S.diaryFilter = v; render(); break;
+    case "dmonth": { const x = parseD(S.diaryMonth || monthStart(todayStr())); x.setMonth(x.getMonth() + +v); S.diaryMonth = ds(x); render(); break; }
+    case "log-day": { const g = goalList().find(x => x.id === id && x.src === src); if (g) logSheet(g, b.dataset.d); break; }
+    case "check-hist": { const g = goalList().find(x => x.id === id && x.src === src); if (g) checkHistorySheet(g); break; }
     case "anniv": annivSheet(); break;
     case "plan-edit": planSheet(id); break;
     case "goal-edit": { const g = goalList().find(x => x.id === id && x.src === src); if (g) goalSheet(g); break; }
     case "check": { const g = goalList().find(x => x.id === id && x.src === src); if (g) toggleCheck(g, b.dataset.d); break; }
     case "gfilter": S.goalFilter = v; render(); break;
-    case "log": { const g = goalList().find(x => x.id === id && x.src === src); if (g) logSheet(g); break; }
+    case "log": { const g = goalList().find(x => x.id === id && x.src === src); if (g) logSheet(g, b.dataset.d); break; }
     case "settings": settingsSheet(); break;
     case "swap-view": S.me = P(); subscribeAll(); toast(`${prof(S.me).name} 시점으로 바꿨어요.`); break;
     case "demo": startDemo(); break;
