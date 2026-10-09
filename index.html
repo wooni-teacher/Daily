@@ -206,7 +206,7 @@ main{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:8px calc(1
 
 /* 하단 탭 + FAB */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
-.tabbar-in{max-width:600px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
+.tabbar-in{max-width:600px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:2px}
 .tab{position:relative;min-height:56px;border-radius:14px;display:grid;place-items:center;align-content:center;gap:2px;font-size:12px;font-weight:600;color:var(--muted)}
 .tab .icon{width:24px;height:24px}
 .tab[aria-current="page"]{color:var(--ink);background:var(--surface2)}
@@ -469,6 +469,59 @@ button.bar:hover .track{outline:2px solid var(--line)}
 .th-pair .th-row.me{background:var(--a-soft)}
 .th-pair .th-row:disabled{cursor:default;opacity:1}
 .tab span:last-child{white-space:nowrap}
+
+/* 목표 관리 메뉴 */
+.goal-more{width:44px;height:44px;flex:none;border-radius:12px;font-size:22px;font-weight:800;line-height:1;color:var(--muted);margin:-6px -6px 0 0}
+.goal-more:hover{background:var(--surface2);color:var(--ink)}
+.menu-list{display:grid;gap:8px}
+.menu-item{display:flex;align-items:center;gap:14px;width:100%;text-align:left;min-height:64px;padding:10px 14px;border-radius:14px;background:var(--bg);border:1.5px solid var(--line);font-size:20px}
+.menu-item > span{display:grid;font-size:15px}
+.menu-item > span span{font-size:13px;color:var(--muted)}
+.menu-item.danger{color:var(--b);border-color:color-mix(in srgb,var(--b) 35%,transparent)}
+.menu-item.danger.armed{background:var(--b);color:#fff}
+.menu-item.danger.armed span span{color:#fff}
+.link-h{display:inline-flex;align-items:center;gap:6px;font:inherit;min-height:40px}
+.arch-list{display:grid;gap:6px}
+.arch-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;background:var(--surface);box-shadow:var(--shadow)}
+.goal-ico.sm{width:38px;height:38px;font-size:19px;border-radius:12px}
+.arch-body{flex:1;min-width:0;display:grid}
+.link-h .icon{transition:transform .15s}.link-h[aria-expanded="true"] .icon{transform:rotate(90deg)}
+
+/* 큐티·독서 */
+.tab{font-size:11px}
+.qt-ref{display:grid;gap:8px}
+.qt-nums{display:flex;align-items:center;gap:8px}
+.qt-num{flex:1;display:flex;align-items:center;gap:6px;font-weight:600;color:var(--muted)}
+.qt-num .input{text-align:center}
+.qt-sep{color:var(--muted);font-weight:700}
+.qt-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.qt-stat{display:grid;gap:2px;padding:12px;border-radius:14px;background:var(--surface);box-shadow:var(--shadow);font-size:13px}
+.qt-stat b{font-size:16px}
+.qt-stat small{color:var(--muted)}
+.qt-stat.a{border-top:4px solid var(--a)} .qt-stat.b{border-top:4px solid var(--b)}
+.qt-item{display:grid;gap:8px;text-align:left;width:100%}
+.qt-refbig{font-family:var(--f-display);font-weight:700;font-size:18px}
+.qt-verse{margin:0;padding:10px 14px;border-left:4px solid var(--both);background:var(--both-soft);border-radius:0 12px 12px 0;font-family:var(--f-display);font-size:16px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.qt-verse.sm{font-size:15px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.qt-apply{font-size:14px;color:var(--muted);overflow-wrap:anywhere}
+.cover{width:52px;height:72px;flex:none;border-radius:4px 10px 10px 4px;background:var(--cv);color:#fff;display:grid;place-items:center;padding:6px;font-size:11px;font-weight:700;line-height:1.25;text-align:center;box-shadow:inset 5px 0 0 rgba(0,0,0,.18),0 2px 6px rgba(0,0,0,.15);overflow:hidden;word-break:keep-all}
+.cover.big{width:84px;height:118px;font-size:14px;font-family:var(--f-display)}
+.book-card{display:flex;gap:14px;align-items:flex-start;text-align:left;width:100%}
+.bk-body{display:grid;gap:4px;min-width:0;flex:1}
+.bk-title{font-size:16px;overflow-wrap:anywhere}
+.bk-head{display:flex;gap:16px;align-items:flex-start}
+.rl-list{display:grid;gap:10px}
+.rl-item{display:grid;gap:8px;padding:12px;border-radius:14px;background:var(--surface);box-shadow:var(--shadow)}
+.rl-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.rl-edit{margin-left:auto}
+.rl-quote{margin:0;padding:10px 14px;border-left:4px solid var(--warn);background:var(--warn-soft);border-radius:0 12px 12px 0;font-family:var(--f-display);font-size:16px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.rl-note{font-size:15px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.rl-feed{display:grid;gap:6px}
+.rl-book{display:flex;align-items:center;gap:8px;text-align:left;font-size:14px}
+.rl-book .cover{width:26px;height:36px;font-size:0;padding:0}
+.rl-book-row{display:flex;gap:8px}
+.rl-book-row .input{flex:1;min-width:0}
+.grid-2 > .card,.diary-day > .card{margin-top:0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 </head>
@@ -535,6 +588,7 @@ const I = {
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
   edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>',
   repeat: '<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>',
+  cross: '<path d="M12 3v18M7 8h10"/>',
   book: '<path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 21.5V4.5"/><path d="M9 7h7"/>',
   bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>'
 };
@@ -554,7 +608,7 @@ const S = {
   mode: null,            // 'demo' | 'live'
   code: null, me: "a", uid: null,
   slots: {}, events: {}, plans: {}, goals: {}, logs: {},
-  activity: {}, info: {}, anniv: {}, notes: {}, reactions: {}, diary: {}, thanks: {}, actReady: false,
+  activity: {}, info: {}, anniv: {}, notes: {}, reactions: {}, diary: {}, thanks: {}, qt: {}, books: {}, bookLogs: {}, actReady: false,
   priv: { events: {}, goals: {}, logs: {}, diary: {} },
   tab: "today", view: "day", sel: todayStr(), filter: "all",
   login: { step: "code", code: "", slots: {}, slot: null, err: "" }
@@ -631,6 +685,9 @@ function subscribeAll() {
   });
   L("diary", v => (S.diary = v));
   L("thanks", v => (S.thanks = v));
+  L("qt", v => (S.qt = v));
+  L("books", v => (S.books = v));
+  L("bookLogs", v => (S.bookLogs = v));
   L(`private/${S.me}`, v => (S.priv = { events: v.events || {}, goals: v.goals || {}, logs: v.logs || {}, diary: v.diary || {} }));
 }
 
@@ -719,6 +776,16 @@ function sampleData(me, includePartnerOwned) {
     out[`activity/${id()}`] = { by: pt, text: `${q("주말 브런치")} 계획을 제안했어요`, at: now - 2.5 * H };
     out[`activity/${id()}`] = { by: pt, text: `${q("연남동 파스타 저녁")}에 ❤️ 반응을 남겼어요`, at: now - 1.5 * H };
     out[`slots/${me}/lastSeen`] = now - 3 * H;
+    // 큐티·독서 예시 (책과 문장은 예시로 지어낸 것)
+    out[`qt/${id()}`] = { by: me, date: d(-1), book: "출애굽기", ch: 3, v1: 1, v2: 12, verse: "", text: "모세가 평범한 일상 속에서 떨기나무 불꽃을 보고 돌이켜 다가갔다. 바쁘다는 이유로 그냥 지나친 부르심은 없었는지 돌아보게 된다.", apply: "출근길 10분은 휴대폰 대신 기도로 시작하기", at: now - 26 * H };
+    out[`qt/${id()}`] = { by: pt, date: d(-1), book: "시편", ch: 23, verse: "", text: "목자가 앞서 걸어가신다는 말이 위로가 됐다. 내가 다 해내야 한다는 마음을 조금 내려놓고 싶다.", apply: "이번 주 회의 준비를 맡기며 기도하기", at: now - 22 * H };
+    out[`qt/${id()}`] = { by: pt, date: d(0), book: "시편", ch: 24, verse: "", text: "땅과 거기 충만한 것이 다 주의 것이라는 고백. 내 시간도 내 것만은 아니라는 생각을 했다.", apply: "", at: now - 3 * H };
+    const bk1 = id(), bk2 = id();
+    out[`books/${bk1}`] = { title: "느리게 걷는 연습 (예시)", author: "예시 지은이", pages: 248, status: "reading", by: pt, at: now - 9 * 24 * H };
+    out[`books/${bk2}`] = { title: "작은 습관의 힘 (예시)", author: "예시 지은이", pages: 0, status: "reading", by: me, at: now - 5 * 24 * H };
+    out[`bookLogs/${bk1}/${id()}`] = { by: pt, date: d(-3), pageFrom: 1, pageTo: 46, quote: "빨리 가는 날보다 멀리 보는 날이 더 오래 남는다. (p.31) — 예시 문장", note: "요즘 너무 급하게 살았나 싶었다. 주말엔 같이 천천히 걷고 싶다.", at: now - 70 * H };
+    out[`bookLogs/${bk1}/${id()}`] = { by: pt, date: d(-1), pageFrom: 47, pageTo: 92, quote: "", note: "2장은 조금 지루했지만 산책 이야기가 좋았다.", at: now - 20 * H };
+    out[`bookLogs/${bk2}/${id()}`] = { by: me, date: d(-2), pageFrom: 1, pageTo: 30, quote: "작은 일을 매일 하는 사람은 결국 큰일을 한다. (p.12) — 예시 문장", note: "영양제 체크하는 것도 이런 거겠지 ㅎㅎ", at: now - 45 * H };
     // 일기·감사 예시
     out[`private/${me}/diary/${d(-1)}`] = { text: "퇴근길에 노을이 예뻤다. 내일은 러닝 6km 꼭 하기.\n요즘 잠을 조금 더 자야겠다.", mood: "😌", at: now - 20 * H };
     out[`diary/${me}_${d(-2)}`] = { by: me, date: d(-2), text: "같이 장 보고 집에서 파스타 해 먹은 날. 소스가 좀 짰지만 둘 다 웃었다 🍝", mood: "🥰", at: now - 44 * H };
@@ -871,8 +938,8 @@ function render() {
   const app = $("#app");
   if (!S.mode) { app.innerHTML = renderStart(); afterStart(); $("#fab-slot")?.remove(); return; }
   const y = window.scrollY;
-  const screens = { today: renderToday, schedule: renderSchedule, plans: renderPlans, goals: renderGoals, diary: renderDiary };
-  const fabLabel = { today: "일정 추가", schedule: "일정 추가", plans: "계획 제안", goals: "목표 추가", diary: myDiary(todayStr()) ? "오늘 일기 고치기" : "일기 쓰기" }[S.tab];
+  const screens = { today: renderToday, schedule: renderSchedule, plans: renderPlans, goals: renderGoals, diary: renderDiary, share: renderShare };
+  const fabLabel = { today: "일정 추가", schedule: "일정 추가", plans: "계획 제안", goals: "목표 추가", diary: myDiary(todayStr()) ? "오늘 일기 고치기" : "일기 쓰기", share: (S.shareSeg || "qt") === "qt" ? "큐티 쓰기" : "독서 기록" }[S.tab];
   const pc = pendingCount();
   app.innerHTML = `
     <header class="top"><div class="top-in">
@@ -888,7 +955,7 @@ function render() {
     <main>${screens[S.tab]()}</main>
     <button class="fab" data-act="fab">${ic("plus")}${fabLabel}</button>
     <nav class="tabbar" aria-label="주요 화면"><div class="tabbar-in">
-      ${[["today", "sun", "오늘"], ["schedule", "cal", "일정"], ["plans", "heart", "함께"], ["goals", "target", "목표"], ["diary", "book", "일기"]].map(([k, i, l]) =>
+      ${[["today", "sun", "오늘"], ["schedule", "cal", "일정"], ["plans", "heart", "함께"], ["goals", "target", "목표"], ["diary", "book", "일기"], ["share", "cross", "큐티·독서"]].map(([k, i, l]) =>
         `<button class="tab" data-act="tab" data-v="${k}" ${S.tab === k ? 'aria-current="page"' : ""}>${ic(i)}${k === "plans" && pc ? `<span class="badge">${pc}</span>` : ""}<span>${l}</span></button>`).join("")}
     </div></nav>`;
   window.scrollTo(0, y);
@@ -1192,6 +1259,46 @@ async function toggleCheck(g, d) {
   if (ok && !was && g.src === "shared") logAct(`${q(g.title)} ${d === todayStr() ? "오늘" : fmtShort(d)} 체크했어요 ✅`);
 }
 
+/* 목표 관리: ⋯ 메뉴 (수정·쉬기·달성·삭제) */
+const goalPaths = g => (g.src === "priv" ? [`private/${S.me}/goals/${g.id}`, `private/${S.me}/logs/${g.id}`] : [`goals/${g.id}`, `logs/${g.id}`]);
+const logCount = g => Object.keys(g.logs || {}).length;
+async function setGoalFlags(g, flags, msg, act) {
+  if (await save(() => store.update(goalPaths(g)[0], flags), msg)) { if (g.src === "shared" && act) logAct(act); closeSheet(); }
+}
+function goalMenuSheet(g) {
+  const n = logCount(g), arch = !!g.archived;
+  openSheet(esc(g.title), `<div class="menu-list">
+    <button class="menu-item" id="gm-edit">${ic("edit")}<span><b>목표 수정하기</b><span>이름, 목표량·기간, 요일, 공유, 함께 여부까지 바꿀 수 있어요</span></span></button>
+    ${arch
+      ? `<button class="menu-item" id="gm-resume">${ic("right")}<span><b>다시 시작하기</b><span>목표 목록으로 돌아오고 기록도 그대로 이어져요</span></span></button>`
+      : `<button class="menu-item" id="gm-pause">⏸<span><b>잠시 쉬기</b><span>목록과 오늘 체크에서 숨겨요. 기록은 남고 언제든 다시 시작할 수 있어요</span></span></button>
+         <button class="menu-item" id="gm-done">🏆<span><b>달성 완료!</b><span>다 이룬 목표를 '지난 목표'로 옮겨 기념해요</span></span></button>`}
+    <button class="menu-item danger" id="gm-del">${ic("x")}<span><b>삭제</b><span>목표와 기록 ${n}개가 모두 지워지고 되돌릴 수 없어요</span></span></button>
+  </div>`, root => {
+    $("#gm-edit", root).addEventListener("click", () => { closeSheet(); goalSheet(g); });
+    $("#gm-pause", root)?.addEventListener("click", () => setGoalFlags(g, { archived: true, completedAt: null, pausedAt: Date.now() }, "잠시 쉬기로 했어요. 아래 '쉬는 중·지난 목표'에 있어요."));
+    $("#gm-done", root)?.addEventListener("click", () => setGoalFlags(g, { archived: true, completedAt: Date.now() }, "축하해요! 🏆 달성한 목표로 옮겼어요.", `${q(g.title)} 목표를 달성했어요 🏆`));
+    $("#gm-resume", root)?.addEventListener("click", () => setGoalFlags(g, { archived: null, completedAt: null, pausedAt: null }, "다시 시작했어요.", `${q(g.title)} 목표를 다시 시작했어요`));
+    const del = $("#gm-del", root);
+    del.addEventListener("click", async () => {
+      if (!del.classList.contains("armed")) { del.classList.add("armed"); del.querySelector("b").textContent = "한 번 더 누르면 삭제돼요"; setTimeout(() => { del.classList.remove("armed"); del.querySelector("b").textContent = "삭제"; }, 3500); return; }
+      const [gp, lp] = goalPaths(g);
+      if (await save(() => store.update("", { [gp]: null, [lp]: null }), "목표를 삭제했어요.")) { if (g.src === "shared") logAct(`${q(g.title)} 목표를 삭제했어요`); closeSheet(); }
+    });
+  });
+}
+function archivedSection(list) {
+  if (!list.length) return "";
+  const open = S.showArchived;
+  return `<h2 class="h2"><button class="link-h" data-act="toggle-arch" aria-expanded="${!!open}">${ic("right", "sm")}쉬는 중·지난 목표 <span class="count">${list.length}</span></button></h2>
+    ${open ? `<div class="arch-list">${list.map(g => {
+      const [emo] = GOAL_KINDS[g.kind] || GOAL_KINDS.custom, edit = canEditGoal(g);
+      return `<div class="arch-row"><span class="goal-ico sm" aria-hidden="true">${emo}</span>
+        <span class="arch-body"><b>${esc(g.title)}</b><span class="small">${g.completedAt ? `🏆 ${fmtShort(ds(new Date(g.completedAt)))} 달성` : "⏸ 쉬는 중"} · 기록 ${logCount(g)}개 · ${g.owner === "both" ? "함께" : esc(prof(g.owner).name)}</span></span>
+        ${edit ? `<button class="btn ghost sm" data-act="goal-menu" data-src="${g.src}" data-id="${g.id}" aria-label="${esc(g.title)} 관리">⋯</button>` : ""}</div>`;
+    }).join("")}</div>` : ""}`;
+}
+
 function goalHead(g, extra = "") {
   const [emo, kindName] = GOAL_KINDS[g.kind] || GOAL_KINDS.custom;
   const t = todayStr(), dd = g.targetDate ? diffDays(t, g.targetDate) : null, edit = canEditGoal(g);
@@ -1202,6 +1309,7 @@ function goalHead(g, extra = "") {
       <div style="flex:1;min-width:0"><button class="goal-title" style="text-align:left" data-act="goal-edit" data-src="${g.src}" data-id="${g.id}" ${edit ? "" : "disabled"}>${esc(g.title)}</button>
         <div class="goal-sub">${vis}${perTag}</div></div>
       ${extra || (dd !== null ? `<div class="dday-box"><b>${dd > 0 ? "D-" + dd : dd === 0 ? "D-DAY" : "D+" + -dd}</b><span>${fmtShort(g.targetDate)}</span></div>` : "")}
+      ${edit ? `<button class="goal-more" data-act="goal-menu" data-src="${g.src}" data-id="${g.id}" aria-label="${esc(g.title)} 수정·삭제 메뉴">⋯</button>` : ""}
     </div>${g.memo ? `<div class="small">${esc(g.memo)}</div>` : ""}`;
 }
 
@@ -1253,14 +1361,15 @@ function goalCard(g) {
     <div class="weeks4" aria-label="${per === "month" ? "최근 4달" : "최근 4주"} 합계">
       ${summary.map((w, i) => `<div class="${i === 3 ? "cur" : ""}">${w.label}<b>${w.v}${esc(unit)}</b></div>`).join("")}
     </div>
-    ${edit ? `<div class="actions"><button class="btn primary" data-act="log" data-src="${g.src}" data-id="${g.id}">${ic("plus")}기록 추가</button><button class="btn ghost" data-act="log" data-src="${g.src}" data-id="${g.id}" data-d="${addDays(t, -1)}">${ic("edit", "sm")}지난 기록 수정</button></div>` : `<div class="small">${ic("eye", "sm")} ${esc(prof(g.owner).name)}님이 공유한 목표예요. 보기만 할 수 있어요.</div>`}
+    ${edit ? `<div class="actions"><button class="btn primary" data-act="log" data-src="${g.src}" data-id="${g.id}">${ic("plus")}기록 추가</button><button class="btn ghost" data-act="log" data-src="${g.src}" data-id="${g.id}" data-d="${addDays(t, -1)}">${ic("edit", "sm")}기록 수정</button></div>` : `<div class="small">${ic("eye", "sm")} ${esc(prof(g.owner).name)}님이 공유한 목표예요. 보기만 할 수 있어요.</div>`}
   </article>`;
 }
 
 function renderGoals() {
   const f = S.goalFilter || "all";
   const pass = g => f === "all" || (f === "check" ? isCheck(g) : !isCheck(g) && goalPer(g) === f);
-  const gs = goalList(), shown = gs.filter(pass);
+  const every = goalList(), gs = every.filter(g => !g.archived), shown = gs.filter(pass);
+  const archived = every.filter(g => g.archived && (g.owner === S.me || g.owner === "both" || g.owner === P()));
   const mine = shown.filter(g => g.owner === S.me), theirs = shown.filter(g => g.owner === P()), both = shown.filter(g => g.owner === "both");
   const cnt = k => gs.filter(g => k === "all" || (k === "check" ? isCheck(g) : !isCheck(g) && goalPer(g) === k)).length;
   const sec = (title, list, empty) => `<h2 class="h2">${title} <span class="count">${list.length}</span></h2>
@@ -1272,13 +1381,14 @@ function renderGoals() {
     </div>
     ${sec(`${esc(prof(S.me).avatar)} 내 목표`, mine, "이 종류의 목표가 아직 없어요. 아래 <b>목표 추가</b>로 시작해 보세요.")}
     ${sec("💞 함께하는 목표", both, "둘이 함께할 목표를 만들어 보세요.")}
-    ${sec(`${esc(prof(P()).avatar)} ${esc(prof(P()).name)}님의 목표`, theirs, `${esc(prof(P()).name)}님이 공유한 목표가 아직 없어요.`)}`;
+    ${sec(`${esc(prof(P()).avatar)} ${esc(prof(P()).name)}님의 목표`, theirs, `${esc(prof(P()).name)}님이 공유한 목표가 아직 없어요.`)}
+    ${archivedSection(archived)}`;
 }
 
 /* 오늘 화면용: 오늘 체크할 목표 */
 function todayChecks() {
   const t = todayStr();
-  const list = goalList().filter(g => isCheck(g) && canEditGoal(g) && checkDays(g).includes(parseD(t).getDay()));
+  const list = goalList().filter(g => !g.archived && isCheck(g) && canEditGoal(g) && checkDays(g).includes(parseD(t).getDay()));
   if (!list.length) return "";
   const done = list.filter(g => checkState(g, t).mine).length;
   return `<section class="card ck-today" aria-label="오늘 체크">
@@ -1510,10 +1620,10 @@ function armDelete(btn, fn) {
   });
 }
 
-function reactBar(it) {
+function reactBar(it, set = REACTS) {
   const r = S.reactions[reactKey(it)] || {};
   return `<div class="field"><span class="lbl">반응 남기기</span><div class="react-bar" data-key="${esc(reactKey(it))}" data-title="${esc(it.title)}">
-    ${REACTS.map(e => `<button type="button" data-react="${e}" aria-pressed="${r[S.me] === e}" aria-label="${e} 반응">${e}</button>`).join("")}</div>
+    ${set.map(e => `<button type="button" data-react="${e}" aria-pressed="${r[S.me] === e}" aria-label="${e} 반응">${e}</button>`).join("")}</div>
     ${r[P()] ? `<span class="small">${esc(prof(P()).avatar)} ${esc(prof(P()).name)}님은 ${r[P()]} 반응을 남겼어요.</span>` : ""}</div>`;
 }
 function bindReact(root) {
@@ -1748,10 +1858,12 @@ function goalSheet(g) {
   openSheet(isNew ? "목표 추가" : "목표 수정", `
     <form class="form" id="gl-form">
       <div class="field"><span class="lbl">누구의 목표인가요?</span><div class="seg" id="gl-owner" style="display:flex">
-        <button type="button" data-v="me" aria-pressed="${owner === "me"}" style="flex:1" ${g ? "disabled" : ""}>${esc(prof(S.me).avatar)} 내 목표</button>
-        <button type="button" data-v="both" aria-pressed="${owner === "both"}" style="flex:1" ${g ? "disabled" : ""}>💞 함께</button></div></div>
+        <button type="button" data-v="me" aria-pressed="${owner === "me"}" style="flex:1">${esc(prof(S.me).avatar)} 내 목표</button>
+        <button type="button" data-v="both" aria-pressed="${owner === "both"}" style="flex:1">💞 함께</button></div>
+        ${g && g.owner !== "both" && isCheck(g) ? `<span class="small">'함께'로 바꾸면 둘 다 체크한 날만 연속 기록으로 세어요.</span>` : ""}
+        ${g && g.owner === "both" ? `<span class="small">'내 목표'로 바꾸면 ${esc(prof(P()).name)}님의 체크·기록도 함께 옮겨지고, ${esc(prof(P()).name)}님은 더 이상 기록할 수 없어요.</span>` : ""}</div>
       <div class="field"><span class="lbl">종류</span><div class="chips" id="gl-kind" style="flex-wrap:wrap">
-        ${Object.entries(GOAL_KINDS).map(([k, [e, n, u]]) => `<button type="button" class="chip" data-v="${k}" aria-pressed="${k === kind}" ${g && (k === "check") !== isCheck(g) ? "disabled" : ""}>${e} ${n}${u ? ` (${u})` : ""}</button>`).join("")}</div>
+        ${Object.entries(GOAL_KINDS).map(([k, [e, n, u]]) => `<button type="button" class="chip" data-v="${k}" aria-pressed="${k === kind}">${e} ${n}${u ? ` (${u})` : ""}</button>`).join("")}</div>
         <span class="small" id="gl-kind-help">${kind === "check" ? "양을 재지 않고, 했는지만 매일 체크해요. 예: 영양제 먹기, 스트레칭, 일기 쓰기" : "얼마나 했는지 숫자로 기록해요."}</span></div>
       <div class="field"><label for="gl-title">목표 이름</label><input class="input" id="gl-title" required maxlength="40" value="${esc(g?.title)}" placeholder="${kind === "check" ? "예: 영양제 먹기" : "예: 가을 10km 대회 완주"}"></div>
 
@@ -1775,7 +1887,7 @@ function goalSheet(g) {
       <button type="button" class="switch" id="gl-share" role="switch" aria-checked="${g ? !!g.shared : false}" ${owner === "both" ? "hidden" : ""}>
         <span class="t"><b>${esc(prof(P()).name)}님에게 공유</b><span>끄면 목표와 기록을 나만 볼 수 있어요</span></span><span class="knob"></span></button>
       <button class="btn primary block" type="submit">${isNew ? "추가하기" : "저장하기"}</button>
-      ${isNew ? "" : `<button class="btn danger block" type="button" id="gl-del">삭제</button>`}
+      ${isNew ? "" : `<button class="btn danger block" type="button" id="gl-del">삭제 (기록 ${logCount(g)}개도 함께)</button>`}
     </form>`, root => {
     bindSeg(root, "#gl-owner"); bindSeg(root, "#gl-kind"); bindSeg(root, "#gl-per");
     const perHelp = () => {
@@ -1808,12 +1920,24 @@ function goalSheet(g) {
         d.period = segVal(root, "#gl-per") || "week"; d.target = +$("#gl-target", root).value || 0; d.unit = $("#gl-unit", root).value.trim();
       }
       if (g?.sample) d.sample = true;
+      if (g) for (const k of ["archived", "completedAt", "pausedAt"]) if (g[k]) d[k] = g[k];
       if (!d.title) return;
-      const id = g?.id || store.newId(), up = {};
+      // 누구 목표·공유가 바뀌면 새 자리로 옮김 (기록도 함께). 종류가 체크↔양으로 바뀌면 기록 모양을 맞춤
+      const moving = g && (g.owner !== own || g.shared !== shared);
+      const id = !g || moving ? store.newId() : g.id, up = {};
       const pathG = s => (s ? `goals/${id}` : `private/${S.me}/goals/${id}`), pathL = s => (s ? `logs/${id}` : `private/${S.me}/logs/${id}`);
-      if (g && g.shared !== shared) { up[pathG(g.shared)] = null; up[pathL(g.shared)] = null; up[pathL(shared)] = g.logs || null; }
+      let logs = g?.logs ? structuredClone(g.logs) : null;
+      if (logs && k === "check" && !isCheck(g)) {           // 양 → 체크: 기록한 날을 체크한 날로
+        const conv = {}; Object.values(logs).forEach(l => l?.date && (conv[`${l.date}_${l.by || S.me}`] = { date: l.date, value: 1, by: l.by || S.me, at: l.at || Date.now() })); logs = conv;
+      }
+      if (logs && own !== "both") {                          // 혼자 목표가 되면 내 것만 남김 → 체크 키도 내 것으로
+        const conv = {}; for (const [lk, l] of Object.entries(logs)) { if (!l) continue; if (k === "check") { const nk = `${l.date}_${own}`; conv[nk] = { ...l, by: own }; } else conv[lk] = { ...l, by: own }; } logs = conv;
+      }
+      if (moving) { const [og, ol] = goalPaths(g); up[og] = null; up[ol] = null; up[pathL(shared)] = logs; }
+      else if (g && logs && JSON.stringify(logs) !== JSON.stringify(g.logs)) up[pathL(shared)] = logs;
       up[pathG(shared)] = d;
-      if (await save(() => store.update("", up), isNew ? "목표를 추가했어요." : g && g.shared !== shared ? (shared ? "목표를 공유했어요." : "목표를 나만 보기로 바꿨어요.") : "저장했어요.")) {
+      if (await save(() => store.update("", up), isNew ? "목표를 추가했어요." : g && g.shared !== shared ? (shared ? "목표를 공유했어요." : "목표를 나만 보기로 바꿨어요.") : "목표를 수정했어요.")) {
+        if (g && !moving && shared) logAct(`${q(d.title)} 목표를 수정했어요`);
         if (shared && (isNew || !g.shared)) logAct(`${q(d.title)} 목표를 ${own === "both" ? "함께 하자고 만들었어요" : "공유했어요"}`);
         closeSheet();
       }
@@ -2012,6 +2136,265 @@ function thanksCard() {
   </section>`;
 }
 
+/* ========== 큐티 · 독서 ========== */
+const BIBLE = {
+  "구약": [["창세기", 50], ["출애굽기", 40], ["레위기", 27], ["민수기", 36], ["신명기", 34], ["여호수아", 24], ["사사기", 21], ["룻기", 4], ["사무엘상", 31], ["사무엘하", 24], ["열왕기상", 22], ["열왕기하", 25], ["역대상", 29], ["역대하", 36], ["에스라", 10], ["느헤미야", 13], ["에스더", 10], ["욥기", 42], ["시편", 150], ["잠언", 31], ["전도서", 12], ["아가", 8], ["이사야", 66], ["예레미야", 52], ["예레미야애가", 5], ["에스겔", 48], ["다니엘", 12], ["호세아", 14], ["요엘", 3], ["아모스", 9], ["오바댜", 1], ["요나", 4], ["미가", 7], ["나훔", 3], ["하박국", 3], ["스바냐", 3], ["학개", 2], ["스가랴", 14], ["말라기", 4]],
+  "신약": [["마태복음", 28], ["마가복음", 16], ["누가복음", 24], ["요한복음", 21], ["사도행전", 28], ["로마서", 16], ["고린도전서", 16], ["고린도후서", 13], ["갈라디아서", 6], ["에베소서", 6], ["빌립보서", 4], ["골로새서", 4], ["데살로니가전서", 5], ["데살로니가후서", 3], ["디모데전서", 6], ["디모데후서", 4], ["디도서", 3], ["빌레몬서", 1], ["히브리서", 13], ["야고보서", 5], ["베드로전서", 5], ["베드로후서", 3], ["요한일서", 5], ["요한이서", 1], ["요한삼서", 1], ["유다서", 1], ["요한계시록", 22]]
+};
+const BOOK_CH = Object.fromEntries([...BIBLE["구약"], ...BIBLE["신약"]]);
+const QT_REACTS = ["🙏", "❤️", "✨", "👏", "🥹"];
+const BOOK_REACTS = ["❤️", "✨", "👏", "🥹", "📌"];
+function qtRef(x) {
+  if (!x?.book) return "";
+  const unit = x.book === "시편" ? "편" : "장";
+  if (x.ch2 && +x.ch2 > +x.ch) return `${x.book} ${x.ch}-${x.ch2}${unit}`;
+  if (x.v1) return `${x.book} ${x.ch}:${x.v1}${x.v2 && +x.v2 > +x.v1 ? "-" + x.v2 : ""}`;
+  return `${x.book} ${x.ch}${unit}`;
+}
+const qtList = () => entries(S.qt).map(([id, x]) => ({ ...x, id })).sort((a, b) => b.date.localeCompare(a.date) || (b.at || 0) - (a.at || 0));
+function qtStreak(s) {
+  const days = new Set(qtList().filter(x => x.by === s).map(x => x.date));
+  let n = 0, d = days.has(todayStr()) ? todayStr() : addDays(todayStr(), -1);
+  while (days.has(d) && n < 2000) { n++; d = addDays(d, -1); }
+  return n;
+}
+function nextRef(s) {
+  const last = qtList().find(x => x.by === s);
+  if (!last?.book) return null;
+  const end = +(last.ch2 || last.ch), max = BOOK_CH[last.book] || end;
+  if (last.v1 && !last.ch2) return { book: last.book, ch: end, v1: last.v2 ? +last.v2 + 1 : +last.v1 + 1 };
+  if (end < max) return { book: last.book, ch: end + 1 };
+  const all = [...BIBLE["구약"], ...BIBLE["신약"]], i = all.findIndex(b => b[0] === last.book);
+  return i >= 0 && i < all.length - 1 ? { book: all[i + 1][0], ch: 1 } : null;
+}
+
+function qtSheet(id, preset) {
+  const cur = id ? S.qt[id] : null, x = cur || preset || {};
+  const bookOpts = Object.entries(BIBLE).map(([g, list]) => `<optgroup label="${g}">${list.map(([b]) => `<option value="${b}" ${x.book === b ? "selected" : ""}>${b}</option>`).join("")}</optgroup>`).join("");
+  openSheet(cur ? "큐티 고치기" : "오늘의 큐티", `
+    <form class="form" id="qt-form">
+      <div class="field"><label for="qt-date">날짜</label><input class="input" type="date" id="qt-date" value="${x.date || todayStr()}" max="${todayStr()}" required></div>
+      <div class="field"><span class="lbl">읽은 말씀</span>
+        <div class="qt-ref">
+          <select class="input" id="qt-book" required aria-label="성경"><option value="">성경 선택</option>${bookOpts}</select>
+          <div class="qt-nums">
+            <label class="qt-num"><input class="input" id="qt-ch" type="number" inputmode="numeric" min="1" value="${x.ch || ""}" required aria-label="시작 장"><span id="qt-unit">${x.book === "시편" ? "편" : "장"}</span></label>
+            <span class="qt-sep">~</span>
+            <label class="qt-num"><input class="input" id="qt-ch2" type="number" inputmode="numeric" min="1" value="${x.ch2 || ""}" placeholder="끝" aria-label="끝 장 (선택)"><span>${x.book === "시편" ? "편" : "장"}</span></label>
+          </div>
+          <div class="qt-nums">
+            <label class="qt-num"><input class="input" id="qt-v1" type="number" inputmode="numeric" min="1" value="${x.v1 || ""}" placeholder="절" aria-label="시작 절 (선택)"><span>절</span></label>
+            <span class="qt-sep">~</span>
+            <label class="qt-num"><input class="input" id="qt-v2" type="number" inputmode="numeric" min="1" value="${x.v2 || ""}" placeholder="절" aria-label="끝 절 (선택)"><span>절</span></label>
+          </div>
+        </div>
+        <span class="small" id="qt-preview"></span></div>
+      <div class="field"><label for="qt-verse">붙잡은 말씀 (선택)</label><textarea class="input" id="qt-verse" maxlength="500" style="min-height:70px" placeholder="마음에 남은 구절을 옮겨 적어요">${esc(x.verse)}</textarea></div>
+      <div class="field"><label for="qt-text">묵상</label><textarea class="input diary-text" id="qt-text" maxlength="3000" required placeholder="읽고 느낀 점, 깨달은 점을 적어요">${esc(x.text)}</textarea></div>
+      <div class="field"><label for="qt-apply">적용·기도 (선택)</label><textarea class="input" id="qt-apply" maxlength="1000" placeholder="오늘 실천할 것, 기도 제목">${esc(x.apply)}</textarea></div>
+      <p class="small" style="margin:0">${ic("eye", "sm")} 큐티는 ${esc(prof(P()).name)}님과 함께 나눠요.</p>
+      <button class="btn primary block" type="submit">${cur ? "저장하기" : "큐티 나누기"}</button>
+      ${cur ? `<button class="btn danger block" type="button" id="qt-del">삭제</button>` : ""}
+    </form>`, root => {
+    const f = n => $("#qt-" + n, root);
+    const val = () => ({ book: f("book").value, ch: +f("ch").value || "", ch2: +f("ch2").value || "", v1: +f("v1").value || "", v2: +f("v2").value || "" });
+    const upd = () => {
+      const v = val(), max = BOOK_CH[v.book];
+      root.querySelectorAll(".qt-num span").forEach((sp, i) => i < 2 && (sp.textContent = v.book === "시편" ? "편" : "장"));
+      if (max) { f("ch").max = max; f("ch2").max = max; }
+      $("#qt-preview", root).textContent = v.book && v.ch ? `→ ${qtRef(v)}${max && v.ch > max ? ` (${v.book}은 ${max}${v.book === "시편" ? "편" : "장"}까지예요)` : ""}` : "";
+    };
+    ["book", "ch", "ch2", "v1", "v2"].forEach(n => f(n).addEventListener("input", upd)); upd();
+    if (!cur && !x.book) f("book").focus(); else if (!cur) f("text").focus();
+    f("form").addEventListener("submit", async e => {
+      e.preventDefault();
+      const v = val(), max = BOOK_CH[v.book];
+      if (!v.book || !v.ch) return toast("성경과 장을 골라 주세요.");
+      if (max && (v.ch > max || (v.ch2 && v.ch2 > max))) return toast(`${v.book}은 ${max}${v.book === "시편" ? "편" : "장"}까지예요.`);
+      if (v.ch2 && v.ch2 <= v.ch) v.ch2 = "";
+      if (v.ch2) { v.v1 = ""; v.v2 = ""; }
+      const data = { ...v, by: cur?.by || S.me, date: f("date").value, verse: f("verse").value.trim(), text: f("text").value.trim(), apply: f("apply").value.trim(), at: cur?.at || Date.now(), updatedAt: Date.now() };
+      if (!data.text) return toast("묵상을 적어 주세요.");
+      if (await save(() => store.set(`qt/${id || store.newId()}`, data), cur ? "저장했어요." : "큐티를 나눴어요 🙏")) {
+        if (!cur) logAct(`큐티를 나눴어요 📖 ${qtRef(data)}`);
+        closeSheet();
+      }
+    });
+    if (cur) armDelete($("#qt-del", root), async () => { if (await save(() => store.remove(`qt/${id}`), "삭제했어요.")) closeSheet(); });
+  });
+}
+function qtRead(id) {
+  const x = S.qt[id]; if (!x) return;
+  if (x.by === S.me) return qtSheet(id);
+  openSheet(esc(qtRef(x)), `<div class="detail">
+    <div class="row-meta">${whoChip(x.by)}<span class="tag">${fmtDate(x.date)}</span></div>
+    ${x.verse ? `<blockquote class="qt-verse">${esc(x.verse)}</blockquote>` : ""}
+    <div><div class="lbl small">묵상</div><div class="diary-full">${esc(x.text)}</div></div>
+    ${x.apply ? `<div><div class="lbl small">적용·기도</div><div class="diary-full">${esc(x.apply)}</div></div>` : ""}
+    ${reactBar({ src: "qt", id, title: qtRef(x) }, QT_REACTS)}
+  </div>`, root => bindReact(root));
+}
+
+/* 독서 */
+const bookList = () => entries(S.books).map(([id, b]) => ({ ...b, id, logs: entries(S.bookLogs[id]).map(([lid, l]) => ({ ...l, id: lid })).sort((a, z) => z.date.localeCompare(a.date) || (z.at || 0) - (a.at || 0)) }));
+const bookPage = b => Math.max(0, ...b.logs.map(l => +l.pageTo || 0));
+const BOOK_COLORS = ["#6A4CC0", "#2860A8", "#BE3A5C", "#2C7A4B", "#A35F00", "#5B6176"];
+const bookColor = b => BOOK_COLORS[[...(b.title || "")].reduce((s, c) => s + c.charCodeAt(0), 0) % BOOK_COLORS.length];
+function bookCover(b, big) {
+  return `<span class="cover ${big ? "big" : ""}" style="--cv:${bookColor(b)}" aria-hidden="true"><span>${esc((b.title || "?").slice(0, big ? 12 : 6))}</span></span>`;
+}
+function bookCard(b) {
+  const pg = bookPage(b), pct = b.pages ? Math.min(100, Math.round((pg / b.pages) * 100)) : null, last = b.logs[0];
+  const readers = [...new Set(b.logs.map(l => l.by))];
+  return `<button class="card book-card" data-act="book-open" data-id="${b.id}">
+    ${bookCover(b)}
+    <span class="bk-body">
+      <b class="bk-title">${esc(b.title)}</b>
+      <span class="small">${b.author ? esc(b.author) + " · " : ""}${b.status === "done" ? "📗 다 읽음" : "📖 읽는 중"}</span>
+      ${pct !== null ? `<span class="meter" style="--fillc:${bookColor(b)}"><i style="width:${pct}%"></i></span><span class="small">p.${pg} / ${b.pages}쪽 (${pct}%)</span>` : pg ? `<span class="small">p.${pg}까지 읽음</span>` : ""}
+      <span class="small">${readers.map(s => esc(prof(s).avatar)).join("")} ${last ? `마지막 ${fmtShort(last.date)}` : "아직 기록 없음"} · 기록 ${b.logs.length}개</span>
+    </span></button>`;
+}
+function bookSheet(id) {
+  const b = id ? S.books[id] : null;
+  openSheet(b ? "책 정보 고치기" : "새 책 추가", `
+    <form class="form" id="bk-form">
+      <div class="field"><label for="bk-title">책 제목</label><input class="input" id="bk-title" maxlength="80" required value="${esc(b?.title)}"></div>
+      <div class="two"><div class="field"><label for="bk-author">지은이 (선택)</label><input class="input" id="bk-author" maxlength="40" value="${esc(b?.author)}"></div>
+        <div class="field"><label for="bk-pages">전체 쪽수 (선택)</label><input class="input" id="bk-pages" type="number" inputmode="numeric" min="1" value="${b?.pages || ""}"></div></div>
+      ${b ? `<div class="field"><span class="lbl">상태</span><div class="seg" id="bk-status" style="display:flex"><button type="button" data-v="reading" aria-pressed="${b.status !== "done"}" style="flex:1">📖 읽는 중</button><button type="button" data-v="done" aria-pressed="${b.status === "done"}" style="flex:1">📗 다 읽음</button></div></div>` : ""}
+      <button class="btn primary block" type="submit">${b ? "저장하기" : "책 추가"}</button>
+      ${b ? `<button class="btn danger block" type="button" id="bk-del">책 삭제 (기록 ${Object.keys(S.bookLogs[id] || {}).length}개도 함께)</button>` : ""}
+    </form>`, root => {
+    bindSeg(root, "#bk-status");
+    if (!b) $("#bk-title", root).focus();
+    $("#bk-form", root).addEventListener("submit", async e => {
+      e.preventDefault();
+      const d = { title: $("#bk-title", root).value.trim(), author: $("#bk-author", root).value.trim(), pages: +$("#bk-pages", root).value || 0, status: b ? segVal(root, "#bk-status") || "reading" : "reading", by: b?.by || S.me, at: b?.at || Date.now() };
+      if (!d.title) return;
+      if (d.status === "done" && b?.status !== "done") d.doneAt = Date.now(); else if (b?.doneAt && d.status === "done") d.doneAt = b.doneAt;
+      const nid = id || store.newId();
+      if (await save(() => store.set(`books/${nid}`, d), b ? "저장했어요." : "책을 추가했어요 📚")) {
+        if (!b) logAct(`새 책 ${q(d.title)} 읽기 시작했어요 📚`); else if (d.status === "done" && b.status !== "done") logAct(`${q(d.title)}를 다 읽었어요 📗`);
+        closeSheet(); if (!b) readLogSheet(nid);
+      }
+    });
+    if (b) armDelete($("#bk-del", root), async () => { if (await save(() => store.update("", { [`books/${id}`]: null, [`bookLogs/${id}`]: null }), "책을 삭제했어요.")) closeSheet(); });
+  });
+}
+function readLogSheet(bookId, logId) {
+  const books = bookList().filter(b => b.status !== "done" || b.id === bookId);
+  if (!books.length && !bookId) return bookSheet();
+  const cur = logId ? S.bookLogs[bookId]?.[logId] : null;
+  const sel = bookId || books.sort((a, z) => (z.logs[0]?.at || z.at || 0) - (a.logs[0]?.at || a.at || 0))[0]?.id;
+  const bk = () => bookList().find(b => b.id === $("#rl-book")?.value);
+  const lastPage = id => { const b = bookList().find(x => x.id === id); return b ? bookPage(b) : 0; };
+  openSheet(cur ? "독서 기록 고치기" : "독서 기록", `
+    <form class="form" id="rl-form">
+      <div class="field"><label for="rl-book">책</label>
+        <div class="rl-book-row"><select class="input" id="rl-book" ${cur ? "disabled" : ""}>${bookList().filter(b => b.status !== "done" || b.id === sel).map(b => `<option value="${b.id}" ${b.id === sel ? "selected" : ""}>${esc(b.title)}</option>`).join("")}</select>
+        ${cur ? "" : `<button type="button" class="btn sm" id="rl-new">${ic("plus", "sm")}새 책</button>`}</div></div>
+      <div class="two"><div class="field"><label for="rl-date">날짜</label><input class="input" type="date" id="rl-date" max="${todayStr()}" value="${cur?.date || todayStr()}" required></div>
+        <div class="field"><span class="lbl">읽은 쪽</span><div class="qt-nums"><input class="input" id="rl-from" type="number" inputmode="numeric" min="0" value="${cur ? cur.pageFrom ?? "" : lastPage(sel) ? lastPage(sel) + 1 : 1}" aria-label="시작 쪽"><span class="qt-sep">~</span><input class="input" id="rl-to" type="number" inputmode="numeric" min="0" value="${cur?.pageTo ?? ""}" required aria-label="끝 쪽"></div></div></div>
+      <span class="small" id="rl-info"></span>
+      <div class="field"><label for="rl-quote">감명 깊은 대목 (선택)</label><textarea class="input" id="rl-quote" maxlength="1000" placeholder="마음에 남은 문장이나 내용을 옮겨 적어요" style="min-height:90px">${esc(cur?.quote)}</textarea><span class="small">쪽수를 같이 적어 두면 나중에 찾기 쉬워요. 예: (p.42)</span></div>
+      <div class="field"><label for="rl-note">감상</label><textarea class="input diary-text" id="rl-note" maxlength="3000" placeholder="읽으면서 든 생각, 느낌을 적어요" style="min-height:140px">${esc(cur?.note)}</textarea></div>
+      <button type="button" class="switch" id="rl-done" role="switch" aria-checked="false" ${cur ? "hidden" : ""}><span class="t"><b>이 책 다 읽었어요</b><span>저장하면 '다 읽은 책'으로 옮겨져요</span></span><span class="knob"></span></button>
+      <button class="btn primary block" type="submit">${cur ? "저장하기" : "기록 나누기"}</button>
+      ${cur ? `<button class="btn danger block" type="button" id="rl-del">삭제</button>` : ""}
+    </form>`, root => {
+    const info = () => { const b = bk(); $("#rl-info", root).textContent = b ? `${b.pages ? `전체 ${b.pages}쪽 · ` : ""}지금까지 p.${bookPage(b)}까지 읽었어요` : ""; };
+    $("#rl-book", root).addEventListener("change", () => { const lp = lastPage($("#rl-book", root).value); $("#rl-from", root).value = lp ? lp + 1 : 1; info(); });
+    info();
+    $("#rl-new", root)?.addEventListener("click", () => { closeSheet(); bookSheet(); });
+    $("#rl-done", root).addEventListener("click", e => { const s = e.currentTarget; s.setAttribute("aria-checked", s.getAttribute("aria-checked") !== "true"); });
+    $("#rl-form", root).addEventListener("submit", async e => {
+      e.preventDefault();
+      const b = bk(); if (!b) return toast("책을 먼저 추가해 주세요.");
+      const from = +$("#rl-from", root).value || 0, to = +$("#rl-to", root).value || 0;
+      if (!to) return toast("어디까지 읽었는지 쪽수를 적어 주세요.");
+      if (from && to < from) return toast("끝 쪽이 시작 쪽보다 앞이에요.");
+      if (b.pages && to > b.pages) return toast(`이 책은 ${b.pages}쪽까지예요.`);
+      const data = { by: cur?.by || S.me, date: $("#rl-date", root).value, pageFrom: from, pageTo: to, quote: $("#rl-quote", root).value.trim(), note: $("#rl-note", root).value.trim(), at: cur?.at || Date.now(), updatedAt: Date.now() };
+      const up = { [`bookLogs/${b.id}/${logId || store.newId()}`]: data };
+      const done = $("#rl-done", root).getAttribute("aria-checked") === "true" || (b.pages && to >= b.pages && b.status !== "done");
+      if (done && !cur) { up[`books/${b.id}/status`] = "done"; up[`books/${b.id}/doneAt`] = Date.now(); }
+      if (await save(() => store.update("", up), cur ? "저장했어요." : done ? "기록했어요. 완독 축하해요! 📗" : "독서 기록을 나눴어요 📚")) {
+        if (!cur) logAct(`${q(b.title)} p.${from ? from + "–" : ""}${to} 읽었어요${data.quote ? " ✍️" : ""}${done ? " · 다 읽었어요 📗" : ""}`);
+        closeSheet();
+      }
+    });
+    if (cur) armDelete($("#rl-del", root), async () => { if (await save(() => store.remove(`bookLogs/${bookId}/${logId}`), "삭제했어요.")) closeSheet(); });
+  });
+}
+function logBlock(b, l) {
+  const mine = l.by === S.me;
+  return `<article class="rl-item">
+    <div class="rl-top">${whoChip(l.by)}<span class="tag">${fmtShort(l.date)} · p.${l.pageFrom ? l.pageFrom + "–" : ""}${l.pageTo}</span>${reactChips({ src: "rl", id: `${b.id}_${l.id}` })}
+      ${mine ? `<button class="btn ghost sm rl-edit" data-act="rl-edit" data-book="${b.id}" data-id="${l.id}">${ic("edit", "sm")}수정</button>` : `<button class="btn ghost sm rl-edit" data-act="rl-react" data-book="${b.id}" data-id="${l.id}">반응</button>`}</div>
+    ${l.quote ? `<blockquote class="rl-quote">${esc(l.quote)}</blockquote>` : ""}
+    ${l.note ? `<div class="rl-note">${esc(l.note)}</div>` : ""}
+  </article>`;
+}
+function bookDetail(id) {
+  const b = bookList().find(x => x.id === id); if (!b) return;
+  const pg = bookPage(b), pct = b.pages ? Math.min(100, Math.round((pg / b.pages) * 100)) : null;
+  openSheet(esc(b.title), `<div class="detail">
+    <div class="bk-head">${bookCover(b, true)}<div class="bk-body"><b class="bk-title" style="font-size:19px">${esc(b.title)}</b>
+      <span class="small">${b.author ? esc(b.author) + " · " : ""}${b.status === "done" ? `📗 ${b.doneAt ? fmtShort(ds(new Date(b.doneAt))) + " " : ""}다 읽음` : "📖 읽는 중"}</span>
+      ${pct !== null ? `<span class="meter" style="--fillc:${bookColor(b)}"><i style="width:${pct}%"></i></span><span class="small">p.${pg} / ${b.pages}쪽 (${pct}%)</span>` : pg ? `<span class="small">p.${pg}까지</span>` : ""}
+      <span class="small">${esc(prof(b.by).avatar)} ${esc(prof(b.by).name)}님이 추가 · 기록 ${b.logs.length}개 · 남긴 대목 ${b.logs.filter(l => l.quote).length}개</span></div></div>
+    <div class="actions"><button class="btn primary" id="bd-log">${ic("plus")}기록 추가</button><button class="btn ghost" id="bd-edit">${ic("edit", "sm")}책 정보</button></div>
+    <div class="rl-list">${b.logs.length ? b.logs.map(l => logBlock(b, l)).join("") : `<div class="empty">아직 기록이 없어요.</div>`}</div>
+  </div>`, root => {
+    $("#bd-log", root).addEventListener("click", () => { closeSheet(); readLogSheet(id); });
+    $("#bd-edit", root).addEventListener("click", () => { closeSheet(); bookSheet(id); });
+    root.querySelectorAll("[data-act='rl-edit']").forEach(x => x.addEventListener("click", () => { closeSheet(); readLogSheet(x.dataset.book, x.dataset.id); }));
+    root.querySelectorAll("[data-act='rl-react']").forEach(x => x.addEventListener("click", () => rlReact(x.dataset.book, x.dataset.id)));
+  });
+}
+function rlReact(bookId, logId) {
+  const b = S.books[bookId], l = S.bookLogs[bookId]?.[logId]; if (!b || !l) return;
+  openSheet(`${esc(prof(l.by).name)}님의 기록`, `<div class="detail">
+    <div class="row-meta">${whoChip(l.by)}<span class="tag">${esc(b.title)} · p.${l.pageFrom ? l.pageFrom + "–" : ""}${l.pageTo}</span></div>
+    ${l.quote ? `<blockquote class="rl-quote">${esc(l.quote)}</blockquote>` : ""}${l.note ? `<div class="rl-note">${esc(l.note)}</div>` : ""}
+    ${reactBar({ src: "rl", id: `${bookId}_${logId}`, title: b.title }, BOOK_REACTS)}</div>`, root => bindReact(root));
+}
+
+function renderShare() {
+  const seg = S.shareSeg || "qt";
+  const head = `<div class="screen-head"><div><div class="eyebrow">함께 나누는</div><h1 class="big-date">${seg === "qt" ? "말씀 묵상" : "독서 기록"}</h1></div>
+    <div class="seg" role="group" aria-label="큐티·독서 전환"><button data-act="sseg" data-v="qt" aria-pressed="${seg === "qt"}">📖 큐티</button><button data-act="sseg" data-v="book" aria-pressed="${seg === "book"}">📚 독서</button></div></div>`;
+  if (seg === "qt") {
+    const f = S.qtFilter || "all", t = todayStr();
+    const list = qtList().filter(x => f === "all" || (f === "me" ? x.by === S.me : x.by === P()));
+    const days = {}; list.forEach(x => (days[x.date] ||= []).push(x));
+    const nx = nextRef(S.me), doneToday = qtList().some(x => x.by === S.me && x.date === t);
+    const month = m => new Set(qtList().filter(x => x.by === m && x.date.slice(0, 7) === t.slice(0, 7)).map(x => x.date)).size;
+    return `${head}
+      <div class="qt-stats">${["a", "b"].filter(s => S.slots[s]).map(s => `<div class="qt-stat ${s}"><span>${esc(prof(s).avatar)} ${esc(prof(s).name)}</span><b>🔥 ${qtStreak(s)}일 연속</b><small>이번 달 ${month(s)}일 · ${qtList().some(x => x.by === s && x.date === t) ? "오늘 했어요 ✅" : "오늘 아직"}</small></div>`).join("")}</div>
+      ${doneToday ? "" : `<button class="card diary-cta" data-act="qt-new" ${nx ? `data-next="1"` : ""}>${ic("book")}<span><b>${nx ? `${qtRef(nx)} 이어서 큐티하기` : "오늘 큐티 쓰기"}</b><span class="small">${nx ? "지난번에 읽은 다음 부분이에요. 바꿀 수도 있어요" : "어느 말씀을 읽었는지와 묵상을 남겨요"}</span></span>${ic("right")}</button>`}
+      <div class="chips" role="group" aria-label="보기">${[["all", "전체"], ["me", `${prof(S.me).avatar} 나`], ["partner", `${prof(P()).avatar} ${prof(P()).name}`]].map(([k, l]) => `<button class="chip" data-act="qfilter" data-v="${k}" aria-pressed="${f === k}">${esc(l)}</button>`).join("")}</div>
+      ${Object.keys(days).length ? `<div class="diary-days">${Object.entries(days).slice(0, 40).map(([d, xs]) => `<section class="diary-day"><div class="day-label ${d === t ? "today" : ""}">${fmtShort(d)}</div>
+        ${xs.map(x => `<button class="card qt-item" data-act="qt-open" data-id="${x.id}">
+          <span class="di-top"><span class="qt-refbig">${esc(qtRef(x))}</span>${whoChip(x.by)}${reactChips({ src: "qt", id: x.id })}</span>
+          ${x.verse ? `<span class="qt-verse sm">${esc(x.verse)}</span>` : ""}
+          <span class="di-text">${esc(x.text)}</span>
+          ${x.apply ? `<span class="qt-apply">🙏 ${esc(x.apply)}</span>` : ""}
+        </button>`).join("")}</section>`).join("")}</div>`
+        : `<div class="card empty">아직 나눈 큐티가 없어요. 아래 <b>큐티 쓰기</b>로 시작해 보세요.</div>`}`;
+  }
+  const bl = bookList(), reading = bl.filter(b => b.status !== "done").sort((a, z) => (z.logs[0]?.at || z.at || 0) - (a.logs[0]?.at || a.at || 0)), done = bl.filter(b => b.status === "done").sort((a, z) => (z.doneAt || 0) - (a.doneAt || 0));
+  const feed = bl.flatMap(b => b.logs.map(l => ({ b, l }))).sort((x, z) => z.l.date.localeCompare(x.l.date) || (z.l.at || 0) - (x.l.at || 0)).slice(0, 12);
+  return `${head}
+    <h2 class="h2">📖 읽는 중 <span class="count">${reading.length}</span></h2>
+    ${reading.length ? `<div class="grid-2">${reading.map(bookCard).join("")}</div>` : `<div class="empty">읽고 있는 책을 추가해 보세요.</div>`}
+    <button class="btn ghost block" data-act="book-new" style="margin-top:10px">${ic("plus")}새 책 추가</button>
+    <h2 class="h2">✍️ 최근 나눈 기록</h2>
+    ${feed.length ? `<div class="rl-list">${feed.map(({ b, l }) => `<div class="rl-feed"><button class="rl-book" data-act="book-open" data-id="${b.id}">${bookCover(b)}<b>${esc(b.title)}</b></button>${logBlock(b, l)}</div>`).join("")}</div>` : `<div class="empty">아직 기록이 없어요.</div>`}
+    ${done.length ? `<h2 class="h2">📗 다 읽은 책 <span class="count">${done.length}</span></h2><div class="grid-2">${done.map(bookCard).join("")}</div>` : ""}`;
+}
+
 function renderDiary() {
   const f = S.diaryFilter || "all", m = S.diaryMonth || monthStart(todayStr());
   const all = diaryList().filter(x => x.date.slice(0, 7) === m.slice(0, 7)).filter(x => f === "all" || (f === "me" ? x.by === S.me : f === "partner" ? x.by === P() : true));
@@ -2087,7 +2470,7 @@ function settingsSheet() {
     $("#st-out", root).addEventListener("click", async () => {
       if (S.mode === "live") { try { if (lsGet("uh.pushTid")) await disablePush(); await store.remove(`devices/${S.me}/${S.uid}`); await fb.authM.signOut(fb.auth); } catch {} lsSet("uh.code", null); }
       unsubs.forEach(u => u()); unsubs = [];
-      Object.assign(S, { mode: null, slots: {}, events: {}, plans: {}, goals: {}, logs: {}, activity: {}, info: {}, anniv: {}, notes: {}, reactions: {}, diary: {}, thanks: {}, priv: { events: {}, goals: {}, logs: {}, diary: {} }, tab: "today", login: { step: "code", code: "", slots: {}, slot: null, err: "" } });
+      Object.assign(S, { mode: null, slots: {}, events: {}, plans: {}, goals: {}, logs: {}, activity: {}, info: {}, anniv: {}, notes: {}, reactions: {}, diary: {}, thanks: {}, qt: {}, books: {}, bookLogs: {}, priv: { events: {}, goals: {}, logs: {}, diary: {} }, tab: "today", login: { step: "code", code: "", slots: {}, slot: null, err: "" } });
       closeSheet(); render();
     });
   });
@@ -2187,7 +2570,7 @@ document.addEventListener("click", async e => {
     case "filter": S.filter = v; render(); break;
     case "open": { const it = findItem(src, id); if (it) eventSheet(it); break; }
     case "done": { const it = findItem(src, id); if (it) toggleDone(it); break; }
-    case "fab": S.tab === "diary" ? diarySheet() : S.tab === "plans" ? planSheet() : S.tab === "goals" ? goalSheet() : eventSheet(null, S.tab === "today" ? todayStr() : S.sel); break;
+    case "fab": S.tab === "share" ? ((S.shareSeg || "qt") === "qt" ? qtSheet(null, nextRef(S.me) || {}) : readLogSheet()) : S.tab === "diary" ? diarySheet() : S.tab === "plans" ? planSheet() : S.tab === "goals" ? goalSheet() : eventSheet(null, S.tab === "today" ? todayStr() : S.sel); break;
     case "new-event": eventSheet(null, b.dataset.date); break;
     case "new-plan": planSheet(null, { date: todayStr() }); break;
     case "plan-ok": if (await save(() => store.update(`plans/${id}`, { status: "confirmed", confirmedAt: Date.now() }), "계획을 확정했어요. 함께 일정에 들어갔어요.")) logAct(`${q(S.plans[id]?.title || "")} 계획을 확정했어요 💞`); break;
@@ -2196,11 +2579,21 @@ document.addEventListener("click", async e => {
     case "seen": save(() => store.update(`slots/${S.me}`, { lastSeen: Date.now() })); break;
     case "note": noteSheet(); break;
     case "diary": diarySheet(); break;
+    case "sseg": S.shareSeg = v; render(); break;
+    case "qfilter": S.qtFilter = v; render(); break;
+    case "qt-new": qtSheet(null, b.dataset.next ? nextRef(S.me) : {}); break;
+    case "qt-open": qtRead(id); break;
+    case "book-new": bookSheet(); break;
+    case "book-open": bookDetail(id); break;
+    case "rl-edit": readLogSheet(b.dataset.book, id); break;
+    case "rl-react": rlReact(b.dataset.book, id); break;
     case "diary-open": { const x = diaryList().find(e => e.key === b.dataset.key); if (x) diaryRead(x); break; }
     case "thanks": thanksSheet(b.dataset.d); break;
     case "dfilter": S.diaryFilter = v; render(); break;
     case "dmonth": { const x = parseD(S.diaryMonth || monthStart(todayStr())); x.setMonth(x.getMonth() + +v); S.diaryMonth = ds(x); render(); break; }
     case "log-day": { const g = goalList().find(x => x.id === id && x.src === src); if (g) logSheet(g, b.dataset.d); break; }
+    case "goal-menu": { const g = goalList().find(x => x.id === id && x.src === src); if (g) goalMenuSheet(g); break; }
+    case "toggle-arch": S.showArchived = !S.showArchived; render(); break;
     case "check-hist": { const g = goalList().find(x => x.id === id && x.src === src); if (g) checkHistorySheet(g); break; }
     case "anniv": annivSheet(); break;
     case "plan-edit": planSheet(id); break;
