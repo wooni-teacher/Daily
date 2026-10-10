@@ -1,0 +1,9 @@
+{
+  "name": "uri-haru-notify",
+  "private": true,
+  "type": "module",
+  "description": "우리 하루 휴대폰 알림 보내기 (GitHub Actions)",
+  "dependencies": {
+    "firebase-admin": "^12.7.0"
+  }
+}

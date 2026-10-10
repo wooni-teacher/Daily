@@ -523,7 +523,12 @@ button.bar:hover .track{outline:2px solid var(--line)}
 .rl-book-row .input{flex:1;min-width:0}
 .grid-2 > .card,.diary-day > .card{margin-top:0}
 .rec-seg button{padding:0 12px}
-@media (max-width:420px){.rec-head{display:grid;gap:10px}.rec-seg{display:flex;width:100%}.rec-seg button{flex:1}}
+@media (max-width:420px){.rec-head{display:grid;gap:10px;justify-content:stretch;align-items:start}.rec-seg{display:flex;width:100%}.rec-seg button{flex:1}}
+
+/* 새 글 표시 */
+.new-pill{display:inline-flex;align-items:center;padding:1px 7px;border-radius:999px;background:var(--b);color:#fff;font-size:11px;font-weight:800;letter-spacing:.04em;line-height:1.5}
+.seg-badge{display:inline-grid;place-items:center;min-width:18px;height:18px;margin-left:4px;padding:0 5px;border-radius:9px;background:var(--b);color:#fff;font-size:11px;font-weight:700;vertical-align:1px}
+.th-who{display:flex;align-items:center;gap:6px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 </head>
@@ -547,7 +552,7 @@ const FIREBASE_CONFIG = {
   appId: "1:527862457033:web:41c8fcb5978ffb67476318"
 };
 /* 휴대폰 알림용 웹 푸시 키 — Firebase 콘솔 > 프로젝트 설정 > 클라우드 메시징 > 웹 푸시 인증서의 '키 쌍' */
-const VAPID_KEY = "";
+const VAPID_KEY = "BABtxlWdlE6LKDxdVE6ydezNKYQoyWOEYJmzeUyX2Dy_hiUHS_uHKVTy2fiPuiCoqeFV_su8nF-gLy3apjyOjBI";
 const ROOT = "couplePlanner";
 const CONFIGURED = !!(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.databaseURL);
 
@@ -781,7 +786,7 @@ function sampleData(me, includePartnerOwned) {
     // 큐티·독서 예시 (책과 문장은 예시로 지어낸 것)
     out[`qt/${id()}`] = { by: me, date: d(-1), book: "출애굽기", ch: 3, v1: 1, v2: 12, verse: "", text: "모세가 평범한 일상 속에서 떨기나무 불꽃을 보고 돌이켜 다가갔다. 바쁘다는 이유로 그냥 지나친 부르심은 없었는지 돌아보게 된다.", apply: "출근길 10분은 휴대폰 대신 기도로 시작하기", at: now - 26 * H };
     out[`qt/${id()}`] = { by: pt, date: d(-1), book: "시편", ch: 23, verse: "", text: "목자가 앞서 걸어가신다는 말이 위로가 됐다. 내가 다 해내야 한다는 마음을 조금 내려놓고 싶다.", apply: "이번 주 회의 준비를 맡기며 기도하기", at: now - 22 * H };
-    out[`qt/${id()}`] = { by: pt, date: d(0), book: "시편", ch: 24, verse: "", text: "땅과 거기 충만한 것이 다 주의 것이라는 고백. 내 시간도 내 것만은 아니라는 생각을 했다.", apply: "", at: now - 3 * H };
+    out[`qt/${id()}`] = { by: pt, date: d(0), book: "시편", ch: 24, verse: "", text: "땅과 거기 충만한 것이 다 주의 것이라는 고백. 내 시간도 내 것만은 아니라는 생각을 했다.", apply: "", at: now - 1 * H };
     const bk1 = id(), bk2 = id();
     out[`books/${bk1}`] = { title: "느리게 걷는 연습 (예시)", author: "예시 지은이", pages: 248, status: "reading", by: pt, at: now - 9 * 24 * H };
     out[`books/${bk2}`] = { title: "작은 습관의 힘 (예시)", author: "예시 지은이", pages: 0, status: "reading", by: me, at: now - 5 * 24 * H };
@@ -942,7 +947,7 @@ function render() {
   const y = window.scrollY;
   const screens = { today: renderToday, schedule: renderSchedule, plans: renderPlans, goals: renderGoals, share: renderShare };
   const fabLabel = { today: "일정 추가", schedule: "일정 추가", plans: "계획 제안", goals: "목표 추가", share: { diary: myDiary(todayStr()) ? "오늘 일기 고치기" : "일기 쓰기", qt: "큐티 쓰기", book: "독서 기록" }[S.shareSeg || "diary"] }[S.tab];
-  const pc = pendingCount();
+  const pc = pendingCount(), rc = S.mode ? REC_SECS.reduce((n, x) => n + (S.tab === "share" && (S.shareSeg || "diary") === x ? 0 : newCount(x)), 0) : 0;
   app.innerHTML = `
     <header class="top"><div class="top-in">
       <span class="brand">우리 하루</span><span class="top-spacer"></span>
@@ -958,9 +963,10 @@ function render() {
     <button class="fab" data-act="fab">${ic("plus")}${fabLabel}</button>
     <nav class="tabbar" aria-label="주요 화면"><div class="tabbar-in">
       ${[["today", "sun", "오늘"], ["schedule", "cal", "일정"], ["plans", "heart", "함께"], ["goals", "target", "목표"], ["share", "book", "기록"]].map(([k, i, l]) =>
-        `<button class="tab" data-act="tab" data-v="${k}" ${S.tab === k ? 'aria-current="page"' : ""}>${ic(i)}${k === "plans" && pc ? `<span class="badge">${pc}</span>` : ""}<span>${l}</span></button>`).join("")}
+        `<button class="tab" data-act="tab" data-v="${k}" ${S.tab === k ? 'aria-current="page"' : ""}>${ic(i)}${k === "plans" && pc ? `<span class="badge">${pc}</span>` : k === "share" && rc ? `<span class="badge" aria-label="새 글 ${rc}개">${badgeNum(rc)}</span>` : ""}<span>${l}</span></button>`).join("")}
     </div></nav>`;
   window.scrollTo(0, y);
+  markRecordSeen();
   if (slideDir) { $("#swipe")?.classList.add(slideDir > 0 ? "slide-l" : "slide-r"); $(".week-strip, .month-grid")?.classList.add(slideDir > 0 ? "slide-l" : "slide-r"); slideDir = 0; }
 }
 let slideDir = 0;
@@ -2332,7 +2338,7 @@ function readLogSheet(bookId, logId) {
 function logBlock(b, l) {
   const mine = l.by === S.me;
   return `<article class="rl-item">
-    <div class="rl-top">${whoChip(l.by)}<span class="tag">${fmtShort(l.date)} · p.${l.pageFrom ? l.pageFrom + "–" : ""}${l.pageTo}</span>${reactChips({ src: "rl", id: `${b.id}_${l.id}` })}
+    <div class="rl-top">${newPill(isNewBy("book", l.at, l.by))}${whoChip(l.by)}<span class="tag">${fmtShort(l.date)} · p.${l.pageFrom ? l.pageFrom + "–" : ""}${l.pageTo}</span>${reactChips({ src: "rl", id: `${b.id}_${l.id}` })}
       ${mine ? `<button class="btn ghost sm rl-edit" data-act="rl-edit" data-book="${b.id}" data-id="${l.id}">${ic("edit", "sm")}수정</button>` : `<button class="btn ghost sm rl-edit" data-act="rl-react" data-book="${b.id}" data-id="${l.id}">반응</button>`}</div>
     ${l.quote ? `<blockquote class="rl-quote">${esc(l.quote)}</blockquote>` : ""}
     ${l.note ? `<div class="rl-note">${esc(l.note)}</div>` : ""}
@@ -2363,10 +2369,32 @@ function rlReact(bookId, logId) {
     ${reactBar({ src: "rl", id: `${bookId}_${logId}`, title: b.title }, BOOK_REACTS)}</div>`, root => bindReact(root));
 }
 
+/* 새 글 표시: 상대가 쓴 글 중 내가 그 칸을 마지막으로 연 뒤에 생긴 것 */
+const REC_SECS = ["diary", "qt", "book"];
+const seenOf = sec => S.slots[S.me]?.seen?.[sec] ?? (S.slots[S.me]?.lastSeen || 0);
+const seenRef = sec => (S.seenSnap && S.seenSnap[sec] !== undefined ? S.seenSnap[sec] : seenOf(sec));
+const isNewBy = (sec, at, by) => by === P() && (at || 0) > seenRef(sec);
+function newCount(sec) {
+  const since = seenOf(sec), p = P(), c = list => list.filter(x => x && x.by === p && (x.at || 0) > since).length;
+  if (sec === "diary") return c(Object.values(S.diary || {})) + c(Object.values(S.thanks || {}));
+  if (sec === "qt") return c(Object.values(S.qt || {}));
+  return Object.values(S.bookLogs || {}).reduce((n, logs) => n + c(Object.values(logs || {})), 0);
+}
+const newPill = on => (on ? `<span class="new-pill">NEW</span>` : "");
+const badgeNum = n => (n > 9 ? "9+" : n);
+function markRecordSeen() {
+  if (S.tab !== "share" || !S.mode || !store) { S._marked = null; S.seenSnap = {}; return; }
+  const seg = S.shareSeg || "diary";
+  if (S._marked === seg) return;
+  S._marked = seg; S.seenSnap ||= {};
+  S.seenSnap[seg] = seenOf(seg);            // 이번에 보는 동안은 NEW 표시를 유지
+  if (newCount(seg) || !S.slots[S.me]?.seen?.[seg]) store.update(`slots/${S.me}/seen`, { [seg]: Date.now() }).catch(() => {});
+}
+
 function renderShare() {
   const seg = S.shareSeg || "diary";
   const head = `<div class="screen-head rec-head"><div><div class="eyebrow">기록</div><h1 class="big-date">${{ diary: "우리의 하루", qt: "말씀 묵상", book: "독서 기록" }[seg]}</h1></div>
-    <div class="seg rec-seg" role="group" aria-label="기록 종류"><button data-act="sseg" data-v="diary" aria-pressed="${seg === "diary"}">✏️ 일기</button><button data-act="sseg" data-v="qt" aria-pressed="${seg === "qt"}">📖 큐티</button><button data-act="sseg" data-v="book" aria-pressed="${seg === "book"}">📚 독서</button></div></div>`;
+    <div class="seg rec-seg" role="group" aria-label="기록 종류"><button data-act="sseg" data-v="diary" aria-pressed="${seg === "diary"}">✏️ 일기${seg !== "diary" && newCount("diary") ? `<span class="seg-badge">${badgeNum(newCount("diary"))}</span>` : ""}</button><button data-act="sseg" data-v="qt" aria-pressed="${seg === "qt"}">📖 큐티${seg !== "qt" && newCount("qt") ? `<span class="seg-badge">${badgeNum(newCount("qt"))}</span>` : ""}</button><button data-act="sseg" data-v="book" aria-pressed="${seg === "book"}">📚 독서${seg !== "book" && newCount("book") ? `<span class="seg-badge">${badgeNum(newCount("book"))}</span>` : ""}</button></div></div>`;
   if (seg === "diary") return renderDiary(head);
   if (seg === "qt") {
     const f = S.qtFilter || "all", t = todayStr();
@@ -2380,7 +2408,7 @@ function renderShare() {
       <div class="chips" role="group" aria-label="보기">${[["all", "전체"], ["me", `${prof(S.me).avatar} 나`], ["partner", `${prof(P()).avatar} ${prof(P()).name}`]].map(([k, l]) => `<button class="chip" data-act="qfilter" data-v="${k}" aria-pressed="${f === k}">${esc(l)}</button>`).join("")}</div>
       ${Object.keys(days).length ? `<div class="diary-days">${Object.entries(days).slice(0, 40).map(([d, xs]) => `<section class="diary-day"><div class="day-label ${d === t ? "today" : ""}">${fmtShort(d)}</div>
         ${xs.map(x => `<button class="card qt-item" data-act="qt-open" data-id="${x.id}">
-          <span class="di-top"><span class="qt-refbig">${esc(qtRef(x))}</span>${whoChip(x.by)}${reactChips({ src: "qt", id: x.id })}</span>
+          <span class="di-top">${newPill(isNewBy("qt", x.at, x.by))}<span class="qt-refbig">${esc(qtRef(x))}</span>${whoChip(x.by)}${reactChips({ src: "qt", id: x.id })}</span>
           ${x.verse ? `<span class="qt-verse sm">${esc(x.verse)}</span>` : ""}
           <span class="di-text">${esc(x.text)}</span>
           ${x.apply ? `<span class="qt-apply">🙏 ${esc(x.apply)}</span>` : ""}
@@ -2418,9 +2446,9 @@ function renderDiary(head = "") {
     ${dates.length ? `<div class="diary-days">${dates.map(d => `
       <section class="diary-day"><div class="day-label ${d === t ? "today" : ""}">${fmtShort(d)}</div>
         ${(f === "thanks" ? [] : days[d] || []).map(e => `<button class="card diary-item" data-act="diary-open" data-key="${esc(e.key)}" data-by="${e.by}">
-          <span class="di-top">${whoChip(e.by)}${e.mood ? `<span class="di-mood">${e.mood}</span>` : ""}${e.by === S.me ? (e.shared ? `<span class="tag">${ic("eye", "sm")}공유</span>` : `<span class="tag">${ic("lock", "sm")}나만</span>`) : ""}${reactChips({ src: "diary", id: e.key })}</span>
+          <span class="di-top">${newPill(isNewBy("diary", e.at, e.by))}${whoChip(e.by)}${e.mood ? `<span class="di-mood">${e.mood}</span>` : ""}${e.by === S.me ? (e.shared ? `<span class="tag">${ic("eye", "sm")}공유</span>` : `<span class="tag">${ic("lock", "sm")}나만</span>`) : ""}${reactChips({ src: "diary", id: e.key })}</span>
           <span class="di-text">${esc(e.text)}</span></button>`).join("")}
-        ${(f === "all" || f === "thanks") && thanksDays[d] ? `<div class="th-pair">${["a", "b"].filter(s => thanksDays[d][s]).map(s => `<button class="th-row ${s === S.me ? "me" : "them"}" ${s === S.me ? `data-act="thanks" data-d="${d}"` : "disabled"}><span class="th-who">💌 ${esc(prof(s).avatar)} ${esc(prof(s).name)} → ${esc(prof(other(s)).name)}</span><span class="th-text">“${esc(thanksDays[d][s].text)}”</span></button>`).join("")}</div>` : ""}
+        ${(f === "all" || f === "thanks") && thanksDays[d] ? `<div class="th-pair">${["a", "b"].filter(s => thanksDays[d][s]).map(s => `<button class="th-row ${s === S.me ? "me" : "them"}" ${s === S.me ? `data-act="thanks" data-d="${d}"` : "disabled"}><span class="th-who">${newPill(isNewBy("diary", thanksDays[d][s].at, s))}💌 ${esc(prof(s).avatar)} ${esc(prof(s).name)} → ${esc(prof(other(s)).name)}</span><span class="th-text">“${esc(thanksDays[d][s].text)}”</span></button>`).join("")}</div>` : ""}
       </section>`).join("")}</div>`
       : `<div class="card empty">이 달에는 아직 기록이 없어요. 아래 <b>일기 쓰기</b>로 시작해 보세요.</div>`}
     <p class="small">${esc(prof(P()).name)}님의 일기는 '보여주기'를 켠 것만 보여요. 감사는 늘 서로에게 보여요.</p>`;
@@ -2605,7 +2633,7 @@ document.addEventListener("click", async e => {
     case "gfilter": S.goalFilter = v; render(); break;
     case "log": { const g = goalList().find(x => x.id === id && x.src === src); if (g) logSheet(g, b.dataset.d); break; }
     case "settings": settingsSheet(); break;
-    case "swap-view": S.me = P(); subscribeAll(); toast(`${prof(S.me).name} 시점으로 바꿨어요.`); break;
+    case "swap-view": S._marked = null; S.seenSnap = {}; S.me = P(); subscribeAll(); toast(`${prof(S.me).name} 시점으로 바꿨어요.`); break;
     case "demo": startDemo(); break;
     case "code-next": codeNext(); break;
     case "code-new": codeNew(); break;
