@@ -206,7 +206,7 @@ main{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:8px calc(1
 
 /* 하단 탭 + FAB */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
-.tabbar-in{max-width:600px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:2px}
+.tabbar-in{max-width:600px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
 .tab{position:relative;min-height:56px;border-radius:14px;display:grid;place-items:center;align-content:center;gap:2px;font-size:12px;font-weight:600;color:var(--muted)}
 .tab .icon{width:24px;height:24px}
 .tab[aria-current="page"]{color:var(--ink);background:var(--surface2)}
@@ -488,7 +488,7 @@ button.bar:hover .track{outline:2px solid var(--line)}
 .link-h .icon{transition:transform .15s}.link-h[aria-expanded="true"] .icon{transform:rotate(90deg)}
 
 /* 큐티·독서 */
-.tab{font-size:11px}
+.tab{font-size:12px}
 .qt-ref{display:grid;gap:8px}
 .qt-nums{display:flex;align-items:center;gap:8px}
 .qt-num{flex:1;display:flex;align-items:center;gap:6px;font-weight:600;color:var(--muted)}
@@ -522,6 +522,8 @@ button.bar:hover .track{outline:2px solid var(--line)}
 .rl-book-row{display:flex;gap:8px}
 .rl-book-row .input{flex:1;min-width:0}
 .grid-2 > .card,.diary-day > .card{margin-top:0}
+.rec-seg button{padding:0 12px}
+@media (max-width:420px){.rec-head{display:grid;gap:10px}.rec-seg{display:flex;width:100%}.rec-seg button{flex:1}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 </head>
@@ -938,8 +940,8 @@ function render() {
   const app = $("#app");
   if (!S.mode) { app.innerHTML = renderStart(); afterStart(); $("#fab-slot")?.remove(); return; }
   const y = window.scrollY;
-  const screens = { today: renderToday, schedule: renderSchedule, plans: renderPlans, goals: renderGoals, diary: renderDiary, share: renderShare };
-  const fabLabel = { today: "일정 추가", schedule: "일정 추가", plans: "계획 제안", goals: "목표 추가", diary: myDiary(todayStr()) ? "오늘 일기 고치기" : "일기 쓰기", share: (S.shareSeg || "qt") === "qt" ? "큐티 쓰기" : "독서 기록" }[S.tab];
+  const screens = { today: renderToday, schedule: renderSchedule, plans: renderPlans, goals: renderGoals, share: renderShare };
+  const fabLabel = { today: "일정 추가", schedule: "일정 추가", plans: "계획 제안", goals: "목표 추가", share: { diary: myDiary(todayStr()) ? "오늘 일기 고치기" : "일기 쓰기", qt: "큐티 쓰기", book: "독서 기록" }[S.shareSeg || "diary"] }[S.tab];
   const pc = pendingCount();
   app.innerHTML = `
     <header class="top"><div class="top-in">
@@ -955,7 +957,7 @@ function render() {
     <main>${screens[S.tab]()}</main>
     <button class="fab" data-act="fab">${ic("plus")}${fabLabel}</button>
     <nav class="tabbar" aria-label="주요 화면"><div class="tabbar-in">
-      ${[["today", "sun", "오늘"], ["schedule", "cal", "일정"], ["plans", "heart", "함께"], ["goals", "target", "목표"], ["diary", "book", "일기"], ["share", "cross", "큐티·독서"]].map(([k, i, l]) =>
+      ${[["today", "sun", "오늘"], ["schedule", "cal", "일정"], ["plans", "heart", "함께"], ["goals", "target", "목표"], ["share", "book", "기록"]].map(([k, i, l]) =>
         `<button class="tab" data-act="tab" data-v="${k}" ${S.tab === k ? 'aria-current="page"' : ""}>${ic(i)}${k === "plans" && pc ? `<span class="badge">${pc}</span>` : ""}<span>${l}</span></button>`).join("")}
     </div></nav>`;
   window.scrollTo(0, y);
@@ -2362,9 +2364,10 @@ function rlReact(bookId, logId) {
 }
 
 function renderShare() {
-  const seg = S.shareSeg || "qt";
-  const head = `<div class="screen-head"><div><div class="eyebrow">함께 나누는</div><h1 class="big-date">${seg === "qt" ? "말씀 묵상" : "독서 기록"}</h1></div>
-    <div class="seg" role="group" aria-label="큐티·독서 전환"><button data-act="sseg" data-v="qt" aria-pressed="${seg === "qt"}">📖 큐티</button><button data-act="sseg" data-v="book" aria-pressed="${seg === "book"}">📚 독서</button></div></div>`;
+  const seg = S.shareSeg || "diary";
+  const head = `<div class="screen-head rec-head"><div><div class="eyebrow">기록</div><h1 class="big-date">${{ diary: "우리의 하루", qt: "말씀 묵상", book: "독서 기록" }[seg]}</h1></div>
+    <div class="seg rec-seg" role="group" aria-label="기록 종류"><button data-act="sseg" data-v="diary" aria-pressed="${seg === "diary"}">✏️ 일기</button><button data-act="sseg" data-v="qt" aria-pressed="${seg === "qt"}">📖 큐티</button><button data-act="sseg" data-v="book" aria-pressed="${seg === "book"}">📚 독서</button></div></div>`;
+  if (seg === "diary") return renderDiary(head);
   if (seg === "qt") {
     const f = S.qtFilter || "all", t = todayStr();
     const list = qtList().filter(x => f === "all" || (f === "me" ? x.by === S.me : x.by === P()));
@@ -2395,7 +2398,7 @@ function renderShare() {
     ${done.length ? `<h2 class="h2">📗 다 읽은 책 <span class="count">${done.length}</span></h2><div class="grid-2">${done.map(bookCard).join("")}</div>` : ""}`;
 }
 
-function renderDiary() {
+function renderDiary(head = "") {
   const f = S.diaryFilter || "all", m = S.diaryMonth || monthStart(todayStr());
   const all = diaryList().filter(x => x.date.slice(0, 7) === m.slice(0, 7)).filter(x => f === "all" || (f === "me" ? x.by === S.me : f === "partner" ? x.by === P() : true));
   const days = {}; all.forEach(x => (days[x.date] ||= []).push(x));
@@ -2404,7 +2407,7 @@ function renderDiary() {
   const t = todayStr(), mineToday = myDiary(t);
   const x = parseD(m), next = new Date(x.getFullYear(), x.getMonth() + 1, 1), canNext = ds(next) <= t;
   return `
-    <div class="screen-head"><div><div class="eyebrow">일기와 감사</div><h1 class="big-date">우리의 하루 기록</h1></div></div>
+    ${head}
     ${thanksCard()}
     ${mineToday ? "" : `<button class="card diary-cta" data-act="diary">${ic("edit")}<span><b>오늘 일기 쓰기</b><span class="small">기분 하나, 한 줄이라도 좋아요</span></span>${ic("right")}</button>`}
     <div class="month-nav"><button class="arrow" data-act="dmonth" data-v="-1" aria-label="지난달">${ic("left")}</button><span class="mn-label">${x.getFullYear()}년 ${x.getMonth() + 1}월</span>
@@ -2570,7 +2573,7 @@ document.addEventListener("click", async e => {
     case "filter": S.filter = v; render(); break;
     case "open": { const it = findItem(src, id); if (it) eventSheet(it); break; }
     case "done": { const it = findItem(src, id); if (it) toggleDone(it); break; }
-    case "fab": S.tab === "share" ? ((S.shareSeg || "qt") === "qt" ? qtSheet(null, nextRef(S.me) || {}) : readLogSheet()) : S.tab === "diary" ? diarySheet() : S.tab === "plans" ? planSheet() : S.tab === "goals" ? goalSheet() : eventSheet(null, S.tab === "today" ? todayStr() : S.sel); break;
+    case "fab": S.tab === "share" ? ({ diary: () => diarySheet(), qt: () => qtSheet(null, nextRef(S.me) || {}), book: () => readLogSheet() }[S.shareSeg || "diary"])() : S.tab === "plans" ? planSheet() : S.tab === "goals" ? goalSheet() : eventSheet(null, S.tab === "today" ? todayStr() : S.sel); break;
     case "new-event": eventSheet(null, b.dataset.date); break;
     case "new-plan": planSheet(null, { date: todayStr() }); break;
     case "plan-ok": if (await save(() => store.update(`plans/${id}`, { status: "confirmed", confirmedAt: Date.now() }), "계획을 확정했어요. 함께 일정에 들어갔어요.")) logAct(`${q(S.plans[id]?.title || "")} 계획을 확정했어요 💞`); break;
