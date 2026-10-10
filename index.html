@@ -2528,7 +2528,11 @@ async function tokenId(token) {
 async function enablePush() {
   const st = pushStatus(); if (!st.ok) return toast(st.msg);
   const perm = await Notification.requestPermission();
-  if (perm !== "granted") return toast("알림이 허용되지 않았어요.");
+  if (perm !== "granted") {
+    const how = isIOS() ? "아이폰 설정 → 알림 → 우리 하루에서 '알림 허용'을 켠 뒤 다시 눌러 주세요."
+      : "크롬 주소창 왼쪽 아이콘(또는 설정 → 애플리케이션 → Chrome → 알림)에서 알림을 허용한 뒤 다시 눌러 주세요.";
+    return toast(perm === "denied" ? `알림이 차단돼 있어요. ${how}` : `허용 창이 닫혔어요. 다시 눌러서 '허용'을 골라 주세요. 창이 안 뜨면: ${how}`);
+  }
   try {
     const reg = await navigator.serviceWorker.register("sw.js");
     await navigator.serviceWorker.ready;
