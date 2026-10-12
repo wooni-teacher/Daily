@@ -538,6 +538,16 @@ button.bar:hover .track{outline:2px solid var(--line)}
 .tg-sub{display:block;font-size:12px;color:var(--muted);font-weight:500}
 .tg-acts{display:flex;gap:8px;padding:0 0 10px}
 .tg-acts .btn{flex:1}
+
+/* 반복 직접 설정 · 날짜별 메모 */
+.rep-custom{display:grid;gap:8px;margin-top:6px;padding:12px;border-radius:14px;background:var(--bg);border:1.5px solid var(--line)}
+.rep-every{display:grid;gap:6px;font-size:13px;font-weight:700;color:var(--muted)}
+.rep-every .seg{display:flex}
+.rep-every .seg button{flex:1;padding:0 6px;font-size:14px}
+.day-memo textarea{background:var(--warn-soft);border-color:color-mix(in srgb,var(--warn) 35%,transparent)}
+.row-daymemo{font-size:13px;color:var(--warn);background:var(--warn-soft);padding:3px 8px;border-radius:8px;overflow-wrap:anywhere;justify-self:start}
+.day-memo-view{background:var(--warn-soft);padding:10px 12px;border-radius:12px}
+.actions .btn{white-space:nowrap;padding:0 12px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 </head>
@@ -830,19 +840,29 @@ async function removeSamples() {
 
 /* ========== 6. 데이터 가공 ========== */
 /* 반복 일정 */
-const REPEATS = { none: "반복 안 함", daily: "매일", weekdays: "평일", weekly: "매주" };
+const REPEATS = { none: "반복 안 함", daily: "매일", weekdays: "평일", weekends: "주말", weekly: "직접 설정", monthly: "매월" };
 const isRepeat = e => e.repeat && e.repeat.freq && e.repeat.freq !== "none";
 function occursOn(e, d) {
   if (d < e.date || (e.repeat?.until && d > e.repeat.until) || e.skip?.[d]) return false;
   const wd = parseD(d).getDay(), f = e.repeat?.freq || "none";
   if (f === "daily") return true;
   if (f === "weekdays") return wd >= 1 && wd <= 5;
-  if (f === "weekly") return (e.repeat.days?.length ? e.repeat.days : [parseD(e.date).getDay()]).includes(wd);
+  if (f === "weekends") return wd === 0 || wd === 6;
+  if (f === "weekly") {
+    if (!(e.repeat.days?.length ? e.repeat.days : [parseD(e.date).getDay()]).includes(wd)) return false;
+    const every = +e.repeat.every || 1;                     // 1 = 매주, 2 = 격주 …
+    return every === 1 || (diffDays(weekStart(e.date), weekStart(d)) / 7) % every === 0;
+  }
+  if (f === "monthly") {                                      // 시작 날짜와 같은 날 (없는 날이면 그 달 마지막 날)
+    const want = parseD(e.date).getDate(), x = parseD(d), last = new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate();
+    return x.getDate() === Math.min(want, last);
+  }
   return d === e.date;
 }
 function repeatLabel(r) {
   if (!r || r.freq === "none") return "";
-  if (r.freq === "weekly") return "매주 " + (r.days?.length ? [...r.days].sort((a, b) => ((a + 6) % 7) - ((b + 6) % 7)).map(x => WD[x]).join("·") : "");
+  if (r.freq === "weekly") return ((+r.every || 1) === 1 ? "매주 " : (+r.every === 2 ? "격주 " : `${r.every}주마다 `)) + (r.days?.length ? [...r.days].sort((a, b) => ((a + 6) % 7) - ((b + 6) % 7)).map(x => WD[x]).join("·") : "");
+  if (r.freq === "monthly") return "매월";
   return REPEATS[r.freq];
 }
 const monthStart = d => d.slice(0, 8) + "01";
@@ -861,7 +881,7 @@ function allItems() {
   for (const e of base) {
     if (!isRepeat(e)) { out.push(e); continue; }
     for (let d = e.date > w0 ? e.date : w0; d <= w1; d = addDays(d, 1))
-      if (occursOn(e, d)) out.push({ ...e, id: `${e.id}@${d}`, baseId: e.id, occ: d, seriesDate: e.date, date: d, done: !!e.doneDates?.[d] });
+      if (occursOn(e, d)) out.push({ ...e, id: `${e.id}@${d}`, baseId: e.id, occ: d, seriesDate: e.date, date: d, done: !!e.doneDates?.[d], dayMemo: e.notes?.[d] || "" });
   }
   for (const [id, p] of entries(S.plans)) if (p.status === "confirmed" && p.date)
     out.push({ id, src: "plan", scope: "together", owner: p.proposer, title: p.title, date: p.date, time: p.time, endTime: "", place: p.place, memo: p.memo, done: !!p.done, cat: p.cat, review: p.review });
@@ -999,6 +1019,7 @@ function rowHTML(it, { showDate = false } = {}) {
     <button class="row-main" data-act="open" data-src="${it.src}" data-id="${it.id}">
       <span class="row-title" data-time="${it.time || "종일"}">${esc(it.title)}</span>
       <span class="row-meta">${whoChip(w)}${scopeTag}${cat}${rep}${it.place ? `<span class="tag">${ic("pin", "sm")}${esc(it.place)}</span>` : ""}${it.scope !== "private" ? reactChips(it) : ""}</span>
+      ${it.dayMemo ? `<span class="row-daymemo">📝 ${esc(it.dayMemo)}</span>` : ""}
     </button>
     ${edit
       ? `<button class="check ${it.done ? "on" : ""}" data-act="done" data-src="${it.src}" data-id="${it.id}" aria-label="${esc(it.title)} ${it.done ? "완료 취소" : "완료로 표시"}" aria-pressed="${!!it.done}">${ic("check")}</button>`
@@ -1660,7 +1681,12 @@ const repeatHTML = r => {
   const f = r?.freq || "none", days = r?.days || [];
   return `<div class="field"><span class="lbl">반복</span>
     <div class="chips" id="ev-rep" style="flex-wrap:wrap">${Object.entries(REPEATS).map(([k, n]) => `<button type="button" class="chip" data-v="${k}" aria-pressed="${k === f}">${n}</button>`).join("")}</div>
-    <div class="wd-pick" id="ev-days" ${f === "weekly" ? "" : "hidden"}>${[1, 2, 3, 4, 5, 6, 0].map(d => `<button type="button" data-d="${d}" aria-pressed="${days.includes(d)}" aria-label="${WD[d]}요일">${WD[d]}</button>`).join("")}</div>
+    <div class="rep-custom" id="ev-days" ${f === "weekly" ? "" : "hidden"}>
+      <div class="rep-every"><span>반복 간격</span><div class="seg" id="ev-every">${[[1, "매주"], [2, "격주"], [3, "3주마다"], [4, "4주마다"]].map(([n, l]) => `<button type="button" data-v="${n}" aria-pressed="${(+r?.every || 1) === n}">${l}</button>`).join("")}</div></div>
+      <div class="wd-pick">${[1, 2, 3, 4, 5, 6, 0].map(d => `<button type="button" data-d="${d}" aria-pressed="${days.includes(d)}" aria-label="${WD[d]}요일">${WD[d]}</button>`).join("")}</div>
+      <span class="small">반복할 요일을 모두 골라요. 예: 월·수·금, 화·목</span>
+    </div>
+    <span class="small" id="ev-monthly-help" ${f === "monthly" ? "" : "hidden"}>시작 날짜와 같은 날에 매달 반복해요. 31일처럼 없는 날은 그 달 마지막 날로 넣어요.</span>
     <div class="field" id="ev-until-f" ${f === "none" ? "hidden" : ""}><label for="ev-until">반복 끝나는 날 (선택)</label><input class="input" type="date" id="ev-until" value="${r?.until || ""}"></div>
   </div>`;
 };
@@ -1677,7 +1703,8 @@ function eventSheet(it, presetDate) {
       <span class="s-ico ${k}">${ic(s.icon)}</span><span><b>${s.name}</b><span>${k === "shared" ? `${esc(prof(P()).name)}님이 볼 수 있고 수정은 나만` : s.desc}</span></span><span class="ring"></span></button>`).join("");
   openSheet(isNew ? "일정 추가" : series ? "반복 일정 수정" : "일정 수정", `
     <form class="form" id="ev-form">
-      ${series ? `<div class="note">${ic("repeat", "sm")}<span>${fmtShort(it.occ)} 일정을 열었어요. 여기서 바꾸는 내용은 반복되는 모든 날에 적용돼요.</span></div>` : ""}
+      ${series ? `<div class="note">${ic("repeat", "sm")}<span>${fmtShort(it.occ)} 일정이에요. 아래 '이 날만의 메모'는 이 날에만, 나머지 내용은 반복되는 모든 날에 적용돼요.</span></div>` : ""}
+      ${series ? `<div class="field day-memo"><label for="ev-daymemo">📝 ${fmtShort(it.occ)} 이 날만의 메모</label><textarea class="input" id="ev-daymemo" maxlength="300" placeholder="이 날에만 보이는 메모예요. 예: 오늘은 하체 운동, 준비물 챙기기">${esc(it.dayMemo)}</textarea></div>` : ""}
       <div class="field"><label for="ev-title">무엇을 하나요?</label><input class="input" id="ev-title" required maxlength="60" placeholder="예: 저녁 장보기" value="${esc(it?.title)}"></div>
       <div class="field"><span class="lbl">누가 볼 수 있나요?</span><div class="scope" id="ev-scope">${scopeBtns}</div></div>
       <div class="field"><label for="ev-date">${series ? "반복 시작 날짜" : "날짜"}</label><input class="input" type="date" id="ev-date" required value="${it?.seriesDate || it?.date || presetDate || S.sel || todayStr()}"></div>
@@ -1687,20 +1714,20 @@ function eventSheet(it, presetDate) {
       </div>
       ${repeatHTML(it?.repeat)}
       <div class="field"><label for="ev-place">장소 (선택)</label><input class="input" id="ev-place" maxlength="40" value="${esc(it?.place)}" placeholder="예: 연남동"></div>
-      <div class="field"><label for="ev-memo">메모 (선택)</label><textarea class="input" id="ev-memo" maxlength="300">${esc(it?.memo)}</textarea></div>
+      <div class="field"><label for="ev-memo">${series ? "공통 메모 (반복되는 모든 날)" : "메모 (선택)"}</label><textarea class="input" id="ev-memo" maxlength="300">${esc(it?.memo)}</textarea></div>
       ${it && it.scope !== "private" ? reactBar(it) : ""}
       <button class="btn primary block" type="submit">${isNew ? "추가하기" : "저장하기"}</button>
       ${isNew ? "" : `<div class="actions"><button class="btn" type="button" id="ev-done">${it.done ? "완료 취소" : `${ic("check")}${series ? "이 날 완료" : "완료로 표시"}`}</button>
-        ${series ? `<button class="btn ghost" type="button" id="ev-skip">이 날만 빼기</button>` : ""}
-        <button class="btn danger" type="button" id="ev-del">${series ? "반복 전체 삭제" : "삭제"}</button></div>`}
+        ${series ? `<button class="btn ghost" type="button" id="ev-skip">이 날 빼기</button>` : ""}
+        <button class="btn danger" type="button" id="ev-del">${series ? "반복 삭제" : "삭제"}</button></div>`}
     </form>`, root => {
-    bindSeg(root, "#ev-scope"); bindSeg(root, "#ev-rep"); bindReact(root);
+    bindSeg(root, "#ev-scope"); bindSeg(root, "#ev-rep"); bindSeg(root, "#ev-every"); bindReact(root);
     $("#ev-rep", root).addEventListener("change", () => {
       const f = segVal(root, "#ev-rep");
-      $("#ev-days", root).hidden = f !== "weekly"; $("#ev-until-f", root).hidden = f === "none";
+      $("#ev-days", root).hidden = f !== "weekly"; $("#ev-until-f", root).hidden = f === "none"; $("#ev-monthly-help", root).hidden = f !== "monthly";
       if (f === "weekly" && !$("#ev-days [aria-pressed='true']", root)) { const d = parseD($("#ev-date", root).value || todayStr()).getDay(); $(`#ev-days [data-d="${d}"]`, root).setAttribute("aria-pressed", "true"); }
     });
-    $("#ev-days", root).addEventListener("click", e => { const b = e.target.closest("[data-d]"); if (b) b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"); });
+    $("#ev-days", root).addEventListener("click", e => { const b = e.target.closest("button[data-d]"); if (b) b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"); });
     if (isNew) $("#ev-title", root).focus();
     $("#ev-form", root).addEventListener("submit", async e => {
       e.preventDefault();
@@ -1713,11 +1740,14 @@ function eventSheet(it, presetDate) {
       };
       if (freq !== "none") {
         data.repeat = { freq, until: $("#ev-until", root).value || "" };
-        if (freq === "weekly") data.repeat.days = [...root.querySelectorAll("#ev-days [aria-pressed='true']")].map(b => +b.dataset.d);
+        if (freq === "weekly") { data.repeat.days = [...root.querySelectorAll("#ev-days [data-d][aria-pressed='true']")].map(b => +b.dataset.d); data.repeat.every = +segVal(root, "#ev-every") || 1; }
         if (freq === "weekly" && !data.repeat.days.length) return toast("반복할 요일을 하나 이상 골라 주세요.");
         if (data.repeat.until && data.repeat.until < data.date) return toast("반복 끝나는 날이 시작보다 빨라요.");
         if (it?.doneDates) data.doneDates = it.doneDates;
         if (it?.skip) data.skip = it.skip;
+        const notes = { ...(it?.notes || {}) };
+        if (series) { const dm = $("#ev-daymemo", root).value.trim(); if (dm) notes[it.occ] = dm; else delete notes[it.occ]; }
+        if (Object.keys(notes).length) data.notes = notes;
       }
       if (it?.review) data.review = it.review;
       if (it?.sample) data.sample = true;
@@ -1751,6 +1781,7 @@ function eventDetail(it) {
     <div class="detail-row">${ic("cal")}<span>${fmtDate(it.date)}</span></div>
     <div class="detail-row">${ic("clock")}<span>${fmtTimeKo(it.time)}${it.endTime ? " ~ " + fmtTimeKo(it.endTime) : ""}</span></div>
     ${it.place ? `<div class="detail-row">${ic("pin")}<span>${esc(it.place)}</span></div>` : ""}
+    ${it.dayMemo ? `<div class="detail-row day-memo-view">📝<span><b>${fmtShort(it.date)} 메모</b><br>${esc(it.dayMemo)}</span></div>` : ""}
     ${it.memo ? `<div class="detail-row">${ic("note")}<span>${esc(it.memo)}</span></div>` : ""}
     ${it.done ? `<span class="pill ok">${ic("check", "sm")}완료</span>` : ""}
     ${reactBar(it)}
