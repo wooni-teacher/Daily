@@ -15,7 +15,17 @@ function occursOn(e, d) {
   const f = e.repeat?.freq || "none", wd = wdOf(d);
   if (f === "daily") return true;
   if (f === "weekdays") return wd >= 1 && wd <= 5;
-  if (f === "weekly") return (e.repeat.days?.length ? e.repeat.days : [wdOf(e.date)]).includes(wd);
+  if (f === "weekends") return wd === 0 || wd === 6;
+  if (f === "weekly") {
+    if (!(e.repeat.days?.length ? e.repeat.days : [wdOf(e.date)]).includes(wd)) return false;
+    const every = +e.repeat.every || 1;
+    const ws = s => { const [y, m, dd] = s.split("-").map(Number); const t = Date.UTC(y, m - 1, dd); return t - ((new Date(t).getUTCDay() + 6) % 7) * 864e5; };
+    return every === 1 || Math.round((ws(d) - ws(e.date)) / (7 * 864e5)) % every === 0;
+  }
+  if (f === "monthly") {
+    const [y, m, dd] = d.split("-").map(Number), want = +e.date.slice(8), last = new Date(Date.UTC(y, m, 0)).getUTCDate();
+    return dd === Math.min(want, last);
+  }
   return d === e.date;
 }
 const isDone = (e, d) => (e.repeat && e.repeat.freq && e.repeat.freq !== "none" ? !!e.doneDates?.[d] : !!e.done);
@@ -67,7 +77,7 @@ export function planCouple(c, nowMs) {
     for (const s of it.to) {
       if (!hasSlot(s) || !pref(s).before) continue;
       const together = it.to.length === 2;
-      sends.push({ slot: s, title: `${together ? "💞 함께 · " : ""}${left}분 뒤 시작해요`, body: `${e.time} ${e.title}${e.place ? " · " + e.place : ""}`, tag: k });
+      sends.push({ slot: s, title: `${together ? "💞 함께 · " : ""}${left}분 뒤 시작해요`, body: `${e.time} ${e.title}${e.place ? " · " + e.place : ""}${e.notes?.[today] ? "\n📝 " + e.notes[today] : ""}`, tag: k });
     }
   }
   for (const k of Object.keys(st.sent)) if (k.slice(0, 10) < today) delete st.sent[k];
